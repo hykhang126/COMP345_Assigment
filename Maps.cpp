@@ -4,6 +4,7 @@ void Maps::addTerritory(Territory *ter)
 {
     
 }
+//shdjasvdjavsdjasvashdvas
 
 Maps::~Maps(){
     for(auto const &pair: maps )
