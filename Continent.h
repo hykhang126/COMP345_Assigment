@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -15,7 +16,7 @@ class Continent{
         string* getName();
         int* getPoint();
         string* getColor();
-        Continent(int pos, string name, int point, string color);
+        Continent(int* pos, string* name, int* point, string* color);
         ~Continent();
-        void toString();
+        string toString();
 };

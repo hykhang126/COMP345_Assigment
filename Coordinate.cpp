@@ -10,19 +10,20 @@ int* Coordinate::getY()
     return y;
 }
 
-Coordinate::Coordinate(int xx, int yy)
+Coordinate::Coordinate(int* xx, int* yy)
 {
-    x = new int(xx);
-    y = new int(yy);
+    x = xx;
+    y = yy;
 }
 
 Coordinate::~Coordinate()
 {
     delete x;
     delete y;
+    cout<<"delete";
 }
 
-void Coordinate::toString()
+string Coordinate::toString()
 {
-    cout << "X: " << x << ", Y: " << y;
+    return "X: " + to_string(*x) + ", Y: " + to_string(*y);
 }
