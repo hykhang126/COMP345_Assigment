@@ -15,7 +15,7 @@ int main()
 
     Maps* map;
     MapLoader loader;
-    map = loader.loadMapFromFile("solar.txt");
+    map = loader.loadMapFromFile("france.txt");
     map->toString();
     
 }
