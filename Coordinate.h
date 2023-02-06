@@ -9,7 +9,7 @@ class Coordinate{
     public: 
         int* getX();
         int* getY();
-        Coordinate(int xx, int yy);
+        Coordinate(int* xx, int* yy);
         ~Coordinate();
-        void toString();
+        string toString();
 };

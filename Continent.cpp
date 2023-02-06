@@ -20,16 +20,16 @@ string* Continent::getColor()
     return color;
 }
 
-void Continent::toString()
+string Continent::toString()
 {
-    cout << "position: " << getPosition() << ", Name: " << getName() << ", point: " << getPoint() << ", color: " << getColor();
+    return "position: " + to_string(*getPosition()) + ", Name: " + *getName() + ", point: " + to_string(*getPoint()) + ", color: " + *getColor();
 }
 
-Continent::Continent(int pos, string nm, int pts, string clr){
-    position = new int(pos);
-    name = new string(nm);
-    point = new int(pts);
-    color = new string(clr);
+Continent::Continent(int* pos, string* nm, int* pts, string* clr){
+    position = pos;
+    name = nm;
+    point = pts;
+    color = clr;
 }
 
 Continent::~Continent()
@@ -38,4 +38,5 @@ Continent::~Continent()
     delete name;
     delete point;
     delete color;
+    cout << "delete";
 }

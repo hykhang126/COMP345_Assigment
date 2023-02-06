@@ -1,13 +1,15 @@
 #include "Territory.h"
 
+
+
 void Territory::setArmies(int *armies)
 {
-    *armies = *armies;
+    armies = armies;
 }
 
 void Territory::setOwner(Player *player)
 {
-    *owner = *player;
+    owner = player;
 }
 
 int* Territory::getArmies()
@@ -38,12 +40,13 @@ Territory::~Territory()
     delete name;
     delete continent;
     delete coordinate;
+    cout << "delete";
 }
 
 
-void Territory::toString()
+string Territory::toString()
 {
-    cout << "Player:, Armies: " << *armies; 
+    return "Player:, Armies: " + to_string(*armies) + ", position: " + to_string(*position) + ", name: " + *name + ", continent: " + continent->toString() + ", Coordinate: " + coordinate->toString() ; 
 }
 
 Coordinate* Territory::getCoordinate(){
@@ -56,4 +59,9 @@ Continent* Territory::getContinent(){
 
 string* Territory::getName(){
     return name;
+}
+
+int Territory::getPosition()
+{
+    return *position;
 }
