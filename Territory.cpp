@@ -65,3 +65,30 @@ int Territory::getPosition()
 {
     return *position;
 }
+
+ostream& operator<< (ostream& os, Territory const &ter)
+{
+    os <<"Player:, Armies: " << to_string(*ter.armies) << ", position: " << to_string(*ter.position) << ", name: " << *ter.name << ", continent: " << ter.continent << ", Coordinate: " << ter.coordinate ; 
+    return os;
+}
+
+Territory& Territory::operator= (Territory const &ter)
+{
+    position = new int(*ter.position);
+    armies = new int(*ter.armies);
+    owner = new Player();
+    name = new string(*ter.name);
+    continent = new Continent(*ter.continent);
+    coordinate = new Coordinate(*ter.coordinate);
+    return *this;
+}
+
+Territory::Territory(Territory const &ter)
+{
+    position = new int(*ter.position);
+    armies = new int(*ter.armies);
+    owner = new Player();
+    name = new string(*ter.name);
+    continent = new Continent(*ter.continent);
+    coordinate = new Coordinate(*ter.coordinate);
+}

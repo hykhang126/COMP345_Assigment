@@ -12,4 +12,7 @@ class Coordinate{
         Coordinate(int* xx, int* yy);
         ~Coordinate();
         string toString();
+        Coordinate (const Coordinate& cor);
+        friend ostream& operator<< (ostream& output, Coordinate const &cor);
+        Coordinate& operator= (Coordinate const &cor);
 };

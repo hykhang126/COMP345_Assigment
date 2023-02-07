@@ -35,15 +35,17 @@ Continent::Continent(const Continent &src)
 
 Continent& Continent::operator= (const Continent &src)
 {
-    position = new int(*src.position);
-    name = new string(*src.name);
-    point = new int(*src.point);
-    color = new string(*src.color);
+    this->position = new int(*src.position);
+    this->name = new string(*src.name);
+    this->point = new int(*src.point);
+    this->color = new string(*src.color);
+    return *this;
 }
 
 ostream& operator<< (ostream &os, const Continent &cont)
 {
     os << "position: " << cont.position << ", Name: " << cont.name <<  ", point: " << cont.point << ", color: " << cont.color;
+    return os;
 }
 
 Continent::Continent(int* pos, string* nm, int* pts, string* clr){
