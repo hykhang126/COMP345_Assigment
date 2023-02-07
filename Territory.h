@@ -28,6 +28,9 @@ class Territory{
         ~Territory();
         string toString();
         int getPosition();
+        friend ostream& operator<< (ostream& os, Territory const &ter);
+        Territory& operator= (const Territory &ter);
+        Territory(Territory const &ter);
 };
 
 #endif
