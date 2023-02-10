@@ -24,6 +24,8 @@ using namespace std;
 
 /**
  * Order: User-defined class to create Order objects
+ * Types of Orders: Deploy
+ *                  
 */
 class Order
 {
@@ -40,7 +42,139 @@ public:
     //assignment operator
     Order& operator = (const Order& other);
     //stream operator
-    friend ostream& operator << (ostream& out, const Order &order);
+    friend ostream& operator << (ostream& out, const Order& order);
+};
+
+// ------------------- DEPLOY ORDER --------------------------
+/**
+ * Deploy: user-defined subclass and one type of Order.
+*/
+class Deploy : public Order
+{
+private:
+    /* data */
+public:
+    //default constructor
+    Deploy(/* args */);
+    //destructor
+    ~Deploy();
+
+    //copy constructor
+    Deploy(const Deploy& other);
+    //assignment operator
+    Deploy& operator = (const Deploy& other);
+    //stream operator
+    friend ostream& operator << (ostream& out, const Deploy& deploy);
+};
+
+// ------------------- ADVANCE ORDER -------------------------
+/**
+ * Advance: user-defined subclass and one type of Order.
+*/
+class Advance : public Order
+{
+private:
+    /* data */
+public:
+    //default constructor
+    Advance(/* args */);
+    //destructor
+    ~Advance();
+
+    //copy constructor
+    Advance(const Advance& other);
+    //assignment operator
+    Advance& operator = (const Advance& other);
+    //stream operator
+    friend ostream& operator << (ostream& out, const Advance& advance);
+};
+
+// ------------------- BOMB ORDER ----------------------------
+/**
+ * Bomb: user-defined subclass and one type of Order
+*/
+class Bomb : public Order
+{
+private:
+    /* data */
+public:
+    //default constructor
+    Bomb(/* args */);
+    //destructor
+    ~Bomb();
+
+    //copy constructor
+    Bomb(const Bomb& other);
+    //assignment operator
+    Bomb& operator = (const Bomb& other);
+    //stream operator
+    friend ostream& operator << (ostream& out, const Bomb& bomb);
+};
+
+// ------------------- Blockade ORDER ------------------------
+/**
+ * Blockade: user-defined subclass and one type of Order
+*/
+class Blockade : public Order
+{
+private:
+    /* data */
+public:
+    //default constructor
+    Blockade(/* args */);
+    //destructor
+    ~Blockade();
+
+    //copy constructor
+    Blockade(const Blockade& other);
+    //assignment operator
+    Blockade& operator = (const Blockade& other);
+    //stream operator
+    friend ostream& operator << (ostream& out, const Blockade& blockade);
+};
+
+// ------------------- AIRLIFT ORDER -------------------------
+/**
+ * Airlift: subclass and one type of Order
+*/
+class Airlift : public Order
+{
+private:
+    /* data */
+public:
+    //default constructor
+    Airlift(/* args */);
+    //destructor
+    ~Airlift();
+
+    //copy constructor
+    Airlift(const Airlift& other);
+    //assignment operator
+    Airlift& operator = (const Airlift& other);
+    //stream operator
+    friend ostream& operator << (ostream& out, const Airlift& airlift);
+};
+
+// ------------------- NEGOTIATE ORDER -----------------------
+/**
+ * Negotiate: user-defined subclass and one type of Order
+*/
+class Negotiate : public Order
+{
+private:
+    /* data */
+public:
+    //default constructor
+    Negotiate(/* args */);
+    //destructor
+    ~Negotiate();
+
+    //copy constructor
+    Negotiate(const Negotiate& other);
+    //assignment operator
+    Negotiate& operator = (const Negotiate& other);
+    //stream operator
+    friend ostream& operator << (ostream& out, const Negotiate& negotiate);
 };
 
 // ------------------- LIST OF ORDERS ------------------------

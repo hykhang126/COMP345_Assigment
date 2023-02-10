@@ -23,7 +23,7 @@ class Card
         friend ostream& operator<<(ostream& out, const Card& card);
         string getType();
         void setType(string type);
-        void play(Hand *hand, Orders *order, Deck *deck);
+        void play(Hand *hand, Order *order, Deck *deck);
 };
 
 class Deck

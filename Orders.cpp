@@ -33,6 +33,205 @@ ostream& operator << (ostream& out, const Order& order) {
     return out;
 }
 
+// ------------------- DEPLOY ORDER --------------------------
+/**
+ * Default constructor for Deploy Class
+*/
+Deploy::Deploy() {
+
+}
+/**
+ * Destructor for Deploy Class
+*/
+Deploy::~Deploy() {
+
+}
+/**
+ * Copy Constructor for Deploy Class
+*/
+Deploy::Deploy(const Deploy& other) {
+    
+}
+/**
+ * Assignment Operator for Deploy Class
+*/
+Deploy& Deploy::operator=(const Deploy& other) {
+    return *this;
+}
+/**
+ * Stream Insertion Operator for Deploy Class
+*/
+ostream& operator << (ostream& out, const Deploy& deploy) {
+    out << "This is an Order of type Deploy.";
+    return out;
+}
+
+// ------------------- ADVANCE ORDER -------------------------
+/**
+ * Default constructor for Advance Class
+*/
+Advance::Advance() {
+
+}
+/**
+ * Destructor for Advance Class
+*/
+Advance::~Advance() {
+
+}
+/**
+ * Copy Constructor for Advance Class
+*/
+Advance::Advance(const Advance& other) {
+    
+}
+/**
+ * Assignment Operator for Advance Class
+*/
+Advance& Advance::operator=(const Advance& other) {
+    return *this;
+}
+/**
+ * Stream Insertion Operator for Advance Class
+*/
+ostream& operator << (ostream& out, const Advance& advance) {
+    out << "This is an Order of type Advance.";
+    return out;
+}
+
+// ------------------- BOMB ORDER ----------------------------
+/**
+ * Default constructor for Bomb Class
+*/
+Bomb::Bomb() {
+
+}
+/**
+ * Destructor for Bomb Class
+*/
+Bomb::~Bomb() {
+
+}
+/**
+ * Copy Constructor for Bomb Class
+*/
+Bomb::Bomb(const Bomb& other) {
+    
+}
+/**
+ * Assignment Operator for Bomb Class
+*/
+Bomb& Bomb::operator=(const Bomb& other) {
+    return *this;
+}
+/**
+ * Stream Insertion Operator for Bomb Class
+*/
+ostream& operator << (ostream& out, const Bomb& bomb) {
+    out << "This is an Order of type Bomb.";
+    return out;
+}
+
+// ------------------- BLOCKADE ORDER ------------------------
+/**
+ * Default constructor for Blockade Class
+*/
+Blockade::Blockade() {
+
+}
+/**
+ * Destructor for Blockade Class
+*/
+Blockade::~Blockade() {
+
+}
+/**
+ * Copy Constructor for Blockade Class
+*/
+Blockade::Blockade(const Blockade& other) {
+    
+}
+/**
+ * Assignment Operator for Blockade Class
+*/
+Blockade& Blockade::operator=(const Blockade& other) {
+    return *this;
+}
+/**
+ * Stream Insertion Operator for Blockade Class
+*/
+ostream& operator << (ostream& out, const Blockade& blockade) {
+    out << "This is an Order of type Blockade.";
+    return out;
+}
+
+// ------------------- AIRLIFT ORDER -------------------------
+/**
+ * Default constructor for Airlift Class
+*/
+Airlift::Airlift() {
+
+}
+/**
+ * Destructor for Airlift Class
+*/
+Airlift::~Airlift() {
+
+}
+/**
+ * Copy Constructor for Airlift Class
+*/
+Airlift::Airlift(const Airlift& other) {
+    
+}
+/**
+ * Assignment Operator for Airlift Class
+*/
+Airlift& Airlift::operator=(const Airlift& other) {
+    return *this;
+}
+/**
+ * Stream Insertion Operator for Airlift Class
+*/
+ostream& operator << (ostream& out, const Airlift& airlift) {
+    out << "This is an Order of type Airlift.";
+    return out;
+}
+
+// ------------------- NEGOTIATE ORDER -----------------------
+/**
+ * Default constructor for Negotiate Class
+*/
+Negotiate::Negotiate() {
+
+}
+/**
+ * Destructor for Negotiate Class
+*/
+Negotiate::~Negotiate() {
+
+}
+/**
+ * Copy Constructor for Negotiate Class
+*/
+Negotiate::Negotiate(const Negotiate& other) {
+    
+}
+/**
+ * Assignment Operator for Negotiate Class
+*/
+Negotiate& Negotiate::operator=(const Negotiate& other) {
+    return *this;
+}
+/**
+ * Stream Insertion Operator for Negotiate Class
+*/
+ostream& operator << (ostream& out, const Negotiate& negotiate) {
+    out << "This is an Order of type Negotiate.";
+    return out;
+}
+
+
 // ------------------- LIST OF ORDERS ------------------------
 /**
  * Default constructor for OrdersList Class
@@ -57,7 +256,7 @@ OrdersList::~OrdersList() {
  * @param other: the other list to copy
 */
 OrdersList::OrdersList(const OrdersList& other) {
-    this->ordersList = other.ordersList;
+    this->ordersList = new vector<Order*>(*(other.ordersList));
 }
 /**
  * Assignment Operator for OrdersList Class
