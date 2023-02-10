@@ -1,6 +1,6 @@
 #include <map>
 #include <list>
-#include "Territory.cpp"
+#include "Territory.h"
 
 using namespace std;
 
