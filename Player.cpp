@@ -64,7 +64,7 @@ ostream& operator<<(ostream& out, const Player& player) {
     out << *player.hand;
     out << "Collection: \n";
     for (const auto& territory : *player.tCollection) {
-        out << "\t Territory: " + territory->getName() + "\n";
+        out << "\t Territory: " << territory->getName() << "\n";
     }
     out << *player.listOfOrders;
     return out;
