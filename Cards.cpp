@@ -7,6 +7,8 @@
 #include "Orders.h"
 using namespace std;
 
+const string *globalCardTypes[5] = {new string("bomb"), new string("reinforcement"), new string("blockade"),new string("airlift"),new string("diplomacy")};
+
 // ****************** CARDS *******************
 
 // Constructor
@@ -53,7 +55,7 @@ void Card::setType(string type) {
 
 // Note that when playing a card, we do not want to delete and remake pointers
 // We just want to move the card pointer from the hand to the deck
-void Card::play(Hand *hand, Orders *order, Deck *deckPter){
+void Card::play(Hand *hand, Order *order, Deck *deckPter){
     // For now, fake add the card move added to order
     //    order.addOrder();
     Card * cardPlayedPter = hand->removeCard(this);

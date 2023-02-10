@@ -6,7 +6,7 @@ using namespace std;
 #include "Orders.h"
 
 // possible card types as a global string array of pointers
-string *globalCardTypes[5] = {new string("bomb"), new string("reinforcement"), new string("blockade"),new string("airlift"),new string("diplomacy")};
+extern const string *globalCardTypes[5];
 
 class Deck;
 class Hand;
@@ -23,7 +23,7 @@ class Card
         friend ostream& operator<<(ostream& out, const Card& card);
         string getType();
         void setType(string type);
-        void play(Hand *hand, Orders *order, Deck *deck);
+        void play(Hand *hand, Order *order, Deck *deck);
 };
 
 class Deck

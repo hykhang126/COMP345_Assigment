@@ -1,8 +1,7 @@
 
 #include <iostream>
-#include <string>
 #include <vector>
-#include "Cards.cpp"
+#include "Cards.h"
 
 using namespace std;
 int main() {
@@ -39,7 +38,7 @@ int main() {
     // We can also print a new card
     cout << *(new Card("Test Card"));
     // Making an orderlist before we can play cards
-    Orders *orderList = new Orders();
+    Order *orderList = new Order();
     // Next we play many random cards from the back of the hand. Note that when playing a card, the cards in the hand are shuffled first.
     for (int i = 0; i < 8; i++){
         hand->getCardsInHand().back()->play(hand,orderList,secondDeck);
