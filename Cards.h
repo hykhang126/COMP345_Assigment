@@ -3,31 +3,27 @@
 #include <string>
 #include <vector>
 using namespace std;
-#include "Orders.h";
+#include "Orders.h"
 
 // possible card types as a global string array of pointers
 string *globalCardTypes[5] = {new string("bomb"), new string("reinforcement"), new string("blockade"),new string("airlift"),new string("diplomacy")};
 
 class Deck;
-
+class Hand;
 class Card
 {
     private:
-
-    string *typePter;
-        Deck *deckPter;
+        string *typePter;
 
     public:
-        Card(string, Deck);
+        Card(string);
         ~Card();
         Card(const Card& c);
         Card& operator =(const Card& c);
         friend ostream& operator<<(ostream& out, const Card& card);
         string getType();
-        Deck getDeck();
-        void setDeck(Deck deck);
         void setType(string type);
-        void play();
+        void play(Hand *hand, Orders *order, Deck *deck);
 };
 
 class Deck
@@ -43,7 +39,9 @@ class Deck
         friend ostream& operator<<(ostream& out, const Deck& deck);
         vector<Card *> getCardsInDeck();
         void setCardsInDeck(vector <Card*>);
-        void draw();
+        void draw(Hand *hand);
+        void addToDeck(Card *card);
+
 };
 
 class Hand
@@ -59,7 +57,7 @@ class Hand
         friend ostream& operator<<(ostream& out, const Hand& hand);
         vector<Card *> getCardsInHand();
         void setCardsInHand(vector <Card*>);
-        Card * removeCard();
+        Card *removeCard(Card *card);
         void addCard(Card *cardPter);
 
 };

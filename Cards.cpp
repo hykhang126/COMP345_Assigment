@@ -4,32 +4,29 @@
 #include <iostream>
 #include <algorithm>
 #include <random>
+#include "Orders.h"
 using namespace std;
 
 // ****************** CARDS *******************
 
 // Constructor
-Card::Card(string type, Deck deck){
+Card::Card(string type){
     typePter = new string(type);
-    deckPter = new Deck(deck);
 }
 
 // Destructor
 Card::~Card(){
     delete(typePter);
-    delete(typePter);
 }
 
 // Copy constructor
 Card::Card(const Card& card){
-    this->deckPter = new Deck(*card.deckPter);
-    this->typePter = new string(*card.typePter);
+    this->typePter = new string(*(card.typePter));
 }
 
 
 // Assignment operator
 Card& Card::operator=(const Card& card){
-    this->deckPter = new Deck(*card.deckPter);
     this->typePter = new string(*card.typePter);
     return *this;
 }
@@ -41,14 +38,9 @@ ostream& operator<<(ostream& outStream, const Card& card)
     return outStream;
 }
 
-
-
 // Getters
 string Card::getType(){
     return *typePter;
-}
-Deck Card::getDeck(){
-    return *deckPter;
 }
 
 // Setters
@@ -57,26 +49,29 @@ void Card::setType(string type) {
     *typePter = type;
 }
 
-void Card::setDeck(Deck deck) {
-    *deckPter = deck;
-}
-
 // Specific class functions
 
-void Card::play(){
+// Note that when playing a card, we do not want to delete and remake pointers
+// We just want to move the card pointer from the hand to the deck
+void Card::play(Hand *hand, Orders *order, Deck *deckPter){
+    // For now, fake add the card move added to order
+    //    order.addOrder();
+    Card * cardPlayedPter = hand->removeCard(this);
+    deckPter->addToDeck(cardPlayedPter);
 
-}
+};
 
 // ****************** DECKS *******************
 
 // Constructor
 Deck::Deck(int size){
+    cardsInDeck = new vector<Card*> {};
 
     for(int i = 0; i<size; i++){
         // Getting a random type from the possible card types, rand()%5 returns 0,1.,2,3 or 4
         int cardTypeIndex = rand()%5;
-        cardsInDeck->push_back(
-            new Card(*globalCardTypes[cardTypeIndex], *this));
+        Card *cardPter = new Card(*globalCardTypes[cardTypeIndex]);
+        cardsInDeck->push_back(cardPter);
     }
 }
 
@@ -85,26 +80,33 @@ Deck::~Deck(){
   for (auto p : *cardsInDeck)
    {
      delete p;
+     p = NULL; // taking care of dangling, in theory ->clear() below should do this for us.
    } 
    cardsInDeck->clear();
+   delete(cardsInDeck); // Since cardsInDeck is a pointer to a vector, we delete it too
+   cardsInDeck=NULL;
 }
 
 // Copy constructor
 
 Deck::Deck(const Deck& deck){
+    this->cardsInDeck = new vector<Card*> {};
     for (auto card : *deck.cardsInDeck)
     {
-        this->cardsInDeck->push_back(card);
+        Card *cardToDeepCopyPter = new Card(*card);
+
+        this->cardsInDeck->push_back(cardToDeepCopyPter);
     };
 }
 
 // Assignment operator
 
  Deck& Deck::operator=(const Deck& deck){
-
+     this->cardsInDeck = new vector<Card*> {};
      for (auto card : *deck.cardsInDeck)
      {
-         this->cardsInDeck->push_back(card);
+         Card *cardToDeepCopyPter = new Card(*card);
+         this->cardsInDeck->push_back(cardToDeepCopyPter);
      };
      return *this;
  }
@@ -127,49 +129,71 @@ vector<Card*> Deck::getCardsInDeck(){
 
 
 // Setters
+// In theory this shouldn't ever be used, but here by convention.
 void Deck::setCardsInDeck(vector<Card *> cards) {
-    *cardsInDeck = cards
+    *cardsInDeck = cards;
 }
 
 // Specific Class functions
-void Deck::play(){
+
+// Note that when drawing a card, we don't want to delete the pointer here!
+// We just want to move it from deck to hand!
+void Deck::draw(Hand *hand){
+    // First shuffle the cards in deck
     std::random_device randomDevice;
     auto randomEngine = std::default_random_engine {randomDevice()};
     std::shuffle(cardsInDeck->begin(), cardsInDeck->end(), randomEngine);
 
-    // hand stuff
+    // Get the pointer to the back card
+    Card * cardToDrawPter = cardsInDeck->back();
+    // Add it to the hand
+    hand->addCard(cardToDrawPter);
+    // Then remove from the deck.
+    cardsInDeck->pop_back();
+}
+
+void Deck::addToDeck(Card *card){
+    cardsInDeck->push_back(card);
 }
 
 // ****************** HAND *******************
 
 // Constructor
 Hand::Hand(){
-
+    cardsInHand = new vector<Card*> {};
 }
 
 // Destructor
 Hand::~Hand(){
+    // First we delete the pointers
     for (auto p : *cardsInHand)
     {
         delete p;
+        p = NULL; // taking care of dangling, just in case
     }
-    cardsInHand->clear();
+    cardsInHand->clear(); // clearing the vector.
+    delete(cardsInHand); // Since cardsInHand is a pointer to a vector, we delete it too
+    cardsInHand=NULL;
 }
 
 // Copy constructor
 Hand::Hand(const Hand& hand){
+    this->cardsInHand = new vector<Card*> {};
     for (auto card : *hand.cardsInHand)
     {
-        this->cardsInHand->push_back(card);
+        Card *cardToDeepCopyPter = new Card(*card);
+        this->cardsInHand->push_back(cardToDeepCopyPter);
     };
 }
 
 // Assignment operator
 Hand& Hand::operator=(const Hand& hand){
 
+    this->cardsInHand = new vector<Card*> {};
     for (auto card : *hand.cardsInHand)
     {
-        this->cardsInHand->push_back(card);
+        Card *cardToDeepCopyPter = new Card(*card);
+        this->cardsInHand->push_back(cardToDeepCopyPter);
     };
     return *this;
 }
@@ -190,19 +214,38 @@ vector<Card*> Hand::getCardsInHand(){
     return *cardsInHand;
 }
 
-// Setters
+// Setters. Shouldn't ever be used but here by convention.
 void Hand::setCardsInHand(vector<Card *> cards) {
-    *cardsInHand = cards
+    *cardsInHand = cards;
 }
 
 // Specific Class functions
+// This adds the existing pointer to the hand
+// The "shallow" pointer pushing is on purpose!
+// We don't want to recreate new values on the heap for already existing cards!
 void Hand::addCard(Card* cardPter){
+    vector<Card*> *test = cardsInHand;
+    if (cardsInHand == nullptr)
+    {
+        cardsInHand = new vector<Card *>{};
+    }
     cardsInHand->push_back(cardPter);
 }
 
-Card* Hand::removeCard(){
-    Card *cardPterToRemove = cardsInHand->back();
-    cardsInHand->pop_back();
-    return cardPterToRemove;
-
+// This function is not meant to delete pointers!
+// It removes a card from the hand by looking for the pointer passed!
+// And returns the card pointer. Which will be returned to the deck on the rest of the Card::play() function
+Card* Hand::removeCard(Card *cardPtr){
+    Card *cardToRemovePter = nullptr;
+    auto it = cardsInHand->begin();
+    while(it != cardsInHand->end()) {
+        if((*it) == cardPtr) {
+            cardToRemovePter = *it;
+            cardsInHand->erase(it);
+            break;
+        } else {
+            it++;
+        }
+    }
+    return cardToRemovePter;
 }
