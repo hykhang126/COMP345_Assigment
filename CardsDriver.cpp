@@ -1,8 +1,7 @@
 
 #include <iostream>
-#include <string>
 #include <vector>
-#include "Cards.cpp"
+#include "Cards.h"
 
 using namespace std;
 int main() {
