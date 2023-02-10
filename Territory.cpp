@@ -1,13 +1,15 @@
 #include "Territory.h"
 
+
+
 void Territory::setArmies(int *armies)
 {
-    *armies = *armies;
+    armies = armies;
 }
 
 void Territory::setOwner(Player *player)
 {
-    *owner = *player;
+    owner = player;
 }
 
 int* Territory::getArmies()
@@ -38,12 +40,13 @@ Territory::~Territory()
     delete name;
     delete continent;
     delete coordinate;
+    cout << "delete";
 }
 
 
-void Territory::toString()
+string Territory::toString()
 {
-    cout << "Player:, Armies: " << *armies; 
+    return "Player:, Armies: " + to_string(*armies) + ", position: " + to_string(*position) + ", name: " + *name + ", continent: " + continent->toString() + ", Coordinate: " + coordinate->toString() ; 
 }
 
 Coordinate* Territory::getCoordinate(){
@@ -56,4 +59,36 @@ Continent* Territory::getContinent(){
 
 string* Territory::getName(){
     return name;
+}
+
+int Territory::getPosition()
+{
+    return *position;
+}
+
+ostream& operator<< (ostream& os, Territory const &ter)
+{
+    os <<"Player:, Armies: " << to_string(*ter.armies) << ", position: " << to_string(*ter.position) << ", name: " << *ter.name << ", continent: " << ter.continent << ", Coordinate: " << ter.coordinate ; 
+    return os;
+}
+
+Territory& Territory::operator= (Territory const &ter)
+{
+    position = new int(*ter.position);
+    armies = new int(*ter.armies);
+    owner = new Player();
+    name = new string(*ter.name);
+    continent = new Continent(*ter.continent);
+    coordinate = new Coordinate(*ter.coordinate);
+    return *this;
+}
+
+Territory::Territory(Territory const &ter)
+{
+    position = new int(*ter.position);
+    armies = new int(*ter.armies);
+    owner = new Player();
+    name = new string(*ter.name);
+    continent = new Continent(*ter.continent);
+    coordinate = new Coordinate(*ter.coordinate);
 }

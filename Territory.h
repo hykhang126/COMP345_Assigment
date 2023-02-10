@@ -2,8 +2,8 @@
 #define TERRITORY_H
 
 #include "Player.h"
-#include "Continent.h"
-#include "Coordinate.h"
+#include "Continent.cpp"
+#include "Coordinate.cpp"
 #include <iostream>
 using namespace std;
 
@@ -26,7 +26,11 @@ class Territory{
         void setArmies( int *armies);
         Territory(Player *player, int *armies, int* pos, string* nm, Continent* cont, Coordinate* cor);
         ~Territory();
-        void toString();
+        string toString();
+        int getPosition();
+        friend ostream& operator<< (ostream& os, Territory const &ter);
+        Territory& operator= (const Territory &ter);
+        Territory(Territory const &ter);
 };
 
 #endif

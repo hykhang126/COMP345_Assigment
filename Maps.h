@@ -1,20 +1,19 @@
 #include <map>
 #include <list>
-#include "Territory.h"
+#include "Territory.cpp"
 
 using namespace std;
 
 class Maps{
     private :
-        map<Territory*, list<Territory*>> maps;
+        map<Territory*, list<Territory*>*> maps;
 
     public :
         void addTerritory(Territory * ter);
         void addEdge(Territory *ter, Territory *edg);
         int countTerritory();
-        int countEdge();
+        int countTotalEdge();
         void toString();
-        Maps();
+        Territory* getTerritoryByIndex(int i);
         ~Maps();
-    
 };
