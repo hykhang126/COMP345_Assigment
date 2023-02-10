@@ -201,6 +201,11 @@ public:
 
     //method to add orders to the list
     void addOrder(Order* order);
+
+    //getter
+    vector<Order*> getList();
+    //setter
+    void setList(vector<Order*> list);
 };
 
 #endif //ORDERS_H

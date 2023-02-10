@@ -284,3 +284,13 @@ void OrdersList::addOrder(Order* order) {
     cout << "Adding order " << *order << " to the list" << endl;
     ordersList->push_back(order);
 }
+/**
+ * Getter for the list of orders
+*/
+vector<Order*> OrdersList::getList() {
+    return *ordersList;
+}
+
+void OrdersList::setList(vector<Order*> list) {
+    *ordersList = list;
+}
