@@ -7,8 +7,8 @@ Player::Player() {
     this->listOfOrders = new OrdersList();
 }
 
-Player::Player(string name, vector<Territory*> tCollection, Hand* hand, OrdersList* listOfOrders) {
-    this->name = new string(name);
+Player::Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersList* listOfOrders) {
+    this->name = new string(*name);
     this->hand = new Hand(*hand);
     this->tCollection = new vector<Territory*>;
     for(auto territory : tCollection) {
@@ -36,15 +36,26 @@ Player::~Player() {
 }
 
 vector<Territory*>* Player::toDefend() {
-    return nullptr;
+    vector<Territory*>* defending = new vector<Territory*>{};
+    //defending = {tCollection->begin(), tCollection->begin()+3};
+    int size = tCollection->size();
+    for(int i=0; i<size; i++){
+        defending->push_back(tCollection[i]);
+    }
+    // for(auto territory: *tCollection){
+    //     defending->push_back(territory);
+    // }
+    return defending;
 }
 
 vector<Territory*>* Player::toAttack() {
-    return nullptr;
+    vector<Territory*>* attacking = new vector<Territory*>;
+    attacking = {tCollection->begin(), tCollection->begin() + 3};
+    return attacking;
 }
 
 void Player::issueOrder() {
-    Order *ord = new Order("Some Order");
+    Order *ord = new Order();
     this->listOfOrders->addOrder(ord);
 }
 

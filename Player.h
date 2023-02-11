@@ -2,8 +2,10 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "Territory.h"
-#include "Maps.h"
+#include <algorithm>
+#include "Map.h"
+#include "Orders.h"
+#include "Cards.h"
 
 using namespace std;
 
@@ -18,7 +20,7 @@ class Player{
         //Basic constructor
         Player();
         //Contructor taking in all attributes as params
-        Player(string name, vector<Territory*> tCollection, Hand* hand, OrdersList* listOfOrders);
+        Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersList* listOfOrders);
         //Copy constructor
         Player(const Player& p);
         //Destructor
