@@ -1,9 +1,6 @@
 #include "GameEngine.h"
 #include <iostream>
-
-
-
-
+#include <algorithm>
 
 // STATE CLASS
 State::State()
@@ -177,11 +174,31 @@ void GameEngine::initialization()
 
 }
 
-
-
 GameEngine::GameEngine()
 {
     this->initialization();
+}
+
+bool GameEngine::isCommandValid(string *command)
+{
+    cout << "-----------------------------\n";
+    cout << "Current State and its transitions:\n - ";
+    currentState->showTransitions();
+    cout << "Your command: " << *command;
+    cout << endl;
+
+    vector<Transition*> currTransitions = currentState->getTransitions();
+    for (int i = 0; i < currTransitions.size(); i++)
+    {
+        if (currTransitions[i]->getName()->compare(*command) == 0)
+        {
+            currentState = currTransitions[i]->getDestination();
+            cout << "Command Valid. State changed\n" << endl;
+            return true;
+        }
+    }
+    cout << "Command Invalid\n" << endl;
+    return false;
 }
 
 

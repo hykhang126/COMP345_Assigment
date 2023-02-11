@@ -2,11 +2,9 @@
 #include <string>
 #include <vector>
 
-
 using namespace std;
 
 class State;
-
 
 class Transition
 {
@@ -53,6 +51,8 @@ class State
 class GameEngine
 {
     private :
+        // // Command string
+        // string *command;
         // currentState to store current state of the game
         State* currentState;
         // All 8 States
@@ -93,6 +93,8 @@ class GameEngine
         void addStateToList(State* state);
 
         GameEngine();
+
+        bool isCommandValid(string *command);
     
 };
 
@@ -101,14 +103,3 @@ class GameEngine
 
 
 
-
-
-
-class Command
-{
-    private :
-        string *name;
-    
-    public:
-        int isCommandValid(string *command);
-};
