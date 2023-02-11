@@ -58,9 +58,8 @@ int main()
         cout << "Enter your choice: ";
         cin >> input;
     }
-
+    cout << "Cleanning memory..." <<endl;
+    delete map;
     cout << "Program terminated" << endl;
-
-    
-    
+    exit(1);  
 }

@@ -1,3 +1,6 @@
+#ifndef MYHEADER_H
+#define MYHEADER_H
+
 #include <map>
 #include <list>
 #include <iostream>
@@ -14,6 +17,7 @@ using namespace std;
 class Player{
     public:
         Player();
+        ~Player();
 };
 
 //Declaration of Continent class
@@ -112,3 +116,5 @@ class MapLoader{
     public:
         Map* loadMapFromFile(string fileName);
 };
+
+#endif // MYHEADER_H
