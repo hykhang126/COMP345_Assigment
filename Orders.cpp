@@ -7,6 +7,7 @@ Order::Order() {
     description = new string("Not Defined");
     isExecuted = new bool(false); //default execution status is false
     effect = new string("Not Defined");
+    isValid = new bool(false); //default validation status is false
 }
 /**
  * Destructor for Order Class
@@ -15,6 +16,7 @@ Order::~Order() {
     delete description;
     delete isExecuted;
     delete effect;
+    delete isValid;
 }
 /**
  * Copy constructor for Order Class
@@ -24,6 +26,7 @@ Order::Order(const Order& other) {
     this->description = new string(*(other.description));
     this->isExecuted = new bool(*(other.isExecuted));
     this->effect = new string(*(other.effect));
+    this->isValid = new bool(*(other.isValid));
 }
 /**
  * Assignment operator for Order Class
@@ -33,6 +36,7 @@ Order& Order::operator= (const Order& other) {
     this->description = new string(*(other.description));
     this->isExecuted = new bool(*(other.isExecuted));
     this->effect = new string(*(other.effect));
+    this->isValid = new bool(*(other.isValid));
     return *this;
 }
 /**
@@ -40,8 +44,9 @@ Order& Order::operator= (const Order& other) {
 */
 ostream& operator << (ostream& out, const Order& order) {
     out << *order.description;
-    if(*order.isExecuted == true)
+    if(*order.isExecuted == true) {
         out << "\n\t\tExecuted: " << *order.effect;
+    }
     return out;
 }
 /**
@@ -80,6 +85,18 @@ string Order::getEffect() {
 void Order::setEffect(string text) {
     *effect = text;
 }
+/**
+ * Getter for order validation status
+*/
+bool Order::getValidStatus() {
+    return *isValid;
+}
+/**
+ * Setter for order validation status
+*/
+void Order::setValidStatus(bool status) {
+    *isValid = status;
+}
 
 // ------------------- DEPLOY ORDER --------------------------
 /**
@@ -113,6 +130,28 @@ Deploy& Deploy::operator=(const Deploy& other) {
 ostream& operator << (ostream& out, const Deploy& deploy) {
     out << "This is an Order of type Deploy.";
     return out;
+}
+/**
+ * Validate method for Deploy order: sets the order's validation status to true
+*/
+void Deploy::validate() {
+    setValidStatus(true);
+        cout << "Deploy order validated!" << endl;
+}
+/**
+ * Execute method for Deploy order:
+ * -First, validates the order
+ * -Then, execute the order is it is valid
+*/
+void Deploy::execute() {
+    validate();
+    if (getValidStatus() == true) {
+        setExecStatus(true);
+        cout << "Deploy order executed!" << endl;
+    }
+    else {
+        cout << "Deploy order failed..." << endl;
+    }
 }
 
 // ------------------- ADVANCE ORDER -------------------------
@@ -148,6 +187,29 @@ ostream& operator << (ostream& out, const Advance& advance) {
     out << "This is an Order of type Advance.";
     return out;
 }
+/**
+ * Validate method for Advance order: sets the order's validation status to true
+*/
+void Advance::validate() {
+    setValidStatus(true);
+        cout << "Advance order validated!" << endl;
+}
+/**
+ * Execute method for Advance order:
+ * -First, validates the order
+ * -Then, execute the order is it is valid
+*/
+void Advance::execute() {
+    validate();
+    if (getValidStatus() == true) {
+        setExecStatus(true);
+        cout << "Advance order executed!" << endl;
+    }
+    else {
+        cout << "Advance order failed..." << endl;
+    }
+}
+
 
 // ------------------- BOMB ORDER ----------------------------
 /**
@@ -182,6 +244,29 @@ ostream& operator << (ostream& out, const Bomb& bomb) {
     out << "This is an Order of type Bomb.";
     return out;
 }
+/**
+ * Validate method for Bomb order: sets the order's validation status to true
+*/
+void Bomb::validate() {
+    setValidStatus(true);
+        cout << "Bomb order validated!" << endl;
+}
+/**
+ * Execute method for Bomb order:
+ * -First, validates the order
+ * -Then, execute the order is it is valid
+*/
+void Bomb::execute() {
+    validate();
+    if (getValidStatus() == true) {
+        setExecStatus(true);
+        cout << "Bomb order executed!" << endl;
+    }
+    else {
+        cout << "Bomb order failed..." << endl;
+    }
+}
+
 
 // ------------------- BLOCKADE ORDER ------------------------
 /**
@@ -216,6 +301,29 @@ ostream& operator << (ostream& out, const Blockade& blockade) {
     out << "This is an Order of type Blockade.";
     return out;
 }
+/**
+ * Validate method for Blockade order: sets the order's validation status to true
+*/
+void Blockade::validate() {
+    setValidStatus(true);
+        cout << "Blockade order validated!" << endl;
+}
+/**
+ * Execute method for Blockade order:
+ * -First, validates the order
+ * -Then, execute the order is it is valid
+*/
+void Blockade::execute() {
+    validate();
+    if (getValidStatus() == true) {
+        setExecStatus(true);
+        cout << "Blockade order executed!" << endl;
+    }
+    else {
+        cout << "Blockade order failed..." << endl;
+    }
+}
+
 
 // ------------------- AIRLIFT ORDER -------------------------
 /**
@@ -250,6 +358,29 @@ ostream& operator << (ostream& out, const Airlift& airlift) {
     out << "This is an Order of type Airlift.";
     return out;
 }
+/**
+ * Validate method for Airlift order: sets the order's validation status to true
+*/
+void Airlift::validate() {
+    setValidStatus(true);
+        cout << "Airlift order validated!" << endl;
+}
+/**
+ * Execute method for Airlift order:
+ * -First, validates the order
+ * -Then, execute the order is it is valid
+*/
+void Airlift::execute() {
+    validate();
+    if (getValidStatus() == true) {
+        setExecStatus(true);
+        cout << "Airlift order executed!" << endl;
+    }
+    else {
+        cout << "Airlift order failed..." << endl;
+    }
+}
+
 
 // ------------------- NEGOTIATE ORDER -----------------------
 /**
@@ -284,6 +415,29 @@ ostream& operator << (ostream& out, const Negotiate& negotiate) {
     out << "This is an Order of type Negotiate.";
     return out;
 }
+/**
+ * Validate method for Negotiate order: sets the order's validation status to true
+*/
+void Negotiate::validate() {
+    setValidStatus(true);
+        cout << "Negotiate order validated!" << endl;
+}
+/**
+ * Execute method for Negotiate order:
+ * -First, validates the order
+ * -Then, execute the order is it is valid
+*/
+void Negotiate::execute() {
+    validate();
+    if (getValidStatus() == true) {
+        setExecStatus(true);
+        cout << "Negotiate order executed!" << endl;
+    }
+    else {
+        cout << "Negotiate order failed..." << endl;
+    }
+}
+
 
 
 // ------------------- LIST OF ORDERS ------------------------

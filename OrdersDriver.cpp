@@ -4,19 +4,20 @@
  * Orders Driver to demonstrate specifications for Orders
 */
 int main() {
+    cout << "Initializing..........................................." << endl;
     // Initialization of list
     OrdersList* list = new OrdersList();
     //Initialization of Orders
     Order* order0 = new Order(); //non-defined order
-    Order* order1 = new Deploy(); //deploy order
-    Order* order2 = new Advance(); //advance order
-    Order* order3 = new Bomb(); //bomb order
-    Order* order4 = new Blockade(); //blockade order
-    Order* order5 = new Airlift(); //airlift order
-    Order* order6 = new Negotiate(); //negotiate order
-    Order* order7 = order3; //copy constructor
+    Deploy* order1 = new Deploy(); //deploy order
+    Advance* order2 = new Advance(); //advance order
+    Bomb* order3 = new Bomb(); //bomb order
+    Blockade* order4 = new Blockade(); //blockade order
+    Airlift* order5 = new Airlift(); //airlift order
+    Negotiate* order6 = new Negotiate(); //negotiate order
+    Negotiate* order7 = order6; //copy constructor
     
-
+    cout << "\nAdding to list....................................." << endl;
     // Insert Orders in OrdersList
     list->addOrder(order0);
     list->addOrder(order1);
@@ -27,18 +28,16 @@ int main() {
     list->addOrder(order6);
     list->addOrder(order7);
 
-    //Testing if executed orders will output effect
-    order0->setExecStatus(true);
-    order1->setExecStatus(true);
-    order2->setExecStatus(true);
-    order3->setExecStatus(true);
-    order4->setExecStatus(true);
-    order5->setExecStatus(true);
-    order6->setExecStatus(true);
-    order7->setExecStatus(true);
-
+    cout <<"\nValidating and executing..........................." << endl;
+    order1->execute();
+    order2->execute();
+    order3->execute();
+    order4->execute();
+    order5->execute();
+    order6->execute();
+    order7->execute();
     
-
+    cout << "\nDisplaying the list of orders......................" << endl;
     // Print output
     cout << *list;
 }

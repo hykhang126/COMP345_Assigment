@@ -32,8 +32,9 @@ class Order
 private:
     /* data */
     string* description; //Specifies the type of Order
-    bool* isExecuted; //Status of Order execution (Executed: True. Not executed: False)
+    bool* isExecuted; //Status of Order execution (Executed: true. Not executed: false)
     string* effect; // Specifies the effect of the Order
+    bool* isValid; //Status of Order Validation (Valid: true. Not Valid: false)
 public:
     //default constructor
     Order();
@@ -59,6 +60,10 @@ public:
     string getEffect();
     //setter for order effect
     void setEffect(string text);
+    //getter for order validation status
+    bool getValidStatus();
+    //setter for order validation status
+    void setValidStatus(bool status);
 };
 
 // ------------------- DEPLOY ORDER --------------------------
@@ -81,6 +86,11 @@ public:
     Deploy& operator = (const Deploy& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Deploy& deploy);
+
+    //validate method to make the order valid
+    void validate();
+    //execute method to execute an order
+    void execute();
 };
 
 // ------------------- ADVANCE ORDER -------------------------
@@ -103,6 +113,12 @@ public:
     Advance& operator = (const Advance& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Advance& advance);
+
+    //validate method to make the order valid
+    void validate();
+    //execute method to execute an order
+    void execute();
+
 };
 
 // ------------------- BOMB ORDER ----------------------------
@@ -125,6 +141,11 @@ public:
     Bomb& operator = (const Bomb& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Bomb& bomb);
+
+    //validate method to make the order valid
+    void validate();
+    //execute method to execute an order
+    void execute();
 };
 
 // ------------------- Blockade ORDER ------------------------
@@ -147,6 +168,11 @@ public:
     Blockade& operator = (const Blockade& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Blockade& blockade);
+
+    //validate method to make the order valid
+    void validate();
+    //execute method to execute an order
+    void execute();
 };
 
 // ------------------- AIRLIFT ORDER -------------------------
@@ -169,6 +195,11 @@ public:
     Airlift& operator = (const Airlift& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Airlift& airlift);
+
+    //validate method to make the order valid
+    void validate();
+    //execute method to execute an order
+    void execute();
 };
 
 // ------------------- NEGOTIATE ORDER -----------------------
@@ -191,6 +222,11 @@ public:
     Negotiate& operator = (const Negotiate& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Negotiate& negotiate);
+
+    //validate method to make the order valid
+    void validate();
+    //execute method to execute an order
+    void execute();
 };
 
 // ------------------- LIST OF ORDERS ------------------------
