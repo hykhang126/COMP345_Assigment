@@ -31,9 +31,12 @@ class Order
 {
 private:
     /* data */
+    string* description; //Specifies the type of Order
+    bool* isExecuted; //Status of Order execution (Executed: True. Not executed: False)
+    string* effect; // Specifies the effect of the Order
 public:
     //default constructor
-    Order(/* args */);
+    Order();
     //destructor
     ~Order();
 
@@ -43,6 +46,19 @@ public:
     Order& operator = (const Order& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Order& order);
+
+    //getter for order type
+    string getDescription();
+    //setter for order type
+    void setDescription(string text);
+    //getter for execution status
+    bool getExecStatus();
+    //setter for execution status
+    void setExecStatus(bool status);
+    //getter for the order effect
+    string getEffect();
+    //setter for order effect
+    void setEffect(string text);
 };
 
 // ------------------- DEPLOY ORDER --------------------------
@@ -55,7 +71,7 @@ private:
     /* data */
 public:
     //default constructor
-    Deploy(/* args */);
+    Deploy();
     //destructor
     ~Deploy();
 
@@ -77,7 +93,7 @@ private:
     /* data */
 public:
     //default constructor
-    Advance(/* args */);
+    Advance();
     //destructor
     ~Advance();
 
@@ -99,7 +115,7 @@ private:
     /* data */
 public:
     //default constructor
-    Bomb(/* args */);
+    Bomb();
     //destructor
     ~Bomb();
 
@@ -121,7 +137,7 @@ private:
     /* data */
 public:
     //default constructor
-    Blockade(/* args */);
+    Blockade();
     //destructor
     ~Blockade();
 
@@ -143,7 +159,7 @@ private:
     /* data */
 public:
     //default constructor
-    Airlift(/* args */);
+    Airlift();
     //destructor
     ~Airlift();
 
@@ -165,7 +181,7 @@ private:
     /* data */
 public:
     //default constructor
-    Negotiate(/* args */);
+    Negotiate();
     //destructor
     ~Negotiate();
 
@@ -188,7 +204,7 @@ private:
     vector<Order*>* ordersList;
 public:
     //default constructor
-    OrdersList(/* args */);
+    OrdersList();
     //destructor
     ~OrdersList();
 

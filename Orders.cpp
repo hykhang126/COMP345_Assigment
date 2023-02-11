@@ -4,33 +4,81 @@
  * Default constructor for Order Class
 */
 Order::Order() {
-
+    description = new string("Not Defined");
+    isExecuted = new bool(false); //default execution status is false
+    effect = new string("Not Defined");
 }
 /**
  * Destructor for Order Class
 */
 Order::~Order() {
+    delete description;
+    delete isExecuted;
+    delete effect;
 }
 /**
  * Copy constructor for Order Class
  * @param other: the other order to copy
 */
 Order::Order(const Order& other) {
-
+    this->description = new string(*(other.description));
+    this->isExecuted = new bool(*(other.isExecuted));
+    this->effect = new string(*(other.effect));
 }
 /**
  * Assignment operator for Order Class
  * @param other: the other order assigned to
 */
 Order& Order::operator= (const Order& other) {
+    this->description = new string(*(other.description));
+    this->isExecuted = new bool(*(other.isExecuted));
+    this->effect = new string(*(other.effect));
     return *this;
 }
 /**
  * Stream insertion operator for Order Class
 */
 ostream& operator << (ostream& out, const Order& order) {
-    out << "Placeholder Order";
+    out << *order.description;
+    if(*order.isExecuted == true)
+        out << "\n\t\tExecuted: " << *order.effect;
     return out;
+}
+/**
+ * Getter for the order description
+*/
+string Order::getDescription() {
+    return *description;
+}
+/**
+ * Setter for the order description
+*/
+void Order::setDescription(string text) {
+    *description = text;
+}
+/**
+ * Getter for order execution status
+*/
+bool Order::getExecStatus() {
+    return *isExecuted;
+}
+/**
+ * Setter for order execution status
+*/
+void Order::setExecStatus(bool status) {
+    *isExecuted = status;
+}
+/**
+ * Getter for the order effect
+*/
+string Order::getEffect() {
+    return *effect;
+}
+/**
+ * Setter for order effect
+*/
+void Order::setEffect(string text) {
+    *effect = text;
 }
 
 // ------------------- DEPLOY ORDER --------------------------
@@ -38,7 +86,8 @@ ostream& operator << (ostream& out, const Order& order) {
  * Default constructor for Deploy Class
 */
 Deploy::Deploy() {
-
+    setDescription("deploy some armies on one of the player's territories");
+    setEffect("Player armies have been placed on the player's territories");
 }
 /**
  * Destructor for Deploy Class
@@ -71,7 +120,8 @@ ostream& operator << (ostream& out, const Deploy& deploy) {
  * Default constructor for Advance Class
 */
 Advance::Advance() {
-
+    setDescription("advance armies from one of the player's territories to an adjacent territory");
+    setEffect("Player armies have moved to an adjacent territory.");
 }
 /**
  * Destructor for Advance Class
@@ -104,7 +154,8 @@ ostream& operator << (ostream& out, const Advance& advance) {
  * Default constructor for Bomb Class
 */
 Bomb::Bomb() {
-
+    setDescription("bomb half of the armies on the opponent's territory that is adjacent to the player's");
+    setEffect("Half of the armies on the opponent's territory has been destroyed.");
 }
 /**
  * Destructor for Bomb Class
@@ -137,7 +188,8 @@ ostream& operator << (ostream& out, const Bomb& bomb) {
  * Default constructor for Blockade Class
 */
 Blockade::Blockade() {
-
+    setDescription("blockade one of the player's territories");
+    setEffect("Number of armies on the player's territory has been tripled. The territory is now neutral.");
 }
 /**
  * Destructor for Blockade Class
@@ -170,7 +222,8 @@ ostream& operator << (ostream& out, const Blockade& blockade) {
  * Default constructor for Airlift Class
 */
 Airlift::Airlift() {
-
+    setDescription("airlift some armies from one of the player's territories to another territory");
+    setEffect("Player's armies has advanced to the target territory");
 }
 /**
  * Destructor for Airlift Class
@@ -203,7 +256,8 @@ ostream& operator << (ostream& out, const Airlift& airlift) {
  * Default constructor for Negotiate Class
 */
 Negotiate::Negotiate() {
-
+    setDescription("negotiate between the current player and another player");
+    setEffect("No attacks allowed between the players in negotiation until the end of the turn");
 }
 /**
  * Destructor for Negotiate Class
@@ -245,11 +299,8 @@ OrdersList::OrdersList() {
 OrdersList::~OrdersList() {
     for(auto order : *ordersList) {
         delete order;
-        order = NULL;
     }
-    ordersList->clear();
-    delete(ordersList);
-    ordersList=NULL;
+    delete ordersList;
 }
 /**
  * Copy Constructor for OrdersList Class
@@ -281,7 +332,7 @@ ostream& operator << (ostream& out, const OrdersList& list) {
  * @param order: the order to add to the list
 */
 void OrdersList::addOrder(Order* order) {
-    cout << "Adding order " << *order << " to the list" << endl;
+    cout << "Adding order to: " << *order << " to the list" << endl;
     ordersList->push_back(order);
 }
 /**
@@ -290,7 +341,9 @@ void OrdersList::addOrder(Order* order) {
 vector<Order*> OrdersList::getList() {
     return *ordersList;
 }
-
+/**
+ * Setter for the list of orders
+*/
 void OrdersList::setList(vector<Order*> list) {
     *ordersList = list;
 }
