@@ -490,6 +490,21 @@ void OrdersList::addOrder(Order* order) {
     ordersList->push_back(order);
 }
 /**
+ * Method to remove an order from the list
+ * @param order: the order to be removed from the list
+*/
+void OrdersList::remove(Order* order) {
+    cout << "Attempting to remove order to: " << *order << " from the list" << endl;
+    auto index = find(ordersList->begin(), ordersList->end(), order);
+    if (index != ordersList->end()) {
+        cout << "Removing order..." << endl;
+        ordersList->erase(index);
+    }
+    else {
+        cout << "Cannot find the order to remove..." << endl;
+    }
+}
+/**
  * Getter for the list of orders
 */
 vector<Order*> OrdersList::getList() {

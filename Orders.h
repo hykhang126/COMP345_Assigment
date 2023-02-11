@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -253,6 +254,10 @@ public:
 
     //method to add orders to the list
     void addOrder(Order* order);
+    //method to remove an order from the list
+    void remove(Order* order);
+    //method to move an order from the list
+    void move(Order* order);
 
     //getter
     vector<Order*> getList();

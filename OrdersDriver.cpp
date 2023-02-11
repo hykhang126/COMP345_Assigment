@@ -4,7 +4,7 @@
  * Orders Driver to demonstrate specifications for Orders
 */
 int main() {
-    cout << "Initializing..........................................." << endl;
+    cout << "Initializing list and orders........................." << endl;
     // Initialization of list
     OrdersList* list = new OrdersList();
     //Initialization of Orders
@@ -39,5 +39,9 @@ int main() {
     
     cout << "\nDisplaying the list of orders......................" << endl;
     // Print output
+    cout << *list;
+
+    cout << "\nTesting the remove method.........................." << endl;
+    list->remove(order2);
     cout << *list;
 }
