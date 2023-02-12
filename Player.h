@@ -44,4 +44,7 @@ class Player{
         string* getName();
         Hand* getHand();
         OrdersList* getOrdersList();
+        vector<Territory*>* getTerritoryCollection();
+        //setters
+        void setTerritoryCollection(vector <Territory*>);
 };
