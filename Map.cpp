@@ -1,10 +1,5 @@
 #include "Map.h"
 
-Player::~Player()
-{
-    cout << "delete player" << endl;
-}
-
 //definition of Map class
 void Map::addTerritory(Territory *ter)
 {

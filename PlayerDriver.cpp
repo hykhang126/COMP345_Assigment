@@ -40,7 +40,7 @@ int main() {
         cout << "\tTerritory name: " << *territory->getName() << endl;
     }
 
-    cout << "\nPlayer info: " << *player1 << endl;
+    cout << "\nPlayer info: \n" << *player1 << endl;
 
     return 0;
 }
