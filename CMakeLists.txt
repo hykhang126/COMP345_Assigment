@@ -17,6 +17,8 @@ add_executable(COMP345_Assigment1
         Maps.cpp
         Maps.h
         Orders.h
+        Player.cpp
         Player.h
+        PlayerDriver.cpp
         Territory.cpp
         Territory.h)

@@ -1,9 +1,5 @@
 #include "Map.h"
 
-//definition of Player class
-Player::Player()
-{}
-
 Player::~Player()
 {
     cout << "delete player" << endl;

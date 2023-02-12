@@ -1,6 +1,7 @@
+
+#pragma once
 #ifndef MYHEADER_H
 #define MYHEADER_H
-
 #include <map>
 #include <list>
 #include <iostream>
@@ -10,15 +11,11 @@
 #include <fstream>
 #include <set>
 #include <queue>
+#include "Player.h"
 
 using namespace std;
 
-//Dummy player class
-class Player{
-    public:
-        Player();
-        ~Player();
-};
+class Player;
 
 //Declaration of Continent class
 class Continent{
