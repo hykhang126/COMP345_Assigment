@@ -1,4 +1,5 @@
 #include "Orders.h"
+#include <algorithm>
 
 /**
  * Default constructor for Order Class
@@ -495,13 +496,36 @@ void OrdersList::addOrder(Order* order) {
 */
 void OrdersList::remove(Order* order) {
     cout << "Attempting to remove order to: " << *order << " from the list" << endl;
-    auto index = find(ordersList->begin(), ordersList->end(), order);
-    if (index != ordersList->end()) {
+    auto index = find(ordersList->begin(), ordersList->end(), order); //first try finding the order
+    if (index != ordersList->end()) { //if order found
         cout << "Removing order..." << endl;
         ordersList->erase(index);
     }
-    else {
+    else { //else inform that order is not in list
         cout << "Cannot find the order to remove..." << endl;
+    }
+}
+/**
+ * Method to move an order in the list.
+ * @param order: the order to move in the list
+ * @param newPosition: new position where the order will move to
+*/
+void OrdersList::move(Order* order, int newPosition) {
+    cout << "Attempting to move order to: " << *order << " from the list " << 
+            "to position " << newPosition << endl;
+    //Check if the new position is valid
+    if (newPosition <= 0 || newPosition > ordersList->size()) {
+        cout << "New position is out of bounds..." << endl;
+        return;
+    }
+    auto index = find(ordersList->begin(), ordersList->end(), order); //check if order is in the list
+    if(index != ordersList->begin()) {
+        cout << "Moving order to its new position..." << endl;
+        ordersList->erase(index); //first erase order's initial position
+        ordersList->insert(ordersList->begin() + newPosition - 1, order); //insert order in its new position
+    }
+    else {
+        cout << "Cannot find the order to move..." << endl;
     }
 }
 /**
