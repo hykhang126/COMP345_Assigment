@@ -31,9 +31,13 @@ class Order
 {
 private:
     /* data */
+    string* description; //Specifies the type of Order
+    bool* isExecuted; //Status of Order execution (Executed: true. Not executed: false)
+    string* effect; // Specifies the effect of the Order
+    bool* isValid; //Status of Order Validation (Valid: true. Not Valid: false)
 public:
     //default constructor
-    Order(/* args */);
+    Order();
     //destructor
     ~Order();
 
@@ -43,6 +47,23 @@ public:
     Order& operator = (const Order& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Order& order);
+
+    //getter for order type
+    string getDescription();
+    //setter for order type
+    void setDescription(string text);
+    //getter for execution status
+    bool getExecStatus();
+    //setter for execution status
+    void setExecStatus(bool status);
+    //getter for the order effect
+    string getEffect();
+    //setter for order effect
+    void setEffect(string text);
+    //getter for order validation status
+    bool getValidStatus();
+    //setter for order validation status
+    void setValidStatus(bool status);
 };
 
 // ------------------- DEPLOY ORDER --------------------------
@@ -55,7 +76,7 @@ private:
     /* data */
 public:
     //default constructor
-    Deploy(/* args */);
+    Deploy();
     //destructor
     ~Deploy();
 
@@ -65,6 +86,11 @@ public:
     Deploy& operator = (const Deploy& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Deploy& deploy);
+
+    //validate method to make the order valid
+    void validate();
+    //execute method to execute an order
+    void execute();
 };
 
 // ------------------- ADVANCE ORDER -------------------------
@@ -77,7 +103,7 @@ private:
     /* data */
 public:
     //default constructor
-    Advance(/* args */);
+    Advance();
     //destructor
     ~Advance();
 
@@ -87,6 +113,12 @@ public:
     Advance& operator = (const Advance& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Advance& advance);
+
+    //validate method to make the order valid
+    void validate();
+    //execute method to execute an order
+    void execute();
+
 };
 
 // ------------------- BOMB ORDER ----------------------------
@@ -99,7 +131,7 @@ private:
     /* data */
 public:
     //default constructor
-    Bomb(/* args */);
+    Bomb();
     //destructor
     ~Bomb();
 
@@ -109,6 +141,11 @@ public:
     Bomb& operator = (const Bomb& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Bomb& bomb);
+
+    //validate method to make the order valid
+    void validate();
+    //execute method to execute an order
+    void execute();
 };
 
 // ------------------- Blockade ORDER ------------------------
@@ -121,7 +158,7 @@ private:
     /* data */
 public:
     //default constructor
-    Blockade(/* args */);
+    Blockade();
     //destructor
     ~Blockade();
 
@@ -131,6 +168,11 @@ public:
     Blockade& operator = (const Blockade& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Blockade& blockade);
+
+    //validate method to make the order valid
+    void validate();
+    //execute method to execute an order
+    void execute();
 };
 
 // ------------------- AIRLIFT ORDER -------------------------
@@ -143,7 +185,7 @@ private:
     /* data */
 public:
     //default constructor
-    Airlift(/* args */);
+    Airlift();
     //destructor
     ~Airlift();
 
@@ -153,6 +195,11 @@ public:
     Airlift& operator = (const Airlift& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Airlift& airlift);
+
+    //validate method to make the order valid
+    void validate();
+    //execute method to execute an order
+    void execute();
 };
 
 // ------------------- NEGOTIATE ORDER -----------------------
@@ -165,7 +212,7 @@ private:
     /* data */
 public:
     //default constructor
-    Negotiate(/* args */);
+    Negotiate();
     //destructor
     ~Negotiate();
 
@@ -175,6 +222,11 @@ public:
     Negotiate& operator = (const Negotiate& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Negotiate& negotiate);
+
+    //validate method to make the order valid
+    void validate();
+    //execute method to execute an order
+    void execute();
 };
 
 // ------------------- LIST OF ORDERS ------------------------
@@ -188,7 +240,7 @@ private:
     vector<Order*>* ordersList;
 public:
     //default constructor
-    OrdersList(/* args */);
+    OrdersList();
     //destructor
     ~OrdersList();
 
@@ -201,6 +253,10 @@ public:
 
     //method to add orders to the list
     void addOrder(Order* order);
+    //method to remove an order from the list
+    void remove(Order* order);
+    //method to move an order from the list
+    void move(Order* order, int newPosition);
 
     //getter
     vector<Order*> getList();
