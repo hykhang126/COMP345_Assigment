@@ -31,17 +31,17 @@ int main() {
     cout<< "****Filled first deck below****\n" << *firstDeck;
     cout << "****Short second deck below****\n" << *secondDeck << "\n ****Deep copy successful above****\n";
     // Also, the third deck (assignment operator) has a different number of cards than the second deck
-    cout<<"****Deep assignment below:**** \n" << thirdDeck;
+    cout<<"****Deep assignment below proved with third deck:**** \n" << thirdDeck;
 
     // Next we make sure that the hand is filled
     cout << "****Printing Hand****\n" << *hand << "****Hand successfully filled above****\n";
     // We can also print a new card
     cout << *(new Card("Test Card"));
     // Making an orderlist before we can play cards
-    Order *orderList = new Order();
+    OrdersList *ordersList  = new OrdersList();
     // Next we play many random cards from the back of the hand. Note that when playing a card, the cards in the hand are shuffled first.
     for (int i = 0; i < 8; i++){
-        hand->getCardsInHand().back()->play(hand,orderList,secondDeck);
+        hand->getCardsInHand().back()->play(hand,ordersList,secondDeck);
     }
     // Next we print the hand again to show that many of the cards are gone from the hand
 

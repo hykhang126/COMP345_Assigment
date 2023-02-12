@@ -55,11 +55,32 @@ void Card::setType(string type) {
 
 // Note that when playing a card, we do not want to delete and remake pointers
 // We just want to move the card pointer from the hand to the deck
-void Card::play(Hand *hand, Order *order, Deck *deckPter){
+void Card::play(Hand *hand, OrdersList *orderLists, Deck *deckPter){
     // For now, fake add the card move added to order
     //    order.addOrder();
     Card * cardPlayedPter = hand->removeCard(this);
     deckPter->addToDeck(cardPlayedPter);
+
+    if(cardPlayedPter->getType() == "bomb"){
+        Bomb *bombOrderPter = new Bomb();
+        orderLists->addOrder(bombOrderPter);
+    }
+    else if (cardPlayedPter->getType() == "blockade"){
+        Blockade *blockadeOrderPter = new Blockade();
+        orderLists->addOrder(blockadeOrderPter);
+    }
+    else if (cardPlayedPter->getType() == "reinforcement") {
+        Order *reinforcementOrderPter = new Order();
+        orderLists->addOrder(reinforcementOrderPter);
+    }
+    else if (cardPlayedPter->getType() == "airlift"){
+        Airlift *airLiftPter = new Airlift();
+        orderLists->addOrder(airLiftPter);
+    }
+    else if (cardPlayedPter->getType() == "diplomacy") {
+        Negotiate *diplomacyOrderPter = new Negotiate();
+        orderLists->addOrder(diplomacyOrderPter);
+    }
 
 };
 
