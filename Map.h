@@ -1,4 +1,7 @@
+
 #pragma once
+#ifndef MYHEADER_H
+#define MYHEADER_H
 #include <map>
 #include <list>
 #include <iostream>
@@ -6,17 +9,15 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
+#include <set>
+#include <queue>
 #include "Player.h"
 
 using namespace std;
 
-
-// class Player{
-//     public:
-//         Player();
-// };
 class Player;
 
+//Declaration of Continent class
 class Continent{
     private:
         int* position;
@@ -37,6 +38,7 @@ class Continent{
         friend ostream& operator<< (ostream &os, const Continent &cont);
 };
 
+//Declaration of Coordinate class
 class Coordinate{
     private:
         int* x;
@@ -52,6 +54,7 @@ class Coordinate{
         Coordinate& operator= (Coordinate const &cor);
 };
 
+//Declaration of Territory class
 class Territory{
     private:
         int* position;
@@ -78,11 +81,11 @@ class Territory{
         Territory(Territory const &ter);
 };
 
-
-
+//Declaration of Map class
 class Map{
     private :
-        map<Territory*, list<Territory*>*> map;
+        map<Territory*, list<Territory*>*>* maps;
+        vector<Continent*>* continentList;
 
     public :
         void addTerritory(Territory * ter);
@@ -93,16 +96,22 @@ class Map{
         Territory* getTerritoryByIndex(int i);
         ~Map();
         void validate();
+        Map();
+        bool BFS();
+        void setContinentList(vector<Continent*>*);
+        vector<Continent*>* getContinentList();
+        void BFSSubGraph();
+        void showAllCoutry();
+        void showAllBorder();
+        void showAllContinent();
 };
 
+//Declaration of MapLoader class
 class MapLoader{
     private:
         vector<string> split(const string &str, char delimiter);
-        
-
     public:
         Map* loadMapFromFile(string fileName);
 };
 
-
-
+#endif // MYHEADER_H

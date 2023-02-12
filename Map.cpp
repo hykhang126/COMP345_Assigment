@@ -1,24 +1,31 @@
 #include "Map.h"
 
-// Player::Player()
-// {}
+Player::~Player()
+{
+    cout << "delete player" << endl;
+}
 
+//definition of Map class
 void Map::addTerritory(Territory *ter)
 {
-    map.insert(pair<Territory*, list<Territory*>*>(ter, new list<Territory*>));
+    maps->insert(pair<Territory*, list<Territory*>*>(ter, new list<Territory*>));
 }   
 
 void Map::addEdge(Territory * ter, Territory* edg)
 {
-    (map)[ter]->push_back(edg);
+    (*maps)[ter]->push_back(edg);
 }
 
-
+Map::Map()
+{
+    maps = new map<Territory*,list<Territory*>*>();
+    continentList = new vector<Continent*>();
+}
 
 int Map::countTotalEdge()
 {
     int counter = 0;
-    for(const auto &ter : map)
+    for(const auto &ter : *maps)
     {
         for(const Territory *country : *ter.second)
         {
@@ -30,7 +37,7 @@ int Map::countTotalEdge()
 
 int Map::countTerritory(){
     int counter = 0;
-    for(const auto &ter : map)
+    for(const auto &ter : *maps)
     {
         counter++;
     }
@@ -38,21 +45,22 @@ int Map::countTerritory(){
 }
 
 Map::~Map(){
-    for(auto const &pair: map)
-    {
+     for (auto const& pair : *maps) {
         delete pair.first;
-        for(auto const *ter : *pair.second)
-        {
-            delete ter;
-        }
         delete pair.second;
     }
-    cout << "delete";
+    delete maps;
+    for(auto const &p : *continentList)
+    {
+        delete p;
+    }
+    delete continentList;
+    cout << "delete Map" << endl;
 } 
 
 void Map::toString()
 {
-    for(const auto &ter : map)
+    for(const auto &ter : *maps)
     {
          cout << *ter.first->getName() << ": [";
         for(const auto &element : *ter.second)
@@ -63,9 +71,14 @@ void Map::toString()
     }
 }
 
+void Map::setContinentList(vector<Continent*>* src)
+{
+    continentList = src;
+}
+
 Territory* Map::getTerritoryByIndex(int i)
 {
-    for(const auto &pair : map)
+    for(const auto &pair : *maps)
     {
         if(pair.first->getPosition() == i)
         {
@@ -77,14 +90,127 @@ Territory* Map::getTerritoryByIndex(int i)
 
 void Map::validate()
 {
-    cout << "Checking 1-1 of Territory-Continent..." <<endl;
-    for(const auto &pair : map)
+    cout <<endl << "4.1 - Checking if the graph is a connected graph?" << endl;
+    if(BFS())
     {
-        cout << "Country: [" << *(pair.first->getName()) << "] : Continent: [" << *(pair.first->getContinent()->getPosition()) << "]" << endl;
+        cout << "Yes, the graph is connected." <<endl;
+    }
+    else{
+        cout << "No, the graph is not a connected graph." << endl;
+    }
+    cout << endl << "4.2 - Checking if sub-graph continent is a connected graph?" << endl;
+    BFSSubGraph();
+    cout <<endl<< "4.3 - Checking every country belongs to only one continent by showing Territory and its continent:" << endl;
+    for(map<Territory*,list<Territory*>*>::iterator it = maps->begin(); it != maps->end(); ++it)
+    {
+        cout << "[Country]: " << *(*it).first->getName() << " in [Continent]: " << *(*it).first->getContinent()->getName() << endl;
+    }
+}
+
+vector<Continent*>* Map::getContinentList()
+{
+    return continentList;
+}
+
+void Map::showAllCoutry()
+ {
+    int counter = 1;
+    cout << "Showing all countries: " <<endl;
+    for(map<Territory*,list<Territory*>*>::iterator it = maps->begin(); it != maps->end(); ++it)
+    {
+        cout << counter++ << " " <<  *(*it).first->getName()<< endl;
+    }
+ }
+
+void Map::showAllBorder(){
+    cout << "Showing all borders: " <<endl;
+    int counter = 1;
+    for(map<Territory*,list<Territory*>*>::iterator it = maps->begin(); it != maps->end(); ++it)
+    {
+        cout << counter++ <<  "[Country]: " <<  *(*it).first->getName()<< "[borders: ] " ;
+        for(list<Territory*>::iterator itt = (*it).second->begin(); itt != (*it).second->end(); ++itt)
+        {
+            cout << *(*itt)->getName() << ", ";
+        }
+        cout << endl;
+    }
+}
+
+void Map::showAllContinent()
+{
+    int counter = 1;
+    cout << "Showing all continents: " <<endl;
+    for(vector<Continent*>::iterator it = continentList->begin(); it != continentList->end(); ++it)
+    {
+        cout << counter++ <<  "[Continent]: " << *(*it)->getName() <<endl;
+    }
+}
+
+void Map::BFSSubGraph() {
+    for (vector<Continent*>::iterator it = getContinentList()->begin(); it != getContinentList()->end(); ++it)
+    {
+        bool flag = false;
+        set<Territory*> continent_territories;
+        for (auto const& [ter, edges] : *maps) {
+            if (ter->getContinent()->getName() == (*it)->getName()) {
+                continent_territories.insert(ter);
+            }
+        }
+        if (continent_territories.empty()) {
+            flag = true;
+        }
+        Territory* start_territory = *continent_territories.begin();
+        set<Territory*> visited_territories;
+        queue<Territory*> territory_queue;
+        territory_queue.push(start_territory);
+        while (!territory_queue.empty()) {
+            Territory* current_territory = territory_queue.front();
+            territory_queue.pop();
+            visited_territories.insert(current_territory);
+            for (auto const& edge : *(maps->at(current_territory))) {
+                if (continent_territories.count(edge) > 0 && visited_territories.count(edge) == 0) {
+                    territory_queue.push(edge);
+                }
+            }
+        }
+        cout << "[Continent] " << *(*it)->getName() ;
+        if(flag || visited_territories.size() == continent_territories.size())
+        {
+            cout << " is a connected sub-graph." << endl;
+        }
+        flag = false;
+        
     }
 }
 
 
+bool Map::BFS() {
+    if (maps->empty()) {
+        return false;
+    }
+    Territory* start_territory = maps->begin()->first;
+    vector<bool> visited(maps->size(), false);
+    queue<Territory*> q;
+    q.push(start_territory);
+    visited[0] = true;
+    int visited_count = 1;
+    while (!q.empty()) {
+        Territory* t = q.front();
+        q.pop();
+        for (Territory* neighbor : *((*maps)[t])) {
+            auto it = maps->find(neighbor);
+            if (it != maps->end()) {
+                int index = distance(maps->begin(), it);
+                if (!visited[index]) {
+                    visited[index] = true;
+                    visited_count++;
+                    q.push(neighbor);}
+                }}}
+    return visited_count == maps->size();
+ }
+
+
+//Definition Continent class
 int* Continent::getPosition()
 {
     return position;
@@ -146,10 +272,10 @@ Continent::~Continent()
     delete name;
     delete point;
     delete color;
-    cout << "delete";
+    cout << "delete Continent" << endl;
 }
 
-
+//Definition of Territory class
 void Territory::setArmies(int *armies)
 {
     armies = armies;
@@ -183,12 +309,10 @@ Territory::Territory(Player *pl, int *arm, int* pos, string* nm, Continent* cont
 Territory::~Territory()
 {
     delete armies;
-    delete owner;
     delete position;
     delete name;
-    delete continent;
     delete coordinate;
-    cout << "delete";
+    cout << "delete Territory" << endl;
 }
 
 
@@ -241,7 +365,7 @@ Territory::Territory(Territory const &ter)
     coordinate = new Coordinate(*ter.coordinate);
 }
 
-
+//Definition of Coordinate class
 int* Coordinate::getX()
 {
     return x;
@@ -262,7 +386,7 @@ Coordinate::~Coordinate()
 {
     delete x;
     delete y;
-    cout<<"delete";
+    cout<<"delete Coordinate" <<endl;
 }
 
 string Coordinate::toString()
@@ -288,7 +412,7 @@ Coordinate& Coordinate::operator= (Coordinate const &cor){
     return *this;
 }
 
-
+//Definition of MapLoader class
 vector<string> MapLoader::split(const string &str, char delimiter)
 {
     vector<string> tokens;
@@ -301,9 +425,12 @@ vector<string> MapLoader::split(const string &str, char delimiter)
     return tokens;
 }
 
+
+
 Map* MapLoader::loadMapFromFile(string fileName)
 { 
-    vector<Continent*> listContinent;
+    try{
+    vector<Continent*> *listContinent = new vector<Continent*>();
     static int counter = 1;
     bool continentFlag = false;
     bool countryFlag = false;
@@ -315,7 +442,6 @@ Map* MapLoader::loadMapFromFile(string fileName)
     if(reader.is_open())
     {
         while(getline(reader,line)){
-            cout << line <<endl;
             if(line == "[continents]")
             {
                 continentFlag = true;
@@ -346,31 +472,52 @@ Map* MapLoader::loadMapFromFile(string fileName)
             if(continentFlag)
             {
                 vector<string> tokens = split(line, ' ');
+                if(tokens.size() < 3)
+                {
+                    cout <<endl << "Invalid map." ;
+                    return nullptr;
+                }
+                int temp = stoi(tokens[1]);
                 Continent* continent = new Continent(new int(counter) ,new string(tokens[0]), new int(stoi(tokens[1])), new string(tokens[2]));
-                listContinent.push_back(continent);
-                cout << "======================== Continent"<< *continent->getPosition() <<endl;
+                listContinent->push_back(continent);
+                cout << "Adding Continent"<< *continent->getPosition() <<endl;
                 counter++;
             }
             if(countryFlag)
             {
                 vector<string> tokens = split(line, ' ');
-                Continent* cont = listContinent[stoi(tokens[2])-1];
+                cout << line << tokens.size();
+                if(tokens.size() != 5)
+                {
+                    cout <<endl << "Invalid map."  ;
+                    return nullptr;
+                }
+                Continent* cont = (*listContinent)[stoi(tokens[2])-1];
                 Territory* territory = new Territory(new Player(), new int(0), new int(stoi(tokens[0])), new string(tokens[1]), cont, new Coordinate(new int(stoi(tokens[3])), new int(stoi(tokens[4]))));
                 map->addTerritory(territory);
-                cout << "======================== Coordinate"<<endl;
+                cout << "Added Country"<<endl;
             }
             if(borderFlag)
             {
                 vector<string> tokens = split(line, ' ');
+                int temp = stoi(tokens[0]);
                 for(int i = 1 ; i < tokens.size(); i++)
                 {
                     map->addEdge(map->getTerritoryByIndex(stoi(tokens[0])), map->getTerritoryByIndex(stoi(tokens[i])));
                 }
-                cout << "======================== border"<<endl;
+                cout << "Added border"<<endl;
             }
         }
     }
     reader.close();
+    map->setContinentList(listContinent);
+    cout << "++++++++++++Load file into map successfully" << endl;
     return map;
-}
 
+    }
+    catch(invalid_argument& e)
+    {
+        cout << "Invalid map" <<endl;
+    }
+    return nullptr;
+}
