@@ -4,19 +4,28 @@
 
 using namespace std;
 int main() {
-    Map* map;
-    MapLoader loader;
-    map = loader.loadMapFromFile("france.txt");
+    string playerName = "Example Player";
+    vector<Territory*> tCollection;
+    Hand hand;
+    OrdersList listOfOrders;
 
-    Hand *hand = new Hand();
-    string *name = new string("Example Player");
-    OrdersList *orderList = new OrdersList();
-    //Create territories
-    Territory *t1 = map->getTerritoryByIndex(0);
-    Territory *t2 = map->getTerritoryByIndex(1);
-    Territory *t3 = map->getTerritoryByIndex(2);
-    vector<Territory*>* collection = new vector<Territory*>{t1, t2, t3};
+    Player player1(&playerName, tCollection, &hand, &listOfOrders);
+    cout << "Player name: " << *player1.getName() << endl;
 
-    Player *player1 = new Player(name, collection, hand, orderList);
+    vector<Territory*>* defending = player1.toDefend();
+    cout << "Defending territories:" << endl;
+    for (auto territory : *defending) {
+        cout << "\tTerritory name: " << territory->getName() << endl;
+    }
 
+    vector<Territory*>* attacking = player1.toAttack();
+    cout << "Attacking territories:" << endl;
+    for (auto territory : *attacking) {
+        cout << "\tTerritory name: " << territory->getName() << endl;
+    }
+
+    Player player2(player1);
+    cout << "Copied player name: " << *player2.getName() << endl;
+
+    return 0;
 }

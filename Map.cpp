@@ -1,7 +1,7 @@
 #include "Map.h"
 
-Player::Player()
-{}
+// Player::Player()
+// {}
 
 void Map::addTerritory(Territory *ter)
 {

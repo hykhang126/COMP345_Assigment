@@ -1,4 +1,5 @@
 #include "Player.h"
+using namespace std;
 
 Player::Player() {
     this->name = new string("Default Player");
@@ -36,21 +37,54 @@ Player::~Player() {
 }
 
 vector<Territory*>* Player::toDefend() {
-    vector<Territory*>* defending = new vector<Territory*>{};
-    //defending = {tCollection->begin(), tCollection->begin()+3};
-    int size = tCollection->size();
-    for(int i=0; i<size; i++){
-        defending->push_back(tCollection[i]);
-    }
-    // for(auto territory: *tCollection){
-    //     defending->push_back(territory);
-    // }
+    //creating player for territory objects
+    Player player1;
+    //creating other attributes necessary to create territories
+    int armies1 = 5, armies2 = 10, armies3 = 15;
+    int pos1 = 1, pos2 = 2, pos3 = 3;
+    string name1 = "Territory1", name2 = "Territory2", name3 = "Territory3";
+    //Creating continents for territories
+    string contName1 = "Continent1", contName2 = "Continent2", contName3 = "Continent3";
+    string color1 = "Red", color2 = "Blue", color3 = "Green";
+    int point1 = 1, point2 = 2, point3 = 3;
+    Continent continent1(&pos1, &contName1, &point1, &color1); 
+    Continent continent2(&pos2, &contName2, &point2, &color2);
+    Continent continent3(&pos3, &contName3, &point3, &color3);
+    //Creating coordinate objects for territoreis
+    int x = 1, y = 2;
+    Coordinate coordinate1(&x, &y), coordinate2(&x, &y), coordinate3(&x, &y);
+    //Creating arbitrary Territories
+    Territory territory1(&player1, &armies1, &pos1, &name1, &continent1, &coordinate1);
+    Territory territory2(&player1, &armies2, &pos2, &name2, &continent2, &coordinate2);
+    Territory territory3(&player1, &armies3, &pos3, &name3, &continent3, &coordinate3);
+    //Creating list of arbitraty territories
+    vector<Territory*>* defending = new vector<Territory*>{&territory1, &territory2, &territory3};
     return defending;
 }
 
 vector<Territory*>* Player::toAttack() {
-    vector<Territory*>* attacking = new vector<Territory*>;
-    attacking = {tCollection->begin(), tCollection->begin() + 3};
+    //creating players for territory objects
+    Player player1;
+    //creating other attributes necessary to create territories
+    int armies1 = 5, armies2 = 10, armies3 = 15;
+    int pos1 = 1, pos2 = 2, pos3 = 3;
+    string name1 = "Territory1", name2 = "Territory2", name3 = "Territory3";
+    //Creating continents for territories
+    string contName1 = "Continent1", contName2 = "Continent2", contName3 = "Continent3";
+    string color1 = "Red", color2 = "Blue", color3 = "Green";
+    int point1 = 1, point2 = 2, point3 = 3;
+    Continent continent1(&pos1, &contName1, &point1, &color1); 
+    Continent continent2(&pos2, &contName2, &point2, &color2);
+    Continent continent3(&pos3, &contName3, &point3, &color3);
+    //Creating coordinate objects for territoreis
+    int x = 1, y = 2;
+    Coordinate coordinate1(&x, &y), coordinate2(&x, &y), coordinate3(&x, &y);
+    //Creating arbitrary Territories
+    Territory territory1(&player1, &armies1, &pos1, &name1, &continent1, &coordinate1);
+    Territory territory2(&player1, &armies2, &pos2, &name2, &continent2, &coordinate2);
+    Territory territory3(&player1, &armies3, &pos3, &name3, &continent3, &coordinate3);
+    //Creating list of arbitraty territories
+    vector<Territory*>* attacking = new vector<Territory*>{&territory1, &territory2, &territory3};
     return attacking;
 }
 
@@ -79,4 +113,16 @@ ostream& operator<<(ostream& out, const Player& player) {
     }
     out << *player.listOfOrders;
     return out;
+}
+
+string* Player::getName() {
+    return name;
+}
+
+Hand* Player::getHand() {
+    return hand;
+}
+
+OrdersList* Player::getOrdersList() {
+    return listOfOrders;
 }

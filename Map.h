@@ -1,3 +1,4 @@
+#pragma once
 #include <map>
 #include <list>
 #include <iostream>
@@ -5,14 +6,16 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
+#include "Player.h"
 
 using namespace std;
 
 
-class Player{
-    public:
-        Player();
-};
+// class Player{
+//     public:
+//         Player();
+// };
+class Player;
 
 class Continent{
     private:

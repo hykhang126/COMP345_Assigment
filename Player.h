@@ -1,13 +1,18 @@
+#pragma once
 #include <list>
 #include <vector>
 #include <string>
 #include <iostream>
-#include <algorithm>
+
 #include "Map.h"
 #include "Orders.h"
 #include "Cards.h"
 
 using namespace std;
+
+class Territory;
+
+class Player;
 
 class Player{
     private :
@@ -35,4 +40,8 @@ class Player{
         Player& operator =(const Player& e);
         //stream insertion operator
         friend ostream& operator<<(ostream& out, const Player& player);
+        //getters
+        string* getName();
+        Hand* getHand();
+        OrdersList* getOrdersList();
 };
