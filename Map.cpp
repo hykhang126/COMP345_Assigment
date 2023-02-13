@@ -4,6 +4,11 @@
 Player::Player()
 {}
 
+Player::~Player()
+{
+    cout << "delete player" << endl;
+}
+
 //definition of Map class
 void Map::addTerritory(Territory *ter)
 {
@@ -44,16 +49,17 @@ int Map::countTerritory(){
 }
 
 Map::~Map(){
-    for(auto const &pair: *maps)
-    {
+     for (auto const& pair : *maps) {
         delete pair.first;
-        for(auto const *ter : *pair.second)
-        {
-            delete ter;
-        }
         delete pair.second;
     }
-    cout << "delete";
+    delete maps;
+    for(auto const &p : *continentList)
+    {
+        delete p;
+    }
+    delete continentList;
+    cout << "delete Map" << endl;
 } 
 
 void Map::toString()
@@ -270,7 +276,7 @@ Continent::~Continent()
     delete name;
     delete point;
     delete color;
-    cout << "delete";
+    cout << "delete Continent" << endl;
 }
 
 //Definition of Territory class
@@ -307,12 +313,10 @@ Territory::Territory(Player *pl, int *arm, int* pos, string* nm, Continent* cont
 Territory::~Territory()
 {
     delete armies;
-    delete owner;
     delete position;
     delete name;
-    delete continent;
     delete coordinate;
-    cout << "delete";
+    cout << "delete Territory" << endl;
 }
 
 
@@ -386,7 +390,7 @@ Coordinate::~Coordinate()
 {
     delete x;
     delete y;
-    cout<<"delete";
+    cout<<"delete Coordinate" <<endl;
 }
 
 string Coordinate::toString()
