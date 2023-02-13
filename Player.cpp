@@ -21,8 +21,10 @@ Player::Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersL
 Player::Player(const Player& p) {
     this->name = new string(*p.name);
     this->hand = new Hand(*p.hand);
+    this->tCollection = new vector<Territory*>;
     for(auto territory : *p.tCollection){
-        this->tCollection->push_back(territory);
+        Territory* territoryCopy = new Territory(*territory);
+        this->tCollection->push_back(territoryCopy);
     }
     this->listOfOrders = new OrdersList(*p.listOfOrders);
 }
@@ -111,7 +113,7 @@ ostream& operator<<(ostream& out, const Player& player) {
     out << *player.hand;
     out << "Collection: \n";
     for (const auto& territory : *player.tCollection) {
-        out << "\t Territory: " << territory->getName() << "\n";
+        out << "\t Territory: " << *territory->getName() << "\n";
     }
     out << *player.listOfOrders;
     return out;
