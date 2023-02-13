@@ -161,7 +161,8 @@ void Deck::setCardsInDeck(vector<Card *> cards) {
 
 // Note that when drawing a card, we don't want to delete the pointer here!
 // We just want to move it from deck to hand!
-void Deck::draw(Hand *hand){
+// Also returns the card
+Card * Deck::draw(Hand *hand){
     // First shuffle the cards in deck
     std::random_device randomDevice;
     auto randomEngine = std::default_random_engine {randomDevice()};
@@ -173,6 +174,7 @@ void Deck::draw(Hand *hand){
     hand->addCard(cardToDrawPter);
     // Then remove from the deck.
     cardsInDeck->pop_back();
+    return cardToDrawPter;
 }
 
 void Deck::addToDeck(Card *card){

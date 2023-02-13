@@ -40,7 +40,7 @@ class Deck
         friend ostream& operator<<(ostream& out, const Deck& deck);
         vector<Card *> getCardsInDeck();
         void setCardsInDeck(vector <Card*>);
-        void draw(Hand *hand);
+        Card * draw(Hand *hand);
         void addToDeck(Card *card);
 
 };
@@ -49,7 +49,7 @@ class Hand
 {
     private:
         vector<Card*> *cardsInHand;
-    
+
     public:
         Hand();
         ~Hand();

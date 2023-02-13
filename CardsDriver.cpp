@@ -22,9 +22,12 @@ int main() {
     cout<< "****Printing Second Deck below****\n" << *secondDeck;
 
     // Drawing 10 cards from the second deck and testing assignment operator
+
     Deck thirdDeck = *secondDeck;
+    cout << "**** Now drawing 10 cards from the second deck and printing them ****\n";
     for (int i = 0; i < 10; i ++){
-        secondDeck->draw(hand);
+        Card *temporaryCard = secondDeck->draw(hand);
+        cout <<*temporaryCard;
     }
 
     // Now we can see that second deck and first deck have a different number of cards.
