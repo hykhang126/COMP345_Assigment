@@ -8,9 +8,9 @@
 using namespace std;
 
 /**
- * Order: User-defined class to create Order objects
- * Types of Orders: Deploy
- *                  
+ * Order: User-defined abstract class
+ * Types of Orders: Deploy, Advance, Airlift, Bomb, Blockade, and Negotiate
+ * Pure Virtual Method: execute()                 
 */
 class Order
 {
@@ -32,6 +32,9 @@ public:
     Order& operator = (const Order& other);
     //stream operator
     friend ostream& operator << (ostream& out, const Order& order);
+
+    //pure virtual method: execute()
+    virtual void execute() = 0;
 
     //getter for order type
     string getDescription();
