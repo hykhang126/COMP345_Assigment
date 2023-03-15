@@ -1,6 +1,7 @@
+#include <fstream>
 #include "Command.h"
 
-Command::Command(string * commandName, string * effectName): command(commandName), effect(effectName){}
+Command::Command(string * commandName, string * effectName): command(commandName), effect(effectName){attach(gameLogObserver);}
 
 Command::Command(string *commandName) : Command(commandName, new string("")){};
 
@@ -10,6 +11,7 @@ Command::~Command(){
     cout << "command " << *command << " is deleted." <<endl;
     delete command;
     delete effect;
+    detach(gameLogObserver);
 }
 
 void Command::SaveEffect(string *effectName)
@@ -18,9 +20,18 @@ void Command::SaveEffect(string *effectName)
     effect = NULL;
     effect = effectName;
     cout << "Saving effect " << *effect << " in command " << *command << endl;
+    notify(this);
 }
 
 string* Command::toString()
 {
     return command;
+}
+
+string Command::getEffect() {
+    return *effect;
+}
+
+string Command::stringToLog() {
+    return "Command saving effect log: " + getEffect();
 }
