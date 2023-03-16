@@ -43,8 +43,13 @@ int main(int argc, char const *argv[])
             cout << endl;
             break;
         case 4:
-            cout << "\nPlease input your command: " ;
+            cout << "\nPlease input your command: " << endl ;
             cin >> input;
+            cout << "-----------------------------\n";
+            cout << "Current State and its transitions:\n - ";
+            test->getCurrentState()->showTransitions();
+            cout << "Your command: " << input;
+            cout << endl;
             test->isCommandValid(&input);
             break;
         case 5:

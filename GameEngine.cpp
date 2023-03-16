@@ -181,11 +181,11 @@ GameEngine::GameEngine()
 
 bool GameEngine::isCommandValid(string *command)
 {
-    cout << "-----------------------------\n";
-    cout << "Current State and its transitions:\n - ";
-    currentState->showTransitions();
-    cout << "Your command: " << *command;
-    cout << endl;
+    // cout << "-----------------------------\n";
+    // cout << "Current State and its transitions:\n - ";
+    // currentState->showTransitions();
+    // cout << "Your command: " << *command;
+    // cout << endl;
 
     vector<Transition*> currTransitions = currentState->getTransitions();
     for (int i = 0; i < currTransitions.size(); i++)
