@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <vector>
+#include "LoggingObserver.h"
 
 using namespace std;
 
@@ -12,7 +13,7 @@ using namespace std;
  * Types of Orders: Deploy, Advance, Airlift, Bomb, Blockade, and Negotiate
  * Pure Virtual Method: execute()                 
 */
-class Order
+class Order : public Subject, public ILoggable
 {
 private:
     /* data */
@@ -52,6 +53,9 @@ public:
     bool getValidStatus();
     //setter for order validation status
     void setValidStatus(bool status);
+
+
+    string stringToLog() override;
 };
 
 // ------------------- DEPLOY ORDER --------------------------
@@ -78,7 +82,8 @@ public:
     //validate method to make the order valid
     void validate();
     //execute method to execute an order
-    void execute();
+    void execute() override ;
+
 };
 
 // ------------------- ADVANCE ORDER -------------------------
@@ -105,7 +110,7 @@ public:
     //validate method to make the order valid
     void validate();
     //execute method to execute an order
-    void execute();
+    void execute() override;
 
 };
 
@@ -133,7 +138,7 @@ public:
     //validate method to make the order valid
     void validate();
     //execute method to execute an order
-    void execute();
+    void execute() override;
 };
 
 // ------------------- Blockade ORDER ------------------------
@@ -160,7 +165,7 @@ public:
     //validate method to make the order valid
     void validate();
     //execute method to execute an order
-    void execute();
+    void execute() override;
 };
 
 // ------------------- AIRLIFT ORDER -------------------------
@@ -187,7 +192,7 @@ public:
     //validate method to make the order valid
     void validate();
     //execute method to execute an order
-    void execute();
+    void execute() override;
 };
 
 // ------------------- NEGOTIATE ORDER -----------------------
@@ -214,14 +219,14 @@ public:
     //validate method to make the order valid
     void validate();
     //execute method to execute an order
-    void execute();
+    void execute() override;
 };
 
 // ------------------- LIST OF ORDERS ------------------------
 /**
  * OrdersList: User-defined class to create and manipulate lists of orders
 */
-class OrdersList
+class OrdersList : public ILoggable, public Subject
 {
 private:
     /* data */
@@ -250,6 +255,8 @@ public:
     vector<Order*> getList();
     //setter
     void setList(vector<Order*> list);
+
+    string stringToLog() override;
 };
 
 #endif //ORDERS_H

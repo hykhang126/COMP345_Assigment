@@ -70,7 +70,7 @@ void Card::play(Hand *hand, OrdersList *orderLists, Deck *deckPter){
         orderLists->addOrder(blockadeOrderPter);
     }
     else if (cardPlayedPter->getType() == "reinforcement") {
-        Order *reinforcementOrderPter = new Order();
+        Order *reinforcementOrderPter = new Advance();
         orderLists->addOrder(reinforcementOrderPter);
     }
     else if (cardPlayedPter->getType() == "airlift"){

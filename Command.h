@@ -1,10 +1,11 @@
 #include <string>
 #include <iostream>
 #include "LoggingObserver.h"
-
+#ifndef COMMANDS_H
+#define COMMANDS_H
 using namespace std;
 
-class Command : ILoggable, Subject{
+class Command : public ILoggable, public Subject{
     private:
     string *command;
     string *effect;
@@ -14,6 +15,8 @@ class Command : ILoggable, Subject{
     Command();
     Command(string *commandName);
     Command(string *commandName, string *effect);
+
+    friend ostream& operator << (ostream& out, const Command& command);
     ~Command();
     Command(const Command&);
     Command& operator= (const Command&);
@@ -22,3 +25,5 @@ class Command : ILoggable, Subject{
     string* getCommandName();
     string getEffect();
 };
+
+#endif

@@ -194,11 +194,17 @@ bool GameEngine::isCommandValid(string *command)
         {
             currentState = currTransitions[i]->getDestination();
             cout << "Command Valid. State changed\n" << endl;
+
+            notify(this);
             return true;
         }
     }
     cout << "Command Invalid\n" << endl;
     return false;
+}
+
+string GameEngine::stringToLog() {
+    return "LOG: Game engine transitioning to state " + *currentState->getName();
 }
 
 void GameEngine::reinforcementPhase(Player *player) {

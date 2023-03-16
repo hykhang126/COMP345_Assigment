@@ -93,8 +93,8 @@ vector<Territory*>* Player::toAttack() {
 }
 
 void Player::issueOrder() {
-    Order *ord = new Order();
-    this->listOfOrders->addOrder(ord);
+//    Order *ord = new Order();
+//    this->listOfOrders->addOrder(ord);
 }
 
 Player& Player::operator=(const Player& p) {

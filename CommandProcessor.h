@@ -5,10 +5,11 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-
+#ifndef COMMPROC_H
+#define COMMPROC_H
 using namespace std;
 
-class CommandProcessor
+class CommandProcessor: public Subject, public ILoggable
 {
     private:
     vector<Command*> * commandList;
@@ -24,3 +25,8 @@ class CommandProcessor
     void SaveCommand(Command * commandName);
     void GetCommand(string * curState);
 };
+
+    string stringToLog() override;
+};
+
+#endif

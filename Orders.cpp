@@ -1,5 +1,6 @@
 #include "Orders.h"
 #include <algorithm>
+#include <sstream>
 
 /**
  * Default constructor for Order Class
@@ -99,6 +100,11 @@ void Order::setValidStatus(bool status) {
     *isValid = status;
 }
 
+string Order::stringToLog() {
+    string test = getEffect();
+    return "LOG: Order " +getDescription() + " executed.";
+}
+
 // ------------------- DEPLOY ORDER --------------------------
 /**
  * Default constructor for Deploy Class
@@ -117,7 +123,7 @@ Deploy::~Deploy() {
  * Copy Constructor for Deploy Class
 */
 Deploy::Deploy(const Deploy& other) {
-    
+
 }
 /**
  * Assignment Operator for Deploy Class
@@ -149,6 +155,7 @@ void Deploy::execute() {
     if (getValidStatus() == true) {
         setExecStatus(true);
         cout << "Deploy order executed!" << endl;
+        notify(this);
     }
     else {
         cout << "Deploy order failed..." << endl;
@@ -205,6 +212,7 @@ void Advance::execute() {
     if (getValidStatus() == true) {
         setExecStatus(true);
         cout << "Advance order executed!" << endl;
+        notify(this);
     }
     else {
         cout << "Advance order failed..." << endl;
@@ -262,6 +270,7 @@ void Bomb::execute() {
     if (getValidStatus() == true) {
         setExecStatus(true);
         cout << "Bomb order executed!" << endl;
+        notify(this);
     }
     else {
         cout << "Bomb order failed..." << endl;
@@ -319,6 +328,7 @@ void Blockade::execute() {
     if (getValidStatus() == true) {
         setExecStatus(true);
         cout << "Blockade order executed!" << endl;
+        notify(this);
     }
     else {
         cout << "Blockade order failed..." << endl;
@@ -376,6 +386,7 @@ void Airlift::execute() {
     if (getValidStatus() == true) {
         setExecStatus(true);
         cout << "Airlift order executed!" << endl;
+        notify(this);
     }
     else {
         cout << "Airlift order failed..." << endl;
@@ -433,6 +444,7 @@ void Negotiate::execute() {
     if (getValidStatus() == true) {
         setExecStatus(true);
         cout << "Negotiate order executed!" << endl;
+        notify(this);
     }
     else {
         cout << "Negotiate order failed..." << endl;
@@ -489,6 +501,7 @@ ostream& operator << (ostream& out, const OrdersList& list) {
 void OrdersList::addOrder(Order* order) {
     cout << "Adding order to: " << *order << " to the list" << endl;
     ordersList->push_back(order);
+    notify(this);
 }
 /**
  * Method to remove an order from the list
@@ -539,4 +552,10 @@ vector<Order*> OrdersList::getList() {
 */
 void OrdersList::setList(vector<Order*> list) {
     *ordersList = list;
+}
+
+string OrdersList::stringToLog() {
+    std::stringstream buffer;
+    buffer << *ordersList->back();
+    return "LOG: Adding Order " + buffer.str() + " to ordersList";
 }

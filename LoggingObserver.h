@@ -1,38 +1,43 @@
-//
-// Created by Eric on 3/14/2023.
-//
-
 #ifndef COMP345_ASSIGMENT1_LOGGINGOBSERVER_H
 #define COMP345_ASSIGMENT1_LOGGINGOBSERVER_H
 #include <list>
 #include <vector>
-// Abstract class, no need for constructors or operators
+// Abstract class to be inherited and ask for definition of stringToLog to classes that inherit it
 class ILoggable {
 public:
+    ILoggable();
+    ~ILoggable();
+    friend std::ostream& operator<<(std::ostream &out, const ILoggable &ILoggable);
+    ILoggable(const ILoggable&);
+    ILoggable& operator =(const ILoggable&);
     virtual std::string stringToLog() = 0;
 };
 
-
-class Subject;
-// Abstract class again
+// Abstract class again. Ask for definition of Observer
 class Observer {
 public:
     Observer();
     ~Observer();
     virtual void update(ILoggable*) = 0;
+    friend std::ostream& operator<<(std::ostream &out, const Observer &observer);
+    Observer(const Observer&);
+    Observer& operator =(const Observer&);
 };
 
-// No pointers or members in this class, copy and assignment constructors are as default
+// Concrete object but no pointers or members in this class, copy and assignment constructors are as default
+// Has an update method that is called when a subject notifies it. Update should log the subject change
 class LogObserver : Observer {
 public:
     LogObserver();
-    ~LogObserver() = default;
+    ~LogObserver();
     void update(ILoggable*) override;
     friend std::ostream& operator<<(std::ostream &out, const LogObserver &logObserver);
-    LogObserver(const LogObserver&) = default;
-    LogObserver& operator =(const LogObserver&) = default;
+    LogObserver(const LogObserver&);
+    LogObserver& operator =(const LogObserver&);
 };
 
+// To be inherited, but technically could be an object by itself. Has a list of observers
+// And has appropriate subject functions
 class Subject {
 private:
     std::list<LogObserver*> *observersList;
@@ -47,6 +52,5 @@ public:
     Subject& operator =(const Subject&);
 };
 
-extern LogObserver* gameLogObserver;
 
 #endif //COMP345_ASSIGMENT1_LOGGINGOBSERVER_H
