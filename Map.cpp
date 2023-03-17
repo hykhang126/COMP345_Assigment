@@ -206,6 +206,14 @@ bool Map::BFS() {
 
 
 //Definition Continent class
+Continent::Continent()
+{
+    position = new int(0);
+    name = new string("");
+    point = new int(0);
+    color = new string("");
+}
+
 int* Continent::getPosition()
 {
     return position;
@@ -360,7 +368,23 @@ Territory::Territory(Territory const &ter)
     coordinate = new Coordinate(*ter.coordinate);
 }
 
+Territory::Territory()
+{
+    position = new int(0);
+    armies = new int(0);
+    owner = new Player();
+    name = new string("");
+    continent = new Continent();
+    coordinate = new Coordinate();
+}
+
 //Definition of Coordinate class
+Coordinate::Coordinate()
+{
+    x = new int(0);
+    y = new int(0);
+}
+
 int* Coordinate::getX()
 {
     return x;
