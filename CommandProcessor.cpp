@@ -213,4 +213,3 @@ string CommandProcessor::stringToLog() {
     std::stringstream buffer;
     buffer << *commandList->back();
     return "LOG: saving Command to command list. " + buffer.str();}
->>>>>>> 482f441ce90b8b8dea9d1f7163223cb136ac89a0
