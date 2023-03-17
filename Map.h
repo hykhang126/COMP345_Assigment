@@ -33,6 +33,7 @@ class Continent{
         Continent(int* pos, string* name, int* point, string* color);
         ~Continent();
         Continent(const Continent &src);
+        Continent();
         string toString();
         Continent& operator= (const Continent &src);
         friend ostream& operator<< (ostream &os, const Continent &cont);
@@ -50,6 +51,7 @@ class Coordinate{
         ~Coordinate();
         string toString();
         Coordinate (const Coordinate& cor);
+        Coordinate();
         friend ostream& operator<< (ostream& output, Coordinate const &cor);
         Coordinate& operator= (Coordinate const &cor);
 };
@@ -79,6 +81,7 @@ class Territory{
         friend ostream& operator<< (ostream& os, Territory const &ter);
         Territory& operator= (const Territory &ter);
         Territory(Territory const &ter);
+        Territory();
 };
 
 //Declaration of Map class
