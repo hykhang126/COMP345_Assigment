@@ -1,23 +1,12 @@
-#pragma once
 #include <list>
 #include <string>
 #include <vector>
+#include "LoggingObserver.h"
 
 using namespace std;
 
 class State;
 
-// Place holder command
-class Command
-{
-    string *name;
-
-    public:
-        string *getName() {return name;};
-        void setName(string *name);
-};
-
-// Transition class
 class Transition
 {
     private :
@@ -33,13 +22,11 @@ class Transition
 
         Transition();
         Transition(string *name, State *destination);
-        ~Transition() { delete name; delete destination; };
 
 };
 
 
 
-// State class
 class State
 {
     private :
@@ -58,13 +45,11 @@ class State
 
         State();
         State(string *name);
-        ~State();
 };
 
 
 
-// GameEngine class
-class GameEngine
+class GameEngine: public Subject, public ILoggable
 {
     private :
         // // Command string
@@ -102,8 +87,6 @@ class GameEngine
         void initialization();
 
     public :
-        void startupPhase(Command *command);
-
         State *getCurrentState();
         void setCurrentState(State *currentState);
 
@@ -111,9 +94,10 @@ class GameEngine
         void addStateToList(State* state);
 
         GameEngine();
-        ~GameEngine();
 
         bool isCommandValid(string *command);
+
+        string stringToLog();
     
 };
 

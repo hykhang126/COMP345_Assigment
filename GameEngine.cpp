@@ -1,30 +1,16 @@
 #include "GameEngine.h"
-
 #include <iostream>
 #include <algorithm>
-
-#include "Map.h"
-#include "Player.h"
-#include "Cards.h"
 
 // STATE CLASS
 State::State()
 {
-    this->name = NULL;
+
 }
 
 State::State(string *name)
 {
     this->name = name;
-}
-
-State::~State()
-{
-    for (Transition* trans : transitions)
-    {
-        delete trans;
-    }
-    
 }
 
 void State::addTransitionsToState(Transition *transition)
@@ -170,7 +156,11 @@ void GameEngine::initialization()
     winState->addTransitionsToState(winTran_1);
     winState->addTransitionsToState(winTran_2);
 
-    // Add all 8 state to stateList
+    // startState->showTransitions();
+    // loadState->showTransitions();
+    // validMapState->showTransitions();
+    // playersAddedState->showTransitions();
+
     this->addStateToList(startState);
     this->addStateToList(loadState);
     this->addStateToList(validMapState);
@@ -189,16 +179,6 @@ GameEngine::GameEngine()
     this->initialization();
 }
 
-GameEngine::~GameEngine()
-{
-    for (State* trans : stateList)
-    {
-        trans->~State();
-        delete trans;
-    }
-    
-}
-
 bool GameEngine::isCommandValid(string *command)
 {
     // cout << "-----------------------------\n";
@@ -214,6 +194,8 @@ bool GameEngine::isCommandValid(string *command)
         {
             currentState = currTransitions[i]->getDestination();
             cout << "Command Valid. State changed\n" << endl;
+
+            notify(this);
             return true;
         }
     }
@@ -221,30 +203,8 @@ bool GameEngine::isCommandValid(string *command)
     return false;
 }
 
-void GameEngine::startupPhase(Command *command)
-{
-    Map* map;
-    MapLoader loader;
-    string choice = *command->getName();
-
-    if (choice.compare("loadmap germany") == 0)
-    {
-        string mapName = choice.substr(9);
-        map = loader.loadMapFromFile(choice);
-    }
-    else if (choice.compare("validate") == 0)
-    {
-        map->validate();
-    }
-    else if (choice.compare("addplayer") == 0)
-    {
-
-    }
-    else if (choice.compare("gamestart") == 0)
-    {
-        
-    }
-    
+string GameEngine::stringToLog() {
+    return "LOG: Game engine transitioning to state " + *currentState->getName();
 }
 
 

@@ -2,6 +2,8 @@
 
 CommandProcessor::CommandProcessor()
 {
+
+    this->commandList = new vector<Command*> {};
     cout << "Please input command:" << endl;
     cout << "(include \"-console\" if entering manually.)" <<endl;
     cout << "(include \"-file <filename>\" if import list of commands by text file.)" <<endl;
@@ -103,4 +105,10 @@ void CommandProcessor::SaveCommand(Command * com)
 {
     this->commandList->push_back(com);
     cout << "Command " << *(com->toString()) << " is saved." <<endl;
+    notify(this);
 }
+
+string CommandProcessor::stringToLog() {
+    std::stringstream buffer;
+    buffer << *commandList->back();
+    return "LOG: saving Command to command list. " + buffer.str();}
