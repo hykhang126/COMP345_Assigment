@@ -201,6 +201,21 @@ bool GameEngine::isCommandValid(string *command)
     return false;
 }
 
+void GameEngine::reinforcementPhase(Player *player) {
+
+}
+
+void GameEngine::issueOrdersPhase(Player *player) {
+
+}
+
+void GameEngine::executeOrdersPhase(Player *player) {
+
+}
+
+Player GameEngine::mainGameLoop() {
+    
+}
 
 
 

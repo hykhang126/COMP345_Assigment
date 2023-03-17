@@ -1,6 +1,7 @@
 #include <list>
 #include <string>
 #include <vector>
+#include "Player.h"
 
 using namespace std;
 
@@ -95,7 +96,10 @@ class GameEngine
         GameEngine();
 
         bool isCommandValid(string *command);
-    
+        void reinforcementPhase(Player *player);
+        void issueOrdersPhase(Player *player);
+        void executeOrdersPhase(Player *player);
+        Player mainGameLoop();
 };
 
 
