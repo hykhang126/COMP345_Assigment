@@ -1,6 +1,7 @@
 #include <list>
 #include <string>
 #include <vector>
+#include "LoggingObserver.h"
 
 using namespace std;
 
@@ -48,7 +49,7 @@ class State
 
 
 
-class GameEngine
+class GameEngine: public Subject, public ILoggable
 {
     private :
         // // Command string
@@ -95,6 +96,8 @@ class GameEngine
         GameEngine();
 
         bool isCommandValid(string *command);
+
+        string stringToLog();
     
 };
 
