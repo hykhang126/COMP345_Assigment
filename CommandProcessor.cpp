@@ -1,65 +1,5 @@
 #include "CommandProcessor.h"
 
-<<<<<<< HEAD
-=======
-CommandProcessor::CommandProcessor()
-{
-
-    this->commandList = new vector<Command*> {};
-    cout << "Please input command:" << endl;
-    cout << "(include \"-console\" if entering manually.)" <<endl;
-    cout << "(include \"-file <filename>\" if import list of commands by text file.)" <<endl;
-
-    string mode = "";
-    cin >> mode;
-    if(mode == "-console")
-    {
-        cout << "Please enter commands' name seperated by new line: " <<endl;
-        cout << "Finish entering by state \"done\"" << endl;
-        string command = "";
-        while(command != "done")
-        {
-            Command * com = new Command(new string(command));
-            this->SaveCommand(com);
-        }
-    }
-    else{
-        std::vector<std::string> words;
-        std::istringstream iss(mode);
-        std::string word;
-        while (std::getline(iss, word, ' ')) {
-            words.push_back(word);
-        }
-
-        if(words[0] == "-file")
-        {
-            try{
-                string line;
-                ifstream reader;
-                reader.open(words[1]);
-                if(reader.is_open())
-                {
-                    while(getline(reader,line)){
-                        Command * com = new Command(new string(line));
-                        this->SaveCommand(com);
-                    }
-                }
-                reader.close();
-                cout << "++++++++++++Load file into command list successfully" << endl;
-                }
-            catch(invalid_argument& e)
-            {
-                cout << "Invalid file" <<endl;
-            }
-        }
-        else{
-            cout << "invalid command -> program terminated." <<endl;
-
-        }
-    }
-}
-
->>>>>>> 482f441ce90b8b8dea9d1f7163223cb136ac89a0
 CommandProcessor::~CommandProcessor()
 {
     for(Command * cm : *commandList)
@@ -175,7 +115,6 @@ void CommandProcessor::SaveCommand(Command * com)
 {
     this->commandList->push_back(com);
     cout << "Command " << *(com->toString()) << " is saved." <<endl;
-<<<<<<< HEAD
 }
 
 Command* CommandProcessor::ReadCommand(){
@@ -205,12 +144,16 @@ void CommandProcessor::GetCommand(string * curState)
     Command * cmmnd = ReadCommand();
     Validate(curState, cmmnd);
 }
-=======
-    notify(this);
+
+void CommandProcessor::ShowCommandList()
+{
+    for(int i = 0; i < commandList->size(); i++)
+    {
+        cout << "Command: " << *(*commandList)[i]->toString() << endl;
+    }
 }
 
 string CommandProcessor::stringToLog() {
     std::stringstream buffer;
     buffer << *commandList->back();
     return "LOG: saving Command to command list. " + buffer.str();}
->>>>>>> 482f441ce90b8b8dea9d1f7163223cb136ac89a0

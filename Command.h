@@ -22,12 +22,9 @@ class Command : public ILoggable, public Subject{
     Command& operator= (const Command&);
     void SaveEffect(string *effect);
     string* toString();
-<<<<<<< HEAD
     string* getCommandName();
-};
-=======
     string getEffect();
 };
+    
 
 #endif
->>>>>>> 482f441ce90b8b8dea9d1f7163223cb136ac89a0

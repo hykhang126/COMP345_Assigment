@@ -27,7 +27,6 @@ string* Command::toString()
     return command;
 }
 
-<<<<<<< HEAD
 Command::Command(const Command& com)
 {
     command = com.command;
@@ -45,7 +44,6 @@ string* Command::getCommandName()
 {
     return command;
 }
-=======
 string Command::getEffect() {
     return *effect;
 }
@@ -58,4 +56,3 @@ ostream &operator<<(ostream &out, const Command &command) {
     out << "Command is " << *command.command << " with effect " << *command.effect;
     return out;
 }
->>>>>>> 482f441ce90b8b8dea9d1f7163223cb136ac89a0

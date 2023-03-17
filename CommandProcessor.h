@@ -23,13 +23,9 @@ class CommandProcessor: public Subject, public ILoggable
     CommandProcessor(const CommandProcessor&);
     CommandProcessor& operator= (const CommandProcessor&);
     void SaveCommand(Command * commandName);
-<<<<<<< HEAD
     void GetCommand(string * curState);
-};
-=======
-
     string stringToLog() override;
+    void ShowCommandList();
 };
 
 #endif
->>>>>>> 482f441ce90b8b8dea9d1f7163223cb136ac89a0
