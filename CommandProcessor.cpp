@@ -153,7 +153,3 @@ void CommandProcessor::ShowCommandList()
     }
 }
 
-string CommandProcessor::stringToLog() {
-    std::stringstream buffer;
-    buffer << *commandList->back();
-    return "LOG: saving Command to command list. " + buffer.str();}

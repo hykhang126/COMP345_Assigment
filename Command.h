@@ -5,18 +5,15 @@
 #define COMMANDS_H
 using namespace std;
 
-class Command : public ILoggable, public Subject{
+class Command{
     private:
     string *command;
     string *effect;
 
     public:
-    string stringToLog() override;
     Command();
     Command(string *commandName);
     Command(string *commandName, string *effect);
-
-    friend ostream& operator << (ostream& out, const Command& command);
     ~Command();
     Command(const Command&);
     Command& operator= (const Command&);

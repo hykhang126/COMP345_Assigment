@@ -9,11 +9,13 @@
 #define COMMPROC_H
 using namespace std;
 
-class CommandProcessor: public Subject, public ILoggable
+class CommandProcessor
 {
     private:
     vector<Command*> * commandList;
     Command* ReadCommand();
+
+    protected:
     void Validate(string * currentState, Command * command);
 
 
@@ -23,9 +25,9 @@ class CommandProcessor: public Subject, public ILoggable
     CommandProcessor(const CommandProcessor&);
     CommandProcessor& operator= (const CommandProcessor&);
     void SaveCommand(Command * commandName);
-    void GetCommand(string * curState);
-    string stringToLog() override;
+    virtual void GetCommand(string * curState);
     void ShowCommandList();
+    
 };
 
 #endif
