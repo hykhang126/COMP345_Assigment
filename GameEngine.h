@@ -1,6 +1,8 @@
 #include <list>
 #include <string>
 #include <vector>
+#include "LoggingObserver.h"
+#include "Player.h"
 
 using namespace std;
 
@@ -96,6 +98,10 @@ class GameEngine: public Subject, public ILoggable
 
         bool isCommandValid(string *command);
     
+        void reinforcementPhase(Player *player);
+        void issueOrdersPhase(Player *player);
+        void executeOrdersPhase(Player *player);
+        Player mainGameLoop();
 };
 
 
