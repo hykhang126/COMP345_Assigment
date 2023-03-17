@@ -24,3 +24,21 @@ string* Command::toString()
 {
     return command;
 }
+
+Command::Command(const Command& com)
+{
+    command = com.command;
+    effect = com.effect;
+}
+
+Command& Command::operator=(const Command& com)
+{
+    command = com.command;
+    effect = com.effect;
+    return *this;
+}
+
+string* Command::getCommandName()
+{
+    return command;
+}
