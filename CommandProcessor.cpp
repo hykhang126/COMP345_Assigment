@@ -1,7 +1,5 @@
 #include "CommandProcessor.h"
 
-<<<<<<< HEAD
-=======
 CommandProcessor::CommandProcessor()
 {
 
@@ -59,7 +57,6 @@ CommandProcessor::CommandProcessor()
     }
 }
 
->>>>>>> 482f441ce90b8b8dea9d1f7163223cb136ac89a0
 CommandProcessor::~CommandProcessor()
 {
     for(Command * cm : *commandList)
@@ -175,7 +172,6 @@ void CommandProcessor::SaveCommand(Command * com)
 {
     this->commandList->push_back(com);
     cout << "Command " << *(com->toString()) << " is saved." <<endl;
-<<<<<<< HEAD
 }
 
 Command* CommandProcessor::ReadCommand(){
@@ -204,8 +200,6 @@ void CommandProcessor::GetCommand(string * curState)
 {
     Command * cmmnd = ReadCommand();
     Validate(curState, cmmnd);
-}
-=======
     notify(this);
 }
 

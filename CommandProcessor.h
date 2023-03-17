@@ -26,7 +26,6 @@ class CommandProcessor
     CommandProcessor& operator= (const CommandProcessor&);
     void SaveCommand(Command * commandName);
     void GetCommand(string * curState);
-};
 
     string stringToLog() override;
     virtual void GetCommand(string * curState);
