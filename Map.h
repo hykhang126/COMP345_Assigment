@@ -107,6 +107,7 @@ class Map{
         void showAllCoutry();
         void showAllBorder();
         void showAllContinent();
+        list<Territory*> * getAdjacentTerritory(Territory * source);
 };
 
 //Declaration of MapLoader class

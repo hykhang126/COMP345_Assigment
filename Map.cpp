@@ -131,6 +131,19 @@ void Map::showAllBorder(){
     }
 }
 
+    list<Territory*>* Map::getAdjacentTerritory(Territory * source)
+    {
+        for(map<Territory*, list<Territory*>*>::iterator it = maps->begin(); it != maps->end(); ++it)
+        {
+            if((*it).first->getName() == source->getName())
+            {
+                return (*it).second;
+            }
+        }
+        return NULL;
+    }
+
+
 void Map::showAllContinent()
 {
     int counter = 1;
