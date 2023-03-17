@@ -27,6 +27,7 @@ class CommandProcessor: public Subject, public ILoggable
 };
 
     string stringToLog() override;
+    void ShowCommandList();
 };
 
 #endif

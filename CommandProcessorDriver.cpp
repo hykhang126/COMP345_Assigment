@@ -57,6 +57,16 @@ int main()
 
     string * currentState = new string("start");
     CommandProcessor * cp = new CommandProcessor();
-    cp->GetCommand(currentState);
+    string input = "";
+    cout << "Enter command or \"exit\" to finish." <<endl;
+    cin >> input;
+    while(input != "exit")
+    {
+        cp->GetCommand(currentState);
+    }
+    cout << "Show all commands before exiting: "<< endl;
+    cp->ShowCommandList();
+    cout << "Cleanning pointers: " << endl;
+    delete cp;
     return 1;
 }

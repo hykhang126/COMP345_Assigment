@@ -25,5 +25,6 @@ class Command : public ILoggable, public Subject{
     string* getCommandName();
     string getEffect();
 };
+    
 
 #endif
