@@ -3,6 +3,8 @@
 #include <iostream>
 #include <algorithm>
 
+
+
 // STATE CLASS
 State::State()
 {
@@ -249,6 +251,8 @@ void GameEngine::startupPhase()
 
     Map* map;
     MapLoader loader;
+    Deck* deck = new Deck(20);
+    Hand* hand = new Hand();
 
     for (Command *command : commandList)
     {
@@ -258,19 +262,35 @@ void GameEngine::startupPhase()
         {
             string mapName = choice.substr(9);
             map = loader.loadMapFromFile(choice);
+            // Update State
+            currentState = loadState;
         }
         else if (choice.compare("validate") == 0)
         {
             map->validate();
+            // Update State
+            currentState = validMapState;
         }
         else if (choice.compare("addplayer") == 0)
         {
             Player* player = new Player();
             addPlayerToList(player);
+            // Update State
+            currentState = playersAddedState;
         }
         else if (choice.compare("gamestart") == 0)
         {
-            
+            for (Player *player : *gamePlayers)
+            {
+                // a) fairly distribute all the territories to the players
+                // b) determine randomly the order of play of the players in the game
+                // c) give 50 initial armies to the players, which are placed in their respective reinforcement pool
+                // d) let each player draw 2 initial cards from the deck using the deck’s draw() method
+                Card* card = deck->draw(hand);
+                player->getHand();
+            }
+            // e) switch the game to the play phase
+            currentState = assignReinState;
         }
     }
 
