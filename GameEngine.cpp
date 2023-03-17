@@ -3,10 +3,6 @@
 #include <iostream>
 #include <algorithm>
 
-#include "Map.h"
-#include "Player.h"
-#include "Cards.h"
-
 // STATE CLASS
 State::State()
 {
@@ -126,6 +122,16 @@ void GameEngine::setCurrentState(State *currentState)
     this->currentState = currentState;
 }
 
+vector<Player*>* GameEngine::getGamePlayers()
+{
+    return this->gamePlayers;
+}
+
+void GameEngine::addPlayerToList(Player* player)
+{
+    this->gamePlayers->push_back(player);
+}
+
 void GameEngine::initialization()
 {
     // Create all states 
@@ -187,6 +193,15 @@ void GameEngine::initialization()
 GameEngine::GameEngine()
 {
     this->initialization();
+    gamePlayers->clear();
+    commandProcessor = NULL;
+}
+
+GameEngine::GameEngine(CommandProcessor *commandProcessor)
+{
+    this->initialization();
+    gamePlayers->clear();
+    this->commandProcessor = commandProcessor;
 }
 
 GameEngine::~GameEngine()
@@ -197,6 +212,8 @@ GameEngine::~GameEngine()
         delete trans;
     }
     
+    delete gamePlayers;
+    delete commandProcessor;
 }
 
 bool GameEngine::isCommandValid(string *command)
@@ -226,29 +243,38 @@ string GameEngine::stringToLog()
     return "LOG: Game engine transitioning to state " + *currentState->getName();
 }
 
-void GameEngine::startupPhase(Command *command)
+void GameEngine::startupPhase()
 {
+    vector<Command*> commandList = commandProcessor->GetCommand();
+
     Map* map;
     MapLoader loader;
-    string choice = *command->getName();
 
-    if (choice.compare("loadmap germany") == 0)
+    for (Command *command : commandList)
     {
-        string mapName = choice.substr(9);
-        map = loader.loadMapFromFile(choice);
+        string choice = *command->toString();
+
+        if (choice.compare("loadmap germany") == 0)
+        {
+            string mapName = choice.substr(9);
+            map = loader.loadMapFromFile(choice);
+        }
+        else if (choice.compare("validate") == 0)
+        {
+            map->validate();
+        }
+        else if (choice.compare("addplayer") == 0)
+        {
+            Player* player = new Player();
+            addPlayerToList(player);
+        }
+        else if (choice.compare("gamestart") == 0)
+        {
+            
+        }
     }
-    else if (choice.compare("validate") == 0)
-    {
-        map->validate();
-    }
-    else if (choice.compare("addplayer") == 0)
-    {
-        
-    }
-    else if (choice.compare("gamestart") == 0)
-    {
-        
-    }
+
+
     
 }
 

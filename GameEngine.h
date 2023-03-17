@@ -3,19 +3,14 @@
 #include <string>
 #include <vector>
 
+#include "Map.h"
+#include "Player.h"
+#include "Cards.h"
+#include "CommandProcessor.h"
+
 using namespace std;
 
 class State;
-
-// Place holder command
-class Command
-{
-    string *name;
-
-    public:
-        string *getName() {return name;};
-        void setName(string *name);
-};
 
 // Transition class
 class Transition
@@ -67,8 +62,6 @@ class State
 class GameEngine
 {
     private :
-        // // Command string
-        // string *command;
         // currentState to store current state of the game
         State* currentState;
         // All 8 States
@@ -99,23 +92,32 @@ class GameEngine
         Transition *winTran_1;
         Transition *winTran_2;
 
+        // Player list
+        vector<Player*>* gamePlayers;
+
+        // CommandProcessor reference, where all commands are stored
+        CommandProcessor *commandProcessor;
+
         void initialization();
 
     public :
-        void startupPhase(Command *command);
-
         State *getCurrentState();
         void setCurrentState(State *currentState);
 
         vector<State*> getStateList();
         void addStateToList(State* state);
 
+        vector<Player*>* getGamePlayers();
+        void addPlayerToList(Player* player);
+
         GameEngine();
+        GameEngine(CommandProcessor *commandProcessor);
         ~GameEngine();
 
         bool isCommandValid(string *command);
 
         string GameEngine::stringToLog();
-    
+
+        void startupPhase();
 };
 
