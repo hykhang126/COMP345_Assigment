@@ -19,7 +19,6 @@ void Command::SaveEffect(string *effectName)
     effect = NULL;
     effect = effectName;
     cout << "Saving effect " << *effect << " in command " << *command << endl;
-    notify(this);
 }
 
 string* Command::toString()
@@ -27,15 +26,23 @@ string* Command::toString()
     return command;
 }
 
+Command::Command(const Command& com)
+{
+    command = com.command;
+    effect = com.effect;
+}
+
+Command& Command::operator=(const Command& com)
+{
+    command = com.command;
+    effect = com.effect;
+    return *this;
+}
+
+string* Command::getCommandName()
+{
+    return command;
+}
 string Command::getEffect() {
     return *effect;
-}
-
-string Command::stringToLog() {
-    return "LOG: Command saving effect: " + getEffect();
-}
-
-ostream &operator<<(ostream &out, const Command &command) {
-    out << "Command is " << *command.command << " with effect " << *command.effect;
-    return out;
 }

@@ -1,5 +1,5 @@
 #include <vector>
-#include "Command.h"
+#include "Command.cpp"
 #include "GameEngine.h"
 #include <iostream>
 #include <string>
@@ -9,20 +9,25 @@
 #define COMMPROC_H
 using namespace std;
 
-class CommandProcessor: public Subject, public ILoggable
+class CommandProcessor
 {
     private:
     vector<Command*> * commandList;
-    void ReadCommand();
+    Command* ReadCommand();
+
+    protected:
+    void Validate(string * currentState, Command * command);
+
 
     public :
     CommandProcessor();
     ~CommandProcessor();
-    vector<Command*> GetCommand();
-    bool Validate(State * currentState, Command * command);
+    CommandProcessor(const CommandProcessor&);
+    CommandProcessor& operator= (const CommandProcessor&);
     void SaveCommand(Command * commandName);
-
-    string stringToLog() override;
+    virtual void GetCommand(string * curState);
+    void ShowCommandList();
+    
 };
 
 #endif
