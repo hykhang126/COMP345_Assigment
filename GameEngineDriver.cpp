@@ -8,7 +8,7 @@ int main(int argc, char const *argv[])
     
     CommandProcessor *commandProcessor = new CommandProcessor();
     GameEngine *test = new GameEngine(commandProcessor);
-    vector<State*> stateList;
+    vector<State*> stateList = test->getStateList();
 
 
     cout << "-----Welcome to Game Engine Driver----- \n";
@@ -58,7 +58,7 @@ int main(int argc, char const *argv[])
             test->isCommandValid(&input);
             break;
         case 5:
-            // test->startupPhase(commandProcessor);
+            test->startupPhase(commandProcessor);
             break;
         case 99:
             cout << "-----Thank you and goodbye!----- \n";

@@ -1,8 +1,11 @@
 #include "GameEngine.h"
 
-#include "Map.cpp"
+
 #include "Player.cpp"
 #include "Cards.cpp"
+#include "Orders.cpp"
+#include "LoggingObserver.cpp"
+#include "Map.cpp"
 
 #include <iostream>
 #include <algorithm>
@@ -209,7 +212,7 @@ GameEngine::GameEngine()
 GameEngine::GameEngine(CommandProcessor *commandProcessor)
 {
     this->initialization();
-    gamePlayers->clear();
+    gamePlayers = new vector<Player*>;
     this->commandProcessor = commandProcessor;
 }
 
@@ -256,8 +259,8 @@ void GameEngine::startupPhase(CommandProcessor* commandProcessor)
     commandProcessor->GetCommand(currentState->getName());
     vector<Command*> *commandList = commandProcessor->ReturnCommandList();
 
-    Map* map;
-    MapLoader loader;
+    // Map* map;
+    // MapLoader loader;
     Deck* deck = new Deck(20);
     Hand* hand = new Hand();
 
@@ -267,14 +270,14 @@ void GameEngine::startupPhase(CommandProcessor* commandProcessor)
 
         if (choice.compare("loadmap germany") == 0)
         {
-            string mapName = choice.substr(9);
-            map = loader.loadMapFromFile(mapName);
+            // string mapName = choice.substr(9);
+            // map = loader.loadMapFromFile(mapName);
             // Update State
             currentState = loadState;
         }
         else if (choice.compare("validate") == 0)
         {
-            map->validate();
+            // map->validate();
             // Update State
             currentState = validMapState;
         }
