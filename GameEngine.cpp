@@ -1,5 +1,9 @@
 #include "GameEngine.h"
 
+#include "Map.cpp"
+#include "Player.cpp"
+#include "Cards.cpp"
+
 #include <iostream>
 #include <algorithm>
 
@@ -77,6 +81,11 @@ Transition::Transition(string *name, State *destination)
 {
     this->name = name;
     this->destination = destination;
+}
+
+Transition::~Transition()
+{
+    delete name;
 }
 
 string *Transition::getName()
@@ -195,8 +204,6 @@ void GameEngine::initialization()
 GameEngine::GameEngine()
 {
     this->initialization();
-    gamePlayers->clear();
-    commandProcessor = NULL;
 }
 
 GameEngine::GameEngine(CommandProcessor *commandProcessor)
@@ -215,7 +222,6 @@ GameEngine::~GameEngine()
     }
     
     delete gamePlayers;
-    delete commandProcessor;
 }
 
 bool GameEngine::isCommandValid(string *command)
@@ -245,23 +251,24 @@ string GameEngine::stringToLog()
     return "LOG: Game engine transitioning to state " + *currentState->getName();
 }
 
-void GameEngine::startupPhase()
+void GameEngine::startupPhase(CommandProcessor* commandProcessor)
 {
-    vector<Command*> commandList = commandProcessor->GetCommand();
+    commandProcessor->GetCommand(currentState->getName());
+    vector<Command*> *commandList = commandProcessor->ReturnCommandList();
 
     Map* map;
     MapLoader loader;
     Deck* deck = new Deck(20);
     Hand* hand = new Hand();
 
-    for (Command *command : commandList)
+    for (Command *command : *commandList)
     {
-        string choice = *command->toString();
+        string choice = *command->getCommandName();
 
         if (choice.compare("loadmap germany") == 0)
         {
             string mapName = choice.substr(9);
-            map = loader.loadMapFromFile(choice);
+            map = loader.loadMapFromFile(mapName);
             // Update State
             currentState = loadState;
         }
@@ -284,17 +291,18 @@ void GameEngine::startupPhase()
             {
                 // a) fairly distribute all the territories to the players
                 // b) determine randomly the order of play of the players in the game
+
                 // c) give 50 initial armies to the players, which are placed in their respective reinforcement pool
                 // d) let each player draw 2 initial cards from the deck using the deck’s draw() method
-                Card* card = deck->draw(hand);
-                player->getHand();
+                    // 1st card
+                deck->draw(player->getHand());
+                    // 2nd card
+                deck->draw(player->getHand());
             }
             // e) switch the game to the play phase
             currentState = assignReinState;
         }
     }
 
-
-    
 }
 

@@ -145,6 +145,11 @@ void CommandProcessor::GetCommand(string * curState)
     Validate(curState, cmmnd);
 }
 
+vector<Command*> * CommandProcessor::ReturnCommandList()
+{
+    return commandList;
+}
+
 void CommandProcessor::ShowCommandList()
 {
     for(int i = 0; i < commandList->size(); i++)

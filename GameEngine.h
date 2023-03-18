@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAMEENG_H
+#define GAMEENG_H
 #include <list>
 #include <string>
 #include <vector>
@@ -28,7 +29,7 @@ class Transition
 
         Transition();
         Transition(string *name, State *destination);
-        ~Transition() { delete name; delete destination; };
+        ~Transition();
 
 };
 
@@ -116,8 +117,10 @@ class GameEngine
 
         bool isCommandValid(string *command);
 
-        string GameEngine::stringToLog();
+        string stringToLog();
 
         void startupPhase();
+        void startupPhase(CommandProcessor* commandProcessor);
 };
 
+# endif

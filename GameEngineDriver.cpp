@@ -1,11 +1,15 @@
 #include "GameEngine.cpp"
+#include "CommandProcessor.cpp"
 
+using namespace std;
 // MAIN
 int main(int argc, char const *argv[])
 {
-    GameEngine *test = new GameEngine();
+    
+    CommandProcessor *commandProcessor = new CommandProcessor();
+    GameEngine *test = new GameEngine(commandProcessor);
     vector<State*> stateList;
-    stateList = test->getStateList();
+
 
     cout << "-----Welcome to Game Engine Driver----- \n";
     while (true)
@@ -14,7 +18,8 @@ int main(int argc, char const *argv[])
         cout << "2. Show all transitions\n";
         cout << "3. Show the current State\n";
         cout << "4. Input a command\n";
-        cout << "5. End Demo\n";
+        cout << "5. startupPhase\n";
+        cout << "99. End Demo\n";
         cout << "-----------------------------\n";
 
         int choice;
@@ -53,6 +58,9 @@ int main(int argc, char const *argv[])
             test->isCommandValid(&input);
             break;
         case 5:
+            // test->startupPhase(commandProcessor);
+            break;
+        case 99:
             cout << "-----Thank you and goodbye!----- \n";
             return 0;
         default:
