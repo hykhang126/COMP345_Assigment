@@ -10,6 +10,7 @@ int main() {
     Territory* terr1 = new Territory();
     terr1->setOwner(player);
     terr1->setName(new string("USA"));
+    player->setReinforcement(50);
     int* numReinforcement = new int(10);
     Order* order1 = new Deploy(numReinforcement, terr1, player);
     //-------------------------DEPLOY------------------------------------

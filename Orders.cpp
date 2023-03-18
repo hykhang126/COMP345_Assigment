@@ -163,7 +163,7 @@ ostream& operator << (ostream& out, const Deploy& deploy) {
 */
 void Deploy::validate() {
     //A2: if player doesn't own the territory, invalid order
-    if(target->getOwner() != player) {
+    if(target->getOwner() != player || *(player->getReinforcement()) < *numReinforcements) {
         setValidStatus(false);
         cout << "Order is invalid..." << endl;
     }
@@ -188,7 +188,8 @@ void Deploy::execute() {
         target->setArmies(newArmies);
         player->setReinforcement(*newPool);
         cout << "Deploy order executed! New number of armies: " << *(target->getArmies()) 
-            << "\nOn territory: " << *(target->getName()) << endl;
+            << "\nOn territory: " << *(target->getName()) 
+            << "\nNew reinforcement pool: " << *(player->getReinforcement()) << endl;
         notify(this);
     }
     else {
