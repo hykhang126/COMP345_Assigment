@@ -144,6 +144,7 @@ void Map::showAllBorder(){
     }
 
 
+
 void Map::showAllContinent()
 {
     int counter = 1;
@@ -536,6 +537,7 @@ Map* MapLoader::loadMapFromFile(string fileName)
                 for(int i = 1 ; i < tokens.size(); i++)
                 {
                     map->addEdge(map->getTerritoryByIndex(stoi(tokens[0])), map->getTerritoryByIndex(stoi(tokens[i])));
+                    map->getTerritoryByIndex(stoi(tokens[0]))->adjacentTerritory->push_back(map->getTerritoryByIndex(stoi(tokens[i])));
                 }
                 cout << "Added border"<<endl;
             }
@@ -543,7 +545,10 @@ Map* MapLoader::loadMapFromFile(string fileName)
     }
     reader.close();
     map->setContinentList(listContinent);
+    
+    
     cout << "++++++++++++Load file into map successfully" << endl;
+    
     return map;
 
     }

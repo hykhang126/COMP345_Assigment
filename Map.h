@@ -65,8 +65,10 @@ class Territory{
         string* name;
         Continent* continent;
         Coordinate* coordinate;
+       
 
     public:
+        vector<Territory*>* adjacentTerritory = new vector<Territory*>();
         Coordinate* getCoordinate();
         Continent* getContinent();
         string* getName();
@@ -113,6 +115,7 @@ class Map{
 //Declaration of MapLoader class
 class MapLoader{
     private:
+   
         vector<string> split(const string &str, char delimiter);
     public:
         Map* loadMapFromFile(string fileName);
