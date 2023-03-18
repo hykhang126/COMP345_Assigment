@@ -11,7 +11,8 @@
 using namespace std;
 
 class Territory;
-
+class Hand;
+class OrdersList;
 class Player;
 
 class Player{
@@ -49,4 +50,5 @@ class Player{
         int* getReinforcement();
         //setters
         void setTerritoryCollection(vector <Territory*>);
+        void setReinforcement(int number);
 };

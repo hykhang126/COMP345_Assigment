@@ -8,7 +8,7 @@ using namespace std;
 // possible card types as a global string array of pointers
 extern const string *globalCardTypes[5];
 
-
+class OrdersList;
 class Deck;
 class Hand;
 class Card

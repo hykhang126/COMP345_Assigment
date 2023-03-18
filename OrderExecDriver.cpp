@@ -8,15 +8,11 @@ int main() {
     cout << "Initializing.................................." << endl;
     Player* player = new Player();
     Territory* terr1 = new Territory();
-    vector<Territory*>* terrList = new vector<Territory*>();
-    terrList->push_back(terr1);
-    player->setTerritoryCollection(*terrList);
+    terr1->setOwner(player);
+    terr1->setName(new string("USA"));
     int* numReinforcement = new int(10);
     Order* order1 = new Deploy(numReinforcement, terr1, player);
-    OrdersList* list = new OrdersList();
-
     //-------------------------DEPLOY------------------------------------
     cout << "\nTesting out Deploy Order...................." << endl;
     order1->execute();
-    list->addOrder(order1);
 }

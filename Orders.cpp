@@ -128,6 +128,8 @@ Deploy::~Deploy() {
  * Copy Constructor for Deploy Class
 */
 Deploy::Deploy(const Deploy& other) {
+    setDescription("deploy some armies on one of the player's territories");
+    setEffect("Player armies have been placed on the player's territories");
     this->numReinforcements = new int(*(other.numReinforcements));
     this->target = new Territory(*(other.target));
     this->player = new Player(*(other.player));
@@ -139,9 +141,9 @@ Deploy::Deploy(const Deploy& other) {
  * @param player: player issuing the order
 */
 Deploy::Deploy(int* number, Territory* targetTerr, Player* player) {
-    numReinforcements = new int(*number);
-    target = new Territory(*targetTerr);
-    this->player = new Player(*player);
+    numReinforcements = number;
+    target = targetTerr;
+    this->player = player;
 }
 /**
  * Assignment Operator for Deploy Class
@@ -160,14 +162,13 @@ ostream& operator << (ostream& out, const Deploy& deploy) {
  * Validate method for Deploy order: sets the order's validation status to true
 */
 void Deploy::validate() {
-    //if player doesn't own the territory, invalid order
-    vector<Territory*> vector = *(player->getTerritoryCollection());
-    if(std::find(vector.begin(), vector.end(), target) == vector.end()) {
+    //A2: if player doesn't own the territory, invalid order
+    if(target->getOwner() != player) {
         setValidStatus(false);
         cout << "Order is invalid..." << endl;
     }
-    //if player owns the territory, valid order
-    else if (std::find(vector.begin(), vector.end(), target) != vector.end()) {
+    //A2: if player owns the territory, valid order
+    else if (target->getOwner() == player) {
         setValidStatus(true);
         cout << "Deploy order validated!" << endl;
     }
@@ -181,9 +182,13 @@ void Deploy::execute() {
     validate();
     if (getValidStatus() == true) {
         setExecStatus(true);
+        //A2: if valid, add the number of armies to the target territory
         int* newArmies = new int(*(target->getArmies()) + *numReinforcements);
+        int* newPool = new int(*(player->getReinforcement()) - *numReinforcements);
         target->setArmies(newArmies);
-        cout << "Deploy order executed! New number of armies: " << *(target->getArmies()) << endl;
+        player->setReinforcement(*newPool);
+        cout << "Deploy order executed! New number of armies: " << *(target->getArmies()) 
+            << "\nOn territory: " << *(target->getName()) << endl;
         notify(this);
     }
     else {
@@ -241,6 +246,8 @@ Advance::~Advance() {
  * @param player: the player making the order
 */
 Advance::Advance(int* number, Territory* sourceTerr, Territory* targetTerr, Player* player) {
+    setDescription("advance armies from one of the player's territories to an adjacent territory");
+    setEffect("Player armies have moved to an adjacent territory.");
     numUnits = new int(*number);
     source = new Territory(*sourceTerr);
     target = new Territory(*targetTerr);
@@ -272,15 +279,17 @@ ostream& operator << (ostream& out, const Advance& advance) {
  * Validate method for Advance order: sets the order's validation status to true
 */
 void Advance::validate() {
-    //A2: if player doesn't own source territory, invalid order
-    vector<Territory*> vector = *(player->getTerritoryCollection());
-    if(std::find(vector.begin(), vector.end(), source) == vector.end()) {
+    //A2: if player doesn't own source territory or target territory is not adjacent, invalid order
+    vector<Territory*> ownership = *(player->getTerritoryCollection());
+    vector<Territory*> adjacency = *(source->adjacentTerritory);
+    if(std::find(ownership.begin(), ownership.end(), source) == ownership.end()
+        || std::find(adjacency.begin(), adjacency.end(), target) == adjacency.end()) {
         setValidStatus(false);
         cout << "Order is invalid..." << endl;
     }
     else {
-    setValidStatus(true);
-    cout << "Advance order validated!" << endl;
+        setValidStatus(true);
+        cout << "Advance order validated!" << endl;
     }
 }
 /**
@@ -290,9 +299,55 @@ void Advance::validate() {
 */
 void Advance::execute() {
     validate();
+    vector<Territory*> ownership = *(player->getTerritoryCollection());
     if (getValidStatus() == true) {
         setExecStatus(true);
-        cout << "Advance order executed!" << endl;
+        //A2: if the target territory belongs to the player issuing the order, move the number of units
+        if(std::find(ownership.begin(), ownership.end(), target) != ownership.end()) {
+            int* newSourceArmies = new int(*(source->getArmies()) - *numUnits);
+            int* newTargetArmies = new int(*(target->getArmies()) + *numUnits);
+            source->setArmies(newSourceArmies);
+            target->setArmies(newTargetArmies);
+            cout << "Advance order executed!" << endl;
+            cout << *numUnits << " were moved from " << source->getName() << " to " << target->getName() << endl;
+            cout << "New number of armies for " << source->getName() << ": " << source->getArmies() << endl;
+            cout << "New number of armies for " << target->getName() << ": " << target->getArmies() << endl;
+        }
+        //A2: if target territory belongs to an enemy, simulate the battle
+        else if(std::find(ownership.begin(), ownership.end(), target) == ownership.end()) {
+            int* attackUnits = new int(*(numUnits));
+            int* newSourceArmies = new int(*(source->getArmies()) - *numUnits);
+            source->setArmies(newSourceArmies);
+            int* newTargetArmies = new int(*(target->getArmies()));
+            int sourceLoss;
+            int targetLoss;
+            for(int i = 0; i < *(numUnits); i++) {
+                if(*newTargetArmies == 0) { //stop if target territory doesn't have any more armies
+                    break;
+                }
+                else if (std::rand() % 100 <= 60) { //each attacking unit has 60% of killing a defending unit
+                    *newTargetArmies -= 1;
+                }
+            }
+            for(int i = 0; i < *(target->getArmies()); i++) {
+                if(*attackUnits == 0) {
+                    break; //stop if source territory doesn't have any more armies
+                }
+                else if (std::rand() % 100 <= 70) {
+                    *attackUnits -= 1; //each defending unit has 70% of killing an attacking unit
+                }
+            }
+            *newSourceArmies += *attackUnits;
+            source->setArmies(newSourceArmies);
+            target->setArmies(newTargetArmies);
+            if(target->getArmies() == 0) {
+                target->setOwner(player);
+                *newSourceArmies -= *attackUnits;
+                *newTargetArmies += *attackUnits;
+                source->setArmies(newSourceArmies);
+                target->setArmies(newTargetArmies);
+            }
+        }
         notify(this);
     }
     else {

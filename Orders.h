@@ -5,12 +5,14 @@
 #include <iostream>
 #include <vector>
 #include "LoggingObserver.h"
-
-//A2
 #include "Player.h"
 #include "Map.h"
 
+//A2
 using namespace std;
+
+class Player;
+class Territory;
 
 /**
  * Order: User-defined abstract class

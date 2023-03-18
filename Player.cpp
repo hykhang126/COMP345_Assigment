@@ -142,3 +142,6 @@ void Player::setTerritoryCollection(vector <Territory*> collection) {
 int* Player::getReinforcement() {
     return this->reinforcement;
 }
+void Player::setReinforcement(int number) {
+    *reinforcement = number;
+}
