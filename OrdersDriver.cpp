@@ -9,7 +9,6 @@ int main() {
     // Initialization of list
     OrdersList* list = new OrdersList();
     //Initialization of Orders
-    Order* order0 = new Order(); //non-defined order
     Deploy* order1 = new Deploy(); //deploy order
     Advance* order2 = new Advance(); //advance order
     Bomb* order3 = new Bomb(); //bomb order
@@ -20,7 +19,6 @@ int main() {
     
     //---------------------INSERTING ORDERS IN THE LIST---------------------------
     cout << "\nAdding to list....................................." << endl;
-    list->addOrder(order0);
     list->addOrder(order1);
     list->addOrder(order2);
     list->addOrder(order3);

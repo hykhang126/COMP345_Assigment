@@ -112,18 +112,36 @@ string Order::stringToLog() {
 Deploy::Deploy() {
     setDescription("deploy some armies on one of the player's territories");
     setEffect("Player armies have been placed on the player's territories");
+    numReinforcements = new int(0);
+    target = new Territory();
+    player = new Player();
 }
 /**
  * Destructor for Deploy Class
 */
 Deploy::~Deploy() {
-
+    delete numReinforcements;
+    delete target;
+    delete player;
 }
 /**
  * Copy Constructor for Deploy Class
 */
 Deploy::Deploy(const Deploy& other) {
-
+    this->numReinforcements = new int(*(other.numReinforcements));
+    this->target = new Territory(*(other.target));
+    this->player = new Player(*(other.player));
+}
+/**
+ * Defined constructor for Deploy
+ * @param number: number of armies to deploy from reinforcement pool
+ * @param targetTerr: territory to deploy to
+ * @param player: player issuing the order
+*/
+Deploy::Deploy(int* number, Territory* targetTerr, Player* player) {
+    numReinforcements = new int(*number);
+    target = new Territory(*targetTerr);
+    this->player = new Player(*player);
 }
 /**
  * Assignment Operator for Deploy Class
@@ -142,8 +160,17 @@ ostream& operator << (ostream& out, const Deploy& deploy) {
  * Validate method for Deploy order: sets the order's validation status to true
 */
 void Deploy::validate() {
-    setValidStatus(true);
+    //if player doesn't own the territory, invalid order
+    vector<Territory*> vector = *(player->getTerritoryCollection());
+    if(std::find(vector.begin(), vector.end(), target) == vector.end()) {
+        setValidStatus(false);
+        cout << "Order is invalid..." << endl;
+    }
+    //if player owns the territory, valid order
+    else if (std::find(vector.begin(), vector.end(), target) != vector.end()) {
+        setValidStatus(true);
         cout << "Deploy order validated!" << endl;
+    }
 }
 /**
  * Execute method for Deploy order:
@@ -154,13 +181,36 @@ void Deploy::execute() {
     validate();
     if (getValidStatus() == true) {
         setExecStatus(true);
-        cout << "Deploy order executed!" << endl;
+        int* newArmies = new int(*(target->getArmies()) + *numReinforcements);
+        target->setArmies(newArmies);
+        cout << "Deploy order executed! New number of armies: " << *(target->getArmies()) << endl;
         notify(this);
     }
     else {
         cout << "Deploy order failed..." << endl;
     }
 }
+/**
+ * Getter for reinforcement number to deploy
+*/
+int* Deploy::getReinforcements() {
+    return numReinforcements;
+}
+/**
+ * Setter for reinforcement number to deploy
+*/
+void Deploy::setReinforcements(int* number) {
+    numReinforcements = number;
+}
+/**
+ * Getter for target territory to deploy to
+*/
+Territory* Deploy::getTarget() {
+    return target;
+}
+/**
+ * 
+*/
 
 // ------------------- ADVANCE ORDER -------------------------
 /**
@@ -169,18 +219,41 @@ void Deploy::execute() {
 Advance::Advance() {
     setDescription("advance armies from one of the player's territories to an adjacent territory");
     setEffect("Player armies have moved to an adjacent territory.");
+    numUnits = new int(0);
+    source = new Territory();
+    target = new Territory();
+    player = new Player();
 }
 /**
  * Destructor for Advance Class
 */
 Advance::~Advance() {
-
+    delete source;
+    delete target;
+    delete player;
+    delete numUnits;
+}
+/**
+ * Full constructor for the Advance order
+ * @param number: the number of army units ordered to move
+ * @param sourceTerr: the source territory
+ * @param targetTerr: the target adjacent territory
+ * @param player: the player making the order
+*/
+Advance::Advance(int* number, Territory* sourceTerr, Territory* targetTerr, Player* player) {
+    numUnits = new int(*number);
+    source = new Territory(*sourceTerr);
+    target = new Territory(*targetTerr);
+    this->player = new Player(*player);
 }
 /**
  * Copy Constructor for Advance Class
 */
 Advance::Advance(const Advance& other) {
-    
+    this->source = new Territory(*(other.source));
+    this->target = new Territory(*(other.target));
+    this->player = new Player(*(other.player));
+    this->numUnits = new int(*(other.numUnits));
 }
 /**
  * Assignment Operator for Advance Class
@@ -199,8 +272,16 @@ ostream& operator << (ostream& out, const Advance& advance) {
  * Validate method for Advance order: sets the order's validation status to true
 */
 void Advance::validate() {
+    //A2: if player doesn't own source territory, invalid order
+    vector<Territory*> vector = *(player->getTerritoryCollection());
+    if(std::find(vector.begin(), vector.end(), source) == vector.end()) {
+        setValidStatus(false);
+        cout << "Order is invalid..." << endl;
+    }
+    else {
     setValidStatus(true);
-        cout << "Advance order validated!" << endl;
+    cout << "Advance order validated!" << endl;
+    }
 }
 /**
  * Execute method for Advance order:
@@ -218,7 +299,42 @@ void Advance::execute() {
         cout << "Advance order failed..." << endl;
     }
 }
-
+/**
+ * Getter for source territory
+*/
+Territory* Advance::getSource() {
+    return source;
+}
+/**
+ * Setter for source territory
+*/
+void Advance::setSource(Territory* sourceTerr) {
+    source = sourceTerr;
+}
+/**
+ * Getter for target territory
+*/
+Territory* Advance::getTarget() {
+    return target;
+}
+/**
+ * Setter for target territory
+*/
+void Advance::setTarget(Territory* targetTerr) {
+    target = targetTerr;
+}
+/**
+ * Getter for player
+*/
+Player* Advance::getPlayer() {
+    return player;
+}
+/**
+ * Setter for player
+*/
+void Advance::setPlayer(Player* player) {
+    this->player = player;
+}
 
 // ------------------- BOMB ORDER ----------------------------
 /**

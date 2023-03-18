@@ -20,6 +20,7 @@ class Player{
         Hand* hand;
         vector<Territory*>* tCollection;
         OrdersList* listOfOrders;
+        int* reinforcement;
 
     public :
         //Basic constructor
@@ -45,6 +46,7 @@ class Player{
         Hand* getHand();
         OrdersList* getOrdersList();
         vector<Territory*>* getTerritoryCollection();
+        int* getReinforcement();
         //setters
         void setTerritoryCollection(vector <Territory*>);
 };

@@ -6,6 +6,10 @@
 #include <vector>
 #include "LoggingObserver.h"
 
+//A2
+#include "Player.h"
+#include "Map.h"
+
 using namespace std;
 
 /**
@@ -34,7 +38,7 @@ public:
     //stream operator
     friend ostream& operator << (ostream& out, const Order& order);
 
-    //pure virtual method: execute()
+    //A2: pure virtual method: execute()
     virtual void execute() = 0;
 
     //getter for order type
@@ -66,12 +70,16 @@ class Deploy : public Order
 {
 private:
     /* data */
+    int* numReinforcements;
+    Territory* target;
+    Player* player;
 public:
     //default constructor
     Deploy();
     //destructor
     ~Deploy();
-
+    //defined constructor
+    Deploy(int* number, Territory* targetTerr, Player* player);
     //copy constructor
     Deploy(const Deploy& other);
     //assignment operator
@@ -84,6 +92,12 @@ public:
     //execute method to execute an order
     void execute() override ;
 
+    int* getReinforcements();
+    void setReinforcements(int* number);
+    Territory* getTarget();
+    void setTarget(Territory* targetTerr);
+    Player* getPlayer();
+    Player* setPlayer(Player* player);
 };
 
 // ------------------- ADVANCE ORDER -------------------------
@@ -94,11 +108,17 @@ class Advance : public Order
 {
 private:
     /* data */
+    Territory* source;
+    Territory* target;
+    Player* player;
+    int* numUnits;
 public:
     //default constructor
     Advance();
     //destructor
     ~Advance();
+    //defined constructor
+    Advance(int* number, Territory* sourceTerr, Territory* targetTerr, Player* player);
 
     //copy constructor
     Advance(const Advance& other);
@@ -112,6 +132,22 @@ public:
     //execute method to execute an order
     void execute() override;
 
+    //getter for source territory
+    Territory* getSource();
+    //setter for source territory
+    void setSource(Territory* sourceTerr);
+    //getter for target territory
+    Territory* getTarget();
+    //setter for target territory
+    void setTarget(Territory* targetTerr);
+    //getter for player
+    Player* getPlayer();
+    //setter for player
+    void setPlayer(Player* player);
+    //getter for number of army units
+    int* getNumUnits();
+    //setter for number of army units
+    void setNumUnits(int* number);
 };
 
 // ------------------- BOMB ORDER ----------------------------
