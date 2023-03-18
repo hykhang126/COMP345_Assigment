@@ -365,7 +365,7 @@ Territory& Territory::operator= (Territory const &ter)
 {
     position = new int(*ter.position);
     armies = new int(*ter.armies);
-    owner = new Player();
+    owner = ter.owner;
     name = new string(*ter.name);
     continent = new Continent(*ter.continent);
     coordinate = new Coordinate(*ter.coordinate);
@@ -376,7 +376,7 @@ Territory::Territory(Territory const &ter)
 {
     position = new int(*ter.position);
     armies = new int(*ter.armies);
-    owner = new Player();
+    owner = ter.owner;
     name = new string(*ter.name);
     continent = new Continent(*ter.continent);
     coordinate = new Coordinate(*ter.coordinate);
@@ -386,7 +386,7 @@ Territory::Territory()
 {
     position = new int(0);
     armies = new int(0);
-    owner = new Player();
+    owner = NULL;
     name = new string("");
     continent = new Continent();
     coordinate = new Coordinate();
@@ -526,7 +526,7 @@ Map* MapLoader::loadMapFromFile(string fileName)
                     return nullptr;
                 }
                 Continent* cont = (*listContinent)[stoi(tokens[2])-1];
-                Territory* territory = new Territory(new Player(), new int(0), new int(stoi(tokens[0])), new string(tokens[1]), cont, new Coordinate(new int(stoi(tokens[3])), new int(stoi(tokens[4]))));
+                Territory* territory = new Territory(NULL, new int(0), new int(stoi(tokens[0])), new string(tokens[1]), cont, new Coordinate(new int(stoi(tokens[3])), new int(stoi(tokens[4]))));
                 map->addTerritory(territory);
                 cout << "Added Country"<<endl;
             }
