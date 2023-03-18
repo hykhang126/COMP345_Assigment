@@ -33,6 +33,7 @@ class Continent{
         Continent(int* pos, string* name, int* point, string* color);
         ~Continent();
         Continent(const Continent &src);
+        Continent();
         string toString();
         Continent& operator= (const Continent &src);
         friend ostream& operator<< (ostream &os, const Continent &cont);
@@ -50,6 +51,7 @@ class Coordinate{
         ~Coordinate();
         string toString();
         Coordinate (const Coordinate& cor);
+        Coordinate();
         friend ostream& operator<< (ostream& output, Coordinate const &cor);
         Coordinate& operator= (Coordinate const &cor);
 };
@@ -63,8 +65,10 @@ class Territory{
         string* name;
         Continent* continent;
         Coordinate* coordinate;
+       
 
     public:
+        vector<Territory*>* adjacentTerritory = new vector<Territory*>();
         Coordinate* getCoordinate();
         Continent* getContinent();
         string* getName();
@@ -79,6 +83,7 @@ class Territory{
         friend ostream& operator<< (ostream& os, Territory const &ter);
         Territory& operator= (const Territory &ter);
         Territory(Territory const &ter);
+        Territory();
 };
 
 //Declaration of Map class
@@ -104,11 +109,13 @@ class Map{
         void showAllCoutry();
         void showAllBorder();
         void showAllContinent();
+        list<Territory*> * getAdjacentTerritory(Territory * source);
 };
 
 //Declaration of MapLoader class
 class MapLoader{
     private:
+   
         vector<string> split(const string &str, char delimiter);
     public:
         Map* loadMapFromFile(string fileName);

@@ -131,6 +131,20 @@ void Map::showAllBorder(){
     }
 }
 
+    list<Territory*>* Map::getAdjacentTerritory(Territory * source)
+    {
+        for(map<Territory*, list<Territory*>*>::iterator it = maps->begin(); it != maps->end(); ++it)
+        {
+            if((*it).first->getName() == source->getName())
+            {
+                return (*it).second;
+            }
+        }
+        return NULL;
+    }
+
+
+
 void Map::showAllContinent()
 {
     int counter = 1;
@@ -206,6 +220,14 @@ bool Map::BFS() {
 
 
 //Definition Continent class
+Continent::Continent()
+{
+    position = new int(0);
+    name = new string("");
+    point = new int(0);
+    color = new string("");
+}
+
 int* Continent::getPosition()
 {
     return position;
@@ -360,7 +382,23 @@ Territory::Territory(Territory const &ter)
     coordinate = new Coordinate(*ter.coordinate);
 }
 
+Territory::Territory()
+{
+    position = new int(0);
+    armies = new int(0);
+    owner = new Player();
+    name = new string("");
+    continent = new Continent();
+    coordinate = new Coordinate();
+}
+
 //Definition of Coordinate class
+Coordinate::Coordinate()
+{
+    x = new int(0);
+    y = new int(0);
+}
+
 int* Coordinate::getX()
 {
     return x;
@@ -499,6 +537,7 @@ Map* MapLoader::loadMapFromFile(string fileName)
                 for(int i = 1 ; i < tokens.size(); i++)
                 {
                     map->addEdge(map->getTerritoryByIndex(stoi(tokens[0])), map->getTerritoryByIndex(stoi(tokens[i])));
+                    map->getTerritoryByIndex(stoi(tokens[0]))->adjacentTerritory->push_back(map->getTerritoryByIndex(stoi(tokens[i])));
                 }
                 cout << "Added border"<<endl;
             }
@@ -506,7 +545,10 @@ Map* MapLoader::loadMapFromFile(string fileName)
     }
     reader.close();
     map->setContinentList(listContinent);
+    
+    
     cout << "++++++++++++Load file into map successfully" << endl;
+    
     return map;
 
     }
