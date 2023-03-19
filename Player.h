@@ -11,7 +11,8 @@
 using namespace std;
 
 class Territory;
-
+class Hand;
+class OrdersList;
 class Player;
 
 class Player{
@@ -20,6 +21,7 @@ class Player{
         Hand* hand;
         vector<Territory*>* tCollection;
         OrdersList* listOfOrders;
+        int* reinforcement;
 
     public :
         //Basic constructor
@@ -45,6 +47,9 @@ class Player{
         Hand* getHand();
         OrdersList* getOrdersList();
         vector<Territory*>* getTerritoryCollection();
+        int* getReinforcement();
         //setters
         void setTerritoryCollection(vector <Territory*>);
+        void setReinforcement(int number);
+        void setName(string name);
 };

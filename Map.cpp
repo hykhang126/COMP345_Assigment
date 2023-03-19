@@ -335,7 +335,8 @@ Territory::~Territory()
 
 string Territory::toString()
 {
-    return "Player:, Armies: " + to_string(*armies) + ", position: " + to_string(*position) + ", name: " + *name + ", continent: " + continent->toString() + ", Coordinate: " + coordinate->toString() ; 
+    return "Player: " + *this->owner->getName() + ", Armies: " + to_string(*armies) + ", position: " + to_string(*position) 
+            + ", name: " + *name + ", continent: " + continent->toString() + ", Coordinate: " + coordinate->toString() ; 
 }
 
 Coordinate* Territory::getCoordinate(){

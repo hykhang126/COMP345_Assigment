@@ -95,8 +95,14 @@ class GameEngine
         // Player list
         vector<Player*>* gamePlayers;
 
-        // CommandProcessor reference, where all commands are stored
+        // CommandProcessor reference, where all commands are handled
         CommandProcessor *commandProcessor;
+
+        // Deck reference, where all cards and deck are stored
+        Deck *deck;
+
+        // Map reference, where the map is stored
+        Map *map;
 
         void initialization();
 
@@ -110,14 +116,20 @@ class GameEngine
         vector<Player*>* getGamePlayers();
         void addPlayerToList(Player* player);
 
+        Deck *getDeck();
+        void setDeck(Deck *deck);
+
+        Map *getMap();
+        void setMap(Map *map);
+
         GameEngine();
-        GameEngine(CommandProcessor *commandProcessor);
+        GameEngine(CommandProcessor *commandProcessor, Deck *deck,  Map *map);
         ~GameEngine();
 
         bool isCommandValid(string *command);
+        void distributeTerritory(Player* player);
 
         string stringToLog();
 
         void startupPhase();
-        void startupPhase(CommandProcessor* commandProcessor);
 };

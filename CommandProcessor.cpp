@@ -118,7 +118,7 @@ void CommandProcessor::SaveCommand(Command * com)
 }
 
 Command* CommandProcessor::ReadCommand(){
-    cout << "Please enter your command: " <<endl;
+    cout << "Please enter your command: " << endl;
     string * cmmndString = new string("");
     cin >> *cmmndString;
     Command* cmmnd = new Command(cmmndString);
