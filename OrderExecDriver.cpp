@@ -59,6 +59,10 @@ int main() {
 
     //for blockade
     Order* order6 = new Blockade(terr1, player);
+
+    //for negotiate
+    Order* order7 = new Negotiate(player, player2);
+    Order* order8 = new Advance(new int(10), terr5, terr4, player2);
     //-------------------------DEPLOY------------------------------------
     cout << "\nTesting out Deploy Order...................." << endl;
     order1->execute();
@@ -76,4 +80,9 @@ int main() {
     //-------------------------BLOCKADE----------------------------------
     cout << "\nTesting out Blockade Order...................." << endl;
     order6->execute();
+    //------------------------NEGOTIATE----------------------------------
+    cout << "\nTesting out Negotiate Order..................." << endl;
+    order7->execute();
+    cout << "\nPlayer 1 attacks Player 2: should result in failure" << endl;
+    order8->execute(); 
 }

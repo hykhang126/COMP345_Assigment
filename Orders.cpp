@@ -288,13 +288,25 @@ bool Advance::isAdjacent() {
     return false;
 }
 /**
+ * Check if target is a negotiating party
+*/
+bool Advance::isNegotiate() {
+    for(int i = 0; i < (target->getOwner()->getNegotiating())->size(); i++) {
+        if(target->getOwner()->getNegotiating()->at(i) == player) {
+            return true;
+        }
+    }
+    return false;
+}
+/**
  * Validate method for Advance order: sets the order's validation status to true
 */
 void Advance::validate() {
     //A2: if player doesn't own source territory or target territory is not adjacent, invalid order
     if(source->getOwner() != player
         || !isAdjacent()
-        || *numUnits > *(source->getArmies())) {
+        || *numUnits > *(source->getArmies())
+        || isNegotiate()) { //NEGOTIATE: if player is negotiating with enemy, order is invalid
         setValidStatus(false);
         cout << "Advance order is invalid..." << endl;
     }
@@ -795,7 +807,11 @@ void Negotiate::execute() {
     validate();
     if (getValidStatus() == true) {
         setExecStatus(true);
+        player->getNegotiating()->push_back(enemy);
+        enemy->getNegotiating()->push_back(player);
         cout << "Negotiate order executed!" << endl;
+        cout << "Players " << *(player->getName()) << " and " << *(enemy->getName()) << " are now negotiating." << endl;
+        cout << "No aggression allowed for Advance orders." << endl;
         notify(this);
     }
     else {

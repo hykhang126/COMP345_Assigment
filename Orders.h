@@ -131,6 +131,8 @@ public:
 
     //check if target is adjacent to source
     bool isAdjacent();
+    //check if target is of negotiating party
+    bool isNegotiate();
     //validate method to make the order valid
     void validate();
     //execute method to execute an order
