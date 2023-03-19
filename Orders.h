@@ -281,11 +281,15 @@ class Negotiate : public Order
 {
 private:
     /* data */
+    Player* player;
+    Player* enemy;
 public:
     //default constructor
     Negotiate();
     //destructor
     ~Negotiate();
+    //defined construcotr
+    Negotiate(Player* player, Player* enemy);
 
     //copy constructor
     Negotiate(const Negotiate& other);
@@ -298,6 +302,12 @@ public:
     void validate();
     //execute method to execute an order
     void execute() override;
+
+    //getters and setters
+    Player* getPlayer();
+    void setPlayer(Player* player);
+    Player* getEnemy();
+    void setEnemy(Player* enemy);
 };
 
 // ------------------- LIST OF ORDERS ------------------------

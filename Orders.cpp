@@ -736,18 +736,29 @@ void Airlift::setPlayer(Player* player) {
 Negotiate::Negotiate() {
     setDescription("negotiate between the current player and another player");
     setEffect("No attacks allowed between the players in negotiation until the end of the turn");
+    player = new Player();
+    enemy = new Player();
 }
 /**
  * Destructor for Negotiate Class
 */
 Negotiate::~Negotiate() {
-
+    delete player;
+    delete enemy;
 }
 /**
  * Copy Constructor for Negotiate Class
 */
 Negotiate::Negotiate(const Negotiate& other) {
-    
+    this->player = new Player(*(other.player));
+    this->enemy = new Player(*(other.enemy));
+}
+/**
+ * Defined constructor
+*/
+Negotiate::Negotiate(Player* player, Player* enemy) {
+    this->player = player;
+    this->enemy = enemy;
 }
 /**
  * Assignment Operator for Negotiate Class
@@ -766,8 +777,14 @@ ostream& operator << (ostream& out, const Negotiate& negotiate) {
  * Validate method for Negotiate order: sets the order's validation status to true
 */
 void Negotiate::validate() {
-    setValidStatus(true);
+    if(enemy == player) {
+        setValidStatus(false);
+        cout << "Negotiate order is invalid..." << endl;
+    }
+    else {
+        setValidStatus(true);
         cout << "Negotiate order validated!" << endl;
+    }
 }
 /**
  * Execute method for Negotiate order:
@@ -785,8 +802,18 @@ void Negotiate::execute() {
         cout << "Negotiate order failed..." << endl;
     }
 }
-
-
+Player* Negotiate::getPlayer() {
+    return player;
+}
+void Negotiate::setPlayer(Player* player) {
+    this->player = player;
+}
+Player* Negotiate::getEnemy() {
+    return enemy;
+}
+void Negotiate::setEnemy(Player* enemy) {
+    this->enemy = enemy;
+}
 
 // ------------------- LIST OF ORDERS ------------------------
 /**
