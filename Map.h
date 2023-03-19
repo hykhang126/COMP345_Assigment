@@ -1,5 +1,4 @@
 
-#pragma once
 #ifndef MYHEADER_H
 #define MYHEADER_H
 #include <map>
