@@ -145,3 +145,6 @@ int* Player::getReinforcement() {
 void Player::setReinforcement(int number) {
     *reinforcement = number;
 }
+void Player::setName(string name) {
+    *(this->name) = name;
+}

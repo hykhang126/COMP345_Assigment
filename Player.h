@@ -51,4 +51,5 @@ class Player{
         //setters
         void setTerritoryCollection(vector <Territory*>);
         void setReinforcement(int number);
+        void setName(string name);
 };

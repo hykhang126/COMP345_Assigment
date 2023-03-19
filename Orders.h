@@ -129,6 +129,8 @@ public:
     //stream operator
     friend ostream& operator << (ostream& out, const Advance& advance);
 
+    //check if target is adjacent to source
+    bool isAdjacent();
     //validate method to make the order valid
     void validate();
     //execute method to execute an order
