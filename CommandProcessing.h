@@ -49,6 +49,7 @@ class CommandProcessor
     CommandProcessor& operator= (const CommandProcessor&);
     void SaveCommand(Command * commandName);
     virtual void GetCommand(string * curState);
+    vector<Command*> * ReturnCommandList();
     void ShowCommandList();
     
 };

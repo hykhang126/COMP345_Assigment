@@ -1,6 +1,6 @@
 #include "GameEngine.h"
 
-#include "CommandProcessor.cpp"
+#include "CommandProcessing.cpp"
 #include "Player.cpp"
 #include "Cards.cpp"
 #include "Orders.cpp"
