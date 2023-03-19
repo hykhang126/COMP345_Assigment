@@ -1,5 +1,4 @@
-#ifndef GAMEENG_H
-#define GAMEENG_H
+#pragma once
 #include <list>
 #include <string>
 #include <vector>
@@ -122,5 +121,3 @@ class GameEngine
         void startupPhase();
         void startupPhase(CommandProcessor* commandProcessor);
 };
-
-# endif

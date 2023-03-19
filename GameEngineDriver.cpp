@@ -1,5 +1,4 @@
 #include "GameEngine.cpp"
-#include "CommandProcessor.cpp"
 
 using namespace std;
 // MAIN
@@ -70,4 +69,5 @@ int main(int argc, char const *argv[])
 
     delete test;
     return 0;
+    
 }

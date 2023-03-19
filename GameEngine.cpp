@@ -1,6 +1,6 @@
 #include "GameEngine.h"
 
-
+#include "CommandProcessor.cpp"
 #include "Player.cpp"
 #include "Cards.cpp"
 #include "Orders.cpp"
@@ -150,12 +150,12 @@ void GameEngine::initialization()
 {
     // Create all states 
     startState = new State(new string("Start"));
-    loadState = new State(new string("Map Loaded"));
-    validMapState = new State(new string("Map Validated"));
-    playersAddedState = new State(new string("Players Added"));
-    assignReinState = new State(new string("Assign Reinforcement"));
-    issueOrderState = new State(new string("Issue Order"));
-    executeOrderState = new State(new string("Execute Order"));
+    loadState = new State(new string("MapLoaded"));
+    validMapState = new State(new string("MapValidated"));
+    playersAddedState = new State(new string("PlayersAdded"));
+    assignReinState = new State(new string("AssignReinforcement"));
+    issueOrderState = new State(new string("IssueOrder"));
+    executeOrderState = new State(new string("ExecuteOrder"));
     winState = new State(new string("Win"));
 
     // Create all transitions;
@@ -229,11 +229,11 @@ GameEngine::~GameEngine()
 
 bool GameEngine::isCommandValid(string *command)
 {
-    // cout << "-----------------------------\n";
-    // cout << "Current State and its transitions:\n - ";
-    // currentState->showTransitions();
-    // cout << "Your command: " << *command;
-    // cout << endl;
+    cout << "-----------------------------\n";
+    cout << "Current State and its transitions:\n - ";
+    currentState->showTransitions();
+    cout << "Your command: " << *command;
+    cout << endl;
 
     vector<Transition*> currTransitions = currentState->getTransitions();
     for (int i = 0; i < currTransitions.size(); i++)
@@ -256,51 +256,83 @@ string GameEngine::stringToLog()
 
 void GameEngine::startupPhase(CommandProcessor* commandProcessor)
 {
-    commandProcessor->GetCommand(currentState->getName());
-    vector<Command*> *commandList = commandProcessor->ReturnCommandList();
+    /* Test command */
+    currentState = validMapState;
 
-    // Map* map;
-    // MapLoader loader;
+    string choice = "NULL";
+    Map* map;
+    MapLoader mapLoader;
     Deck* deck = new Deck(20);
-    Hand* hand = new Hand();
+    int playerCount = gamePlayers->size();
+    
+    while (true)
+    {
+        cout << "  ***  Please input commands  ***  "<< endl;
+        cout << "---------Enter 'stop' to stop giving commands. Enter any keys to continue---------" << endl;
+        cin >> choice;
+        if (choice.compare("stop") == 0) break;
+        commandProcessor->GetCommand(currentState->getName());
+        
+    }
+    
+    cout << "  ***  Executing commands  ***  "<< endl;
+    vector<Command*> *commandList = commandProcessor->ReturnCommandList();
 
     for (Command *command : *commandList)
     {
-        string choice = *command->getCommandName();
+        choice = *command->getCommandName();
 
-        if (choice.compare("loadmap germany") == 0)
+        if (choice.compare("loadmap") == 0)
         {
-            // string mapName = choice.substr(9);
-            // map = loader.loadMapFromFile(mapName);
+            string mapName = "france.txt";
+            if (map == NULL)
+            {
+                map = mapLoader.loadMapFromFile(mapName);
+                map->toString();
+            }
             // Update State
             currentState = loadState;
         }
-        else if (choice.compare("validate") == 0)
+        else if (choice.compare("validatemap") == 0)
         {
-            // map->validate();
+            map->validate();
             // Update State
             currentState = validMapState;
         }
         else if (choice.compare("addplayer") == 0)
         {
-            Player* player = new Player();
+            playerCount++;
+            string *name = new string("Player ");
+            name->append(std::to_string(playerCount));
+            Hand *hand = new Hand();
+            vector<Territory*> *tCollection = new vector<Territory*> {};
+            OrdersList *listOfOrders = new OrdersList();
+
+            Player* player = new Player(name, *tCollection, hand, listOfOrders);
             addPlayerToList(player);
+            cout << *player->getName() << " added succesfully to player list" << endl;
             // Update State
             currentState = playersAddedState;
         }
         else if (choice.compare("gamestart") == 0)
         {
+            // b) determine randomly the order of play of the players in the game
+            std::random_device randomDevice;
+            auto randomEngine = std::default_random_engine {randomDevice()};
+            std::shuffle(gamePlayers->begin(), gamePlayers->end(), randomEngine);
+
             for (Player *player : *gamePlayers)
             {
-                // a) fairly distribute all the territories to the players
-                // b) determine randomly the order of play of the players in the game
+                cout << *player->getName() << endl;
+                // a) fairly distribute all the territories to the players  
 
                 // c) give 50 initial armies to the players, which are placed in their respective reinforcement pool
+
                 // d) let each player draw 2 initial cards from the deck using the deck’s draw() method
-                    // 1st card
-                deck->draw(player->getHand());
-                    // 2nd card
-                deck->draw(player->getHand());
+                //     // 1st card
+                // deck->draw(player->getHand());
+                //     // 2nd card
+                // deck->draw(player->getHand());
             }
             // e) switch the game to the play phase
             currentState = assignReinState;
