@@ -49,7 +49,7 @@ class Player{
         vector<Territory*>* getTerritoryCollection();
         int* getReinforcement();
         //setters
-        void setTerritoryCollection(vector <Territory*>);
-        void setReinforcement(int number);
+        void setTerritoryCollection(vector <Territory*>*);
+        void setReinforcement(int* number);
         void setName(string name);
 };

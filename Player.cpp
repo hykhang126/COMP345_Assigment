@@ -136,14 +136,14 @@ vector<Territory*>* Player::getTerritoryCollection() {
     return this->tCollection;
 }
 
-void Player::setTerritoryCollection(vector <Territory*> collection) {
-    *tCollection = collection;
+void Player::setTerritoryCollection(vector <Territory*> *collection) {
+    tCollection = collection;
 }
 int* Player::getReinforcement() {
     return this->reinforcement;
 }
-void Player::setReinforcement(int number) {
-    *reinforcement = number;
+void Player::setReinforcement(int *number) {
+    reinforcement = number;
 }
 void Player::setName(string name) {
     *(this->name) = name;

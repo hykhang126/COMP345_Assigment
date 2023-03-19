@@ -223,6 +223,8 @@ void GameEngine::initialization()
 
     this->setCurrentState(startState);
 
+    delete startTran, loadTran_1, loadTran_2, validMapTran, playersAddedTran_1, playersAddedTran_2, assignReinTran, issueOrderTran_1, 
+            issueOrderTran_2, executeOrderTran_1, executeOrderTran_2, executeOrderTran_3, winTran_1, winTran_2;
 }
 
 GameEngine::GameEngine()
@@ -280,18 +282,24 @@ string GameEngine::stringToLog()
 void GameEngine::distributeTerritory(Player* player)
 {
     int maxNumTerritories = map->countTerritory();
-    int maxNumTerritoriesPerPlayer = 1;
+    int maxNumTerritoriesPerPlayer = 5;
     vector<Territory*> tCollection = {};
+    Territory* territory;
     int countTerritories = 0;
 
     while (countTerritories < maxNumTerritoriesPerPlayer)
     {
         int randomIndex = rand() % (maxNumTerritories-1) + 1;
         cout << randomIndex << endl;
-        if ( map->getTerritoryByIndex(randomIndex) == nullptr) 
-            continue;
-        Territory* territory = map->getTerritoryByIndex(randomIndex);
-        if (territory != nullptr && territory->getOwner() == nullptr)
+        if (map != nullptr && map->getTerritoryByIndex(randomIndex) != nullptr) 
+            territory = map->getTerritoryByIndex(randomIndex);
+        else 
+        {
+            cout << " Territory* is null" << endl;
+            break;
+        }
+
+        if (territory->getOwner() == nullptr)
         {
             tCollection.push_back(territory);
             territory->setOwner(player);
@@ -299,10 +307,11 @@ void GameEngine::distributeTerritory(Player* player)
         }
     }
     
-    player->setTerritoryCollection(tCollection);
+    player->setTerritoryCollection(&tCollection);
     for (Territory *ter : *player->getTerritoryCollection())
     {
-        cout << ter->toString() << endl;
+        if (ter != nullptr) cout << ter->toString() << endl;
+        else cout << "ter is null" << endl;
     }
 }
 
@@ -315,10 +324,10 @@ void GameEngine::startupPhase()
     MapLoader mapLoader;
     int playerCount = gamePlayers->size();
 
-    cout << "  ***  Please input commands  ***  "<< endl;
+    cout << "\n  ***  Please input commands  ***  "<< endl;
     commandProcessor->GetCommand(currentState->getName());
     
-    cout << "  ***  Executing commands  ***  "<< endl;
+    cout << "\n  ***  Executing commands  ***  "<< endl;
     vector<Command*> *commandList = commandProcessor->ReturnCommandList();
 
     for (Command *command : *commandList)
@@ -346,20 +355,23 @@ void GameEngine::startupPhase()
         else if (choice.compare("addplayer") == 0)
         {
             playerCount++;
-            string* playerName = new string("Player");
-            playerName->append(std::to_string(playerCount));
+            string playerName = "Player";
+            playerName.append(std::to_string(playerCount));
             vector<Territory*> tCollection = {};
-            Hand* hand = new Hand();
-            OrdersList* listOfOrders = new OrdersList();
+            Hand hand;
+            OrdersList listOfOrders;
 
-            Player* player = new Player(playerName, tCollection, hand, listOfOrders);
+            Player* player = new Player(&playerName, tCollection, &hand, &listOfOrders);
 
+            // a) fairly distribute all the territories to the players  
             distributeTerritory(player);
 
             addPlayerToList(player);
             cout << *player->getName() << " added succesfully to player list" << endl;
+            cout << "---------------------" << endl;
             // Update State
             currentState = playersAddedState;
+
         }
         else if (choice.compare("gamestart") == 0)
         {
@@ -368,15 +380,14 @@ void GameEngine::startupPhase()
             auto randomEngine = std::default_random_engine {randomDevice()};
             std::shuffle(gamePlayers->begin(), gamePlayers->end(), randomEngine);
 
-            for (Player *player : *gamePlayers)
+              for (const auto& player : *gamePlayers)
             {
                 cout << endl << "---" << *player->getName() << "---" << endl;
-                // a) fairly distribute all the territories to the players  
-                // distributeTerritory(player);
- 
+
                 // c) give 50 initial armies to the players, which are placed in their respective reinforcement pool
-                player->setReinforcement(50);
+                player->setReinforcement(new int(50));
                 cout << "Number of initial armies: " << *player->getReinforcement() << endl;
+                cout << "---------------------" << endl;
 
                 // d) let each player draw 2 initial cards from the deck using the deck’s draw() method
                     // 1st card
@@ -385,12 +396,14 @@ void GameEngine::startupPhase()
                 deck->draw(player->getHand());
                     // Find some way to show the 2 drawn cards
                 cout << "Number of cards on hand: " << player->getHand()->getCardsInHand().size() << endl;
+                cout << "---------------------" << endl;
             }
             // e) switch the game to the play phase
             currentState = assignReinState;
         }
         // Update the command effect to be already executed
         command->SaveEffect(new string("executed"));
+        cout << "---------------------" << endl;
     }
 }
 
