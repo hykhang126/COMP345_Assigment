@@ -6,6 +6,7 @@ Player::Player() {
     this->hand = new Hand();
     this->tCollection = new vector<Territory*> {};
     this->listOfOrders = new OrdersList();
+    this->reinforcement = new int(0);
 }
 
 Player::Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersList* listOfOrders) {
@@ -135,6 +136,15 @@ vector<Territory*>* Player::getTerritoryCollection() {
     return this->tCollection;
 }
 
-void Player::setTerritoryCollection(vector <Territory*> collection) {
-    *tCollection = collection;
+void Player::setTerritoryCollection(vector <Territory*> *collection) {
+    tCollection = collection;
+}
+int* Player::getReinforcement() {
+    return this->reinforcement;
+}
+void Player::setReinforcement(int *number) {
+    reinforcement = number;
+}
+void Player::setName(string name) {
+    *(this->name) = name;
 }
