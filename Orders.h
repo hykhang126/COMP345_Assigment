@@ -202,11 +202,14 @@ class Blockade : public Order
 private:
     /* data */
     Territory* target;
+    Player* player;
 public:
     //default constructor
     Blockade();
     //destructor
     ~Blockade();
+    //defined constructor
+    Blockade(Territory* targetTerr, Player* player);
 
     //copy constructor
     Blockade(const Blockade& other);
@@ -219,6 +222,12 @@ public:
     void validate();
     //execute method to execute an order
     void execute() override;
+
+    //getters and setters
+    Territory* getTarget();
+    void setTarget(Territory* targetTerr);
+    Player* getPlayer();
+    void setPlayer(Player* player);
 };
 
 // ------------------- AIRLIFT ORDER -------------------------

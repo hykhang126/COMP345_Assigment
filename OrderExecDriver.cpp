@@ -56,6 +56,9 @@ int main() {
     terr5->adjacentTerritory->push_back(terr4);
     Order* order5 = new Bomb(terr5, player);
     player->setTerritoryCollection(*collection);
+
+    //for blockade
+    Order* order6 = new Blockade(terr1, player);
     //-------------------------DEPLOY------------------------------------
     cout << "\nTesting out Deploy Order...................." << endl;
     order1->execute();
@@ -70,4 +73,7 @@ int main() {
     //--------------------------BOMB-------------------------------------
     cout << "\nTesting out Bomb Order...................." << endl;
     order5->execute();
+    //-------------------------BLOCKADE----------------------------------
+    cout << "\nTesting out Blockade Order...................." << endl;
+    order6->execute();
 }

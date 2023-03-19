@@ -442,7 +442,8 @@ Bomb::Bomb(Territory* targetTerr, Player* player) {
  * Copy Constructor for Bomb Class
 */
 Bomb::Bomb(const Bomb& other) {
-    
+    this->target = new Territory(*(other.target));
+    this->player = new Player(*(other.player));
 }
 /**
  * Assignment Operator for Bomb Class
@@ -526,18 +527,29 @@ void Bomb::setPlayer(Player* player) {
 Blockade::Blockade() {
     setDescription("blockade one of the player's territories");
     setEffect("Number of armies on the player's territory has been tripled. The territory is now neutral.");
+    target = new Territory();
+    player = new Player();
 }
 /**
  * Destructor for Blockade Class
 */
 Blockade::~Blockade() {
-
+    delete target;
+    delete player;
 }
 /**
  * Copy Constructor for Blockade Class
 */
 Blockade::Blockade(const Blockade& other) {
-    
+    this->target = new Territory(*(other.target));
+    this->player = new Player(*(other.player));
+}
+/**
+ * Defined constructor
+*/
+Blockade::Blockade(Territory* targetTerr, Player* player) {
+    target = targetTerr;
+    this->player = player;
 }
 /**
  * Assignment Operator for Blockade Class
@@ -556,8 +568,14 @@ ostream& operator << (ostream& out, const Blockade& blockade) {
  * Validate method for Blockade order: sets the order's validation status to true
 */
 void Blockade::validate() {
-    setValidStatus(true);
+    if(target->getOwner() != player) {
+        setValidStatus(false);
+        cout << "Blockade order is invalid..." << endl;
+    }
+    else {
+        setValidStatus(true);
         cout << "Blockade order validated!" << endl;
+    }
 }
 /**
  * Execute method for Blockade order:
@@ -568,12 +586,30 @@ void Blockade::execute() {
     validate();
     if (getValidStatus() == true) {
         setExecStatus(true);
+        int* newTargetArmies = new int(*(target->getArmies())*2);
+        target->setArmies(newTargetArmies);
         cout << "Blockade order executed!" << endl;
+        cout << "New army in " << *(target->getName()) << ": " << *(target->getArmies()) << endl;
         notify(this);
     }
     else {
         cout << "Blockade order failed..." << endl;
     }
+}
+/**
+ * Getters and setters
+*/
+Territory* Blockade::getTarget() {
+    return target;
+}
+void Blockade::setTarget(Territory* targetTerr) {
+    target = targetTerr;
+}
+Player* Blockade::getPlayer() {
+    return player;
+}
+void Blockade::setPlayer(Player* player) {
+    this->player = player;
 }
 
 
@@ -611,7 +647,10 @@ Airlift::Airlift(int* number, Territory* sourceTerr, Territory* targetTerr, Play
  * Copy Constructor for Airlift Class
 */
 Airlift::Airlift(const Airlift& other) {
-    
+    this->numArmies = new int(*(other.numArmies));
+    this->source = new Territory(*(other.source));
+    this->target = new Territory(*(other.target));
+    this->player = new Player(*(other.player));
 }
 /**
  * Assignment Operator for Airlift Class
@@ -631,7 +670,7 @@ ostream& operator << (ostream& out, const Airlift& airlift) {
 */
 void Airlift::validate() {
     //if source or target doesn't belong to player issuing order, invalid order
-    if(source->getOwner() != player || target->getOwner() != player || source->getArmies() < numArmies) {
+    if(source->getOwner() != player || target->getOwner() != player) {
         setValidStatus(false);
         cout << "Airlift order is invalid..." << endl;
     }
