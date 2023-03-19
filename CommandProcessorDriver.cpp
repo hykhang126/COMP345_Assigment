@@ -1,11 +1,12 @@
-#include "FileCommandProcessorAdapter.cpp"
+#include "CommandProcessing.cpp"
 
 
 int main()
 {
-    cout << "Please select input mode:" << endl;
+    cout << "Please select input mode:" << endl << endl;
     cout << "\"-console\" if entering manually." <<endl;
     cout << "\"-file\" if import list of commands by text file." <<endl;
+    cout << "Enter your choice: ";
 
     string mode = "";
     cin >> mode;
@@ -21,8 +22,10 @@ int main()
             cout << "Enter \"exit\" to finish or any key to continue." <<endl;
             cin >> input;
         }
+        cout << "---------------- Exiting --------------------------" <<endl;
         cout << "Show all commands before exiting: "<< endl;
         cp->ShowCommandList();
+         cout << "--------------------------------------"<<endl;
         cout << "Cleanning pointers: " << endl;
         delete cp;
     }
@@ -36,8 +39,10 @@ int main()
                 string * cur = new string("start");
                 CommandProcessor * cmdp = new FileCommandProcessorAdapter(fileName);
                 cmdp->GetCommand(cur );
+                cout << "---------------- Exiting --------------------------" <<endl;
                 cout << "Show all commands before exiting: "<< endl;
                 cmdp->ShowCommandList();
+                cout << "--------------------------------------"<<endl;
                 cout << "Cleanning pointers: " << endl;
                 delete cmdp;
                 }

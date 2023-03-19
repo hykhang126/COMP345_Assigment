@@ -1,5 +1,102 @@
-#include "CommandProcessor.h"
+#include "CommandProcessing.h"
 
+//Command method implementations
+//Parameterized constructors
+Command::Command(string * commandName, string * effectName): command(commandName), effect(effectName){}
+Command::Command(string *commandName) : Command(commandName, new string("")){};
+Command::Command() : Command(new string(""), new string("")){};
+//Destructor
+Command::~Command(){
+    cout << "command " << *command << " is deleted." <<endl;
+    delete command;
+    delete effect;
+}
+void Command::SaveEffect(string *effectName)
+{
+    delete effect;
+    effect = NULL;
+    effect = effectName;
+    cout << "Saving effect " << *effect << " in command " << *command << endl;
+}
+string* Command::toString()
+{
+    return command;
+}
+//Copy constructor
+Command::Command(const Command& com)
+{
+    command = com.command;
+    effect = com.effect;
+}
+//Assignment operator
+Command& Command::operator=(const Command& com)
+{
+    command = com.command;
+    effect = com.effect;
+    return *this;
+}
+string* Command::getCommandName()
+{
+    return command;
+}
+string Command::getEffect() {
+    return *effect;
+}
+
+
+
+
+//FileLineReader method implementations
+vector<string*>* FileLineReader::ReadLineFromfile()
+{
+    vector<string*> *vec = new vector<string*>();
+    string line;
+    ifstream reader;
+    reader.open(file);
+    if(reader.is_open())
+    {
+        while(getline(reader,line)){
+            vec->push_back(new string(line));        }
+    }
+    reader.close();
+    cout << "++++++++++++Load file successfully" << endl;
+    return vec;
+}
+FileLineReader::FileLineReader(string f)
+{
+    file = f;
+}
+
+
+
+
+//FileCommandProccesorAdapter implementations
+vector<Command*>* FileCommandProcessorAdapter::ReadCommand()
+{
+    vector<Command*>* commands = new vector<Command*>();
+    vector<string*> * strings = flr->ReadLineFromfile();
+    for(int i = 0 ; i < (*strings).size(); i++)
+    {
+        Command * cmd = new Command((*strings)[i]);
+        commands->push_back(cmd);
+    }
+    return commands;
+}
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(string f)
+{
+    flr = new FileLineReader(f);
+}
+void FileCommandProcessorAdapter::GetCommand(string * curState){
+    vector<Command*>* cmds = ReadCommand();
+    for(int i = 0 ; i < cmds->size(); i++)
+    {
+        Validate(curState, (*cmds)[i]);
+    }
+}
+
+
+
+//Command Processor implementations
 CommandProcessor::~CommandProcessor()
 {
     for(Command * cm : *commandList)
@@ -152,4 +249,3 @@ void CommandProcessor::ShowCommandList()
         cout << "Command: " << *(*commandList)[i]->toString() << endl;
     }
 }
-
