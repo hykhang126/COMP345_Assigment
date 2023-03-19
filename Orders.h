@@ -162,11 +162,15 @@ class Bomb : public Order
 {
 private:
     /* data */
+    Territory* target;
+    Player* player;
 public:
     //default constructor
     Bomb();
     //destructor
     ~Bomb();
+    //defined constructor
+    Bomb(Territory* targetTerr, Player* player);
 
     //copy constructor
     Bomb(const Bomb& other);
@@ -175,10 +179,18 @@ public:
     //stream operator
     friend ostream& operator << (ostream& out, const Bomb& bomb);
 
+    //check if target is adjacent to one of the player's territories
+    bool isAdjacent();
     //validate method to make the order valid
     void validate();
     //execute method to execute an order
     void execute() override;
+
+    //getters and setters
+    Territory* getTarget();
+    void setTarget(Territory* targetTerr);
+    Player* getPlayer();
+    void setPlayer(Player* player);
 };
 
 // ------------------- Blockade ORDER ------------------------
@@ -189,6 +201,7 @@ class Blockade : public Order
 {
 private:
     /* data */
+    Territory* target;
 public:
     //default constructor
     Blockade();
@@ -216,11 +229,17 @@ class Airlift : public Order
 {
 private:
     /* data */
+    int* numArmies;
+    Territory* source;
+    Territory* target;
+    Player* player;
 public:
     //default constructor
     Airlift();
     //destructor
     ~Airlift();
+    //defined constructor
+    Airlift(int* number, Territory* sourceTerr, Territory* targetTerr, Player* player);
 
     //copy constructor
     Airlift(const Airlift& other);
@@ -233,6 +252,16 @@ public:
     void validate();
     //execute method to execute an order
     void execute() override;
+
+    //getters and setters
+    int* getNumArmies();
+    void setNumArmies(int* number);
+    Territory* getSource();
+    void setSource(Territory* sourceTerr);
+    Territory* getTarget();
+    void setTarget(Territory* targetTerr);
+    Player* getPlayer();
+    void setPlayer(Player* player);
 };
 
 // ------------------- NEGOTIATE ORDER -----------------------

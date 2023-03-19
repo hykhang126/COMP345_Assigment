@@ -325,6 +325,7 @@ void Advance::execute() {
         }
         //A2: if target territory belongs to an enemy, simulate the battle
         else if(target->getOwner() != player) {
+            cout << "Battle initiated......" << endl;
             int* attackUnits = new int(*(numUnits));
             int* newSourceArmies = new int(*(source->getArmies()) - *numUnits);
             source->setArmies(newSourceArmies);
@@ -418,12 +419,24 @@ void Advance::setPlayer(Player* player) {
 Bomb::Bomb() {
     setDescription("bomb half of the armies on the opponent's territory that is adjacent to the player's");
     setEffect("Half of the armies on the opponent's territory has been destroyed.");
+    target = new Territory();
+    player = new Player();
 }
 /**
  * Destructor for Bomb Class
 */
 Bomb::~Bomb() {
-
+    delete target;
+    delete player;
+}
+/**
+ * Defined constructor
+*/
+Bomb::Bomb(Territory* targetTerr, Player* player) {
+    setDescription("bomb half of the armies on the opponent's territory that is adjacent to the player's");
+    setEffect("Half of the armies on the opponent's territory has been destroyed.");
+    target = targetTerr;
+    this->player = player;
 }
 /**
  * Copy Constructor for Bomb Class
@@ -445,11 +458,31 @@ ostream& operator << (ostream& out, const Bomb& bomb) {
     return out;
 }
 /**
+ * Check if target is adjacent to one of player's territories
+*/
+bool Bomb::isAdjacent() {
+    for(int i = 0; i < player->getTerritoryCollection()->size(); i++) {
+        for(int j = 0; j < player->getTerritoryCollection()->at(i)->adjacentTerritory->size(); i++) {
+            if(player->getTerritoryCollection()->at(i)->adjacentTerritory->at(j)->getName() == target->getName()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+/**
  * Validate method for Bomb order: sets the order's validation status to true
 */
 void Bomb::validate() {
-    setValidStatus(true);
+    //if target terr is owned by player or is not adjacent to one of the player's territories, order is invalid
+    if(target->getOwner() == player || !isAdjacent()) {
+        setValidStatus(false);
+        cout << "Bomb order is invalid..." << endl;
+    }
+    else {
+        setValidStatus(true);
         cout << "Bomb order validated!" << endl;
+    }
 }
 /**
  * Execute method for Bomb order:
@@ -460,14 +493,31 @@ void Bomb::execute() {
     validate();
     if (getValidStatus() == true) {
         setExecStatus(true);
+        int* newTargetArmies = new int(*(target->getArmies())/2);
+        target->setArmies(newTargetArmies);
         cout << "Bomb order executed!" << endl;
+        cout << "New army for " << *(target->getName()) << ": " << *(target->getArmies()) << endl;
         notify(this);
     }
     else {
         cout << "Bomb order failed..." << endl;
     }
 }
-
+/**
+ * Getters and setters
+*/
+Territory* Bomb::getTarget() {
+    return target;
+}
+void Bomb::setTarget(Territory* targetTerr) {
+    target = targetTerr;
+}
+Player* Bomb::getPlayer() {
+    return player;
+}
+void Bomb::setPlayer(Player* player) {
+    this->player = player;
+}
 
 // ------------------- BLOCKADE ORDER ------------------------
 /**
@@ -534,12 +584,28 @@ void Blockade::execute() {
 Airlift::Airlift() {
     setDescription("airlift some armies from one of the player's territories to another territory");
     setEffect("Player's armies has advanced to the target territory");
+    numArmies = 0;
+    source = new Territory();
+    target = new Territory();
+    player = new Player();
 }
 /**
  * Destructor for Airlift Class
 */
 Airlift::~Airlift() {
-
+    delete numArmies;
+    delete source;
+    delete target;
+    delete player;
+}
+/**
+ * Defined constructor
+*/
+Airlift::Airlift(int* number, Territory* sourceTerr, Territory* targetTerr, Player* player) {
+    numArmies = number;
+    source = sourceTerr;
+    target = targetTerr;
+    this->player = player;
 }
 /**
  * Copy Constructor for Airlift Class
@@ -564,8 +630,15 @@ ostream& operator << (ostream& out, const Airlift& airlift) {
  * Validate method for Airlift order: sets the order's validation status to true
 */
 void Airlift::validate() {
-    setValidStatus(true);
+    //if source or target doesn't belong to player issuing order, invalid order
+    if(source->getOwner() != player || target->getOwner() != player || source->getArmies() < numArmies) {
+        setValidStatus(false);
+        cout << "Airlift order is invalid..." << endl;
+    }
+    else {
+        setValidStatus(true);
         cout << "Airlift order validated!" << endl;
+    }
 }
 /**
  * Execute method for Airlift order:
@@ -577,13 +650,45 @@ void Airlift::execute() {
     if (getValidStatus() == true) {
         setExecStatus(true);
         cout << "Airlift order executed!" << endl;
+        int* newSourceArmies = new int(*(source->getArmies())- *numArmies);
+        int* newTargetArmies = new int(*(target->getArmies()) + *numArmies);
+        source->setArmies(newSourceArmies);
+        target->setArmies(newTargetArmies);
+        cout << "New army in " << *(source->getName()) << ": " << *(source->getArmies()) << endl;
+        cout << "New army in " << *(target->getName()) << ": " << *(target->getArmies()) << endl;
         notify(this);
     }
     else {
         cout << "Airlift order failed..." << endl;
     }
 }
-
+/**
+ * Getters and Setters
+*/
+int* Airlift::getNumArmies() {
+    return numArmies;
+}
+void Airlift::setNumArmies(int* number) {
+    numArmies = number;
+}
+Territory* Airlift::getSource() {
+    return source;
+}
+void Airlift::setSource(Territory* sourceTerr) {
+    source = sourceTerr;
+}
+Territory* Airlift::getTarget() {
+    return target;
+}
+void Airlift::setTarget(Territory* targetTerr) {
+    target = targetTerr;
+}
+Player* Airlift::getPlayer() {
+    return player;
+}
+void Airlift::setPlayer(Player* player) {
+    this->player = player;
+}
 
 // ------------------- NEGOTIATE ORDER -----------------------
 /**
