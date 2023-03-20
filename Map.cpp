@@ -295,12 +295,17 @@ Continent::~Continent()
 //Definition of Territory class
 void Territory::setArmies(int *armies)
 {
-    armies = armies;
+    this->armies = armies;
 }
 
 void Territory::setOwner(Player *player)
 {
     owner = player;
+}
+
+void Territory::setName(string *name)
+{
+    this->name = name;
 }
 
 int* Territory::getArmies()
@@ -335,7 +340,8 @@ Territory::~Territory()
 
 string Territory::toString()
 {
-    return "Player:, Armies: " + to_string(*armies) + ", position: " + to_string(*position) + ", name: " + *name + ", continent: " + continent->toString() + ", Coordinate: " + coordinate->toString() ; 
+    return "Player: " + *this->owner->getName() + ", Armies: " + to_string(*armies) + ", position: " + to_string(*position) 
+            + ", name: " + *name + ", continent: " + continent->toString() + ", Coordinate: " + coordinate->toString() ; 
 }
 
 Coordinate* Territory::getCoordinate(){

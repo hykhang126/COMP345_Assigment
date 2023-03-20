@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <iterator>
+#include <algorithm>
 
 #include "Map.h"
 #include "Orders.h"
@@ -11,7 +13,8 @@
 using namespace std;
 
 class Territory;
-
+class Hand;
+class OrdersList;
 class Player;
 
 class Player{
@@ -20,6 +23,13 @@ class Player{
         Hand* hand;
         vector<Territory*>* tCollection;
         OrdersList* listOfOrders;
+
+        vector<Territory*>* territoriesToAttack;
+        vector<Territory*>* territoriesToDefend;
+        int* reinforcement;
+        vector<Player*>* negotiating;
+        bool* hasConquered;
+
 
     public :
         //Basic constructor
@@ -35,7 +45,7 @@ class Player{
         //returns a list of territories that are to be attacked
         vector<Territory*>* toAttack();
         //creates an order object and adds it to the list of orders
-        void issueOrder();
+        void issueOrder(vector<Player*>* gamePlayers, Deck* deck);
         //assignment operator
         Player& operator =(const Player& e);
         //stream insertion operator
@@ -45,6 +55,19 @@ class Player{
         Hand* getHand();
         OrdersList* getOrdersList();
         vector<Territory*>* getTerritoryCollection();
+        int* getReinforcement();
+        vector<Player*>* getNegotiating();
+        bool* getHasConquered();
         //setters
-        void setTerritoryCollection(vector <Territory*>);
+        void setTerritoriesToAttack();
+        void setTerritoriesToDefend();
+  
+        bool hasCardInHand(string cardName);
+
+        void setTerritoryCollection(vector <Territory*>*);
+        void setReinforcement(int* number);
+        void setName(string name);
+        void setNegotiating(vector<Player*>* list);
+        void setHasConquered(bool* check);
+
 };
