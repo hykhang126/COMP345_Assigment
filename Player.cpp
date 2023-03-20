@@ -73,10 +73,24 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
                 cout << "You must deploy all your armies before any other order" << endl;;
                 break;
             } else if (this->hasCardInHand("Negotiate")){
+                cout << "The following is a list of the players in the game: " << endl; 
+                vector<Player*>* players = gamePlayers;
+                for(auto it = players->begin(); it != players->end(); ++it){
+                    cout << (*it)->getName() << endl;
+                }
+
                 string playerToNegotiate;
                 cout << "Enter the name of the player you would like to negotiate with " << endl;
                 cin >> playerToNegotiate;
-                this->listOfOrders->addOrder(new Negotiate());
+
+                Player* enemy = nullptr;
+                for (auto& player : *gamePlayers) {
+                    if (*player->getName() == playerToNegotiate) {
+                        enemy = player;
+                    }
+                }
+
+                this->listOfOrders->addOrder(new Negotiate(this, enemy));
                 break;
             } else {
                 cout << "You cannot add this order as you do not have the proper card in hand!" << endl;
