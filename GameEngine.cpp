@@ -325,7 +325,7 @@ void GameEngine::reinforcementPhase() {
 
 void GameEngine::issueOrdersPhase() {
     for(Player* player: this->getPlayers()){
-        player->issueOrder();
+        player->issueOrder(gamePlayers, deck);
     }
 }
 

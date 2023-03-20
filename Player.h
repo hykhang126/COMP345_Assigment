@@ -45,7 +45,7 @@ class Player{
         //returns a list of territories that are to be attacked
         vector<Territory*>* toAttack();
         //creates an order object and adds it to the list of orders
-        void issueOrder();
+        void issueOrder(vector<Player*>* gamePlayers, Deck* deck);
         //assignment operator
         Player& operator =(const Player& e);
         //stream insertion operator

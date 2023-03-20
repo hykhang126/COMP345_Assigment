@@ -54,7 +54,7 @@ vector<Territory*>* Player::toAttack() {
     return this->territoriesToAttack;
 }
 
-void Player::issueOrder() {
+void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
     
     int orderOption;
     this->setTerritoriesToAttack();
@@ -146,7 +146,7 @@ void Player::issueOrder() {
                 if (target == nullptr) {
                     cout << "One of the territories entered does not exist or does not belong to the player." << endl;
                 } else {
-                    this->listOfOrders->addOrder(new Blockade(target, this));
+                    this->listOfOrders->addOrder(new Blockade(target, this, gamePlayers));
                 }
             } else {
                 cout << "You cannot add this order as you do not have the proper card in hand!" << endl;
@@ -219,7 +219,7 @@ void Player::issueOrder() {
                         }
                 }
 
-                this->listOfOrders->addOrder(new Advance(&number, srcTerritoryPtr, targetTerritoryPtr, this));
+                this->listOfOrders->addOrder(new Advance(&number, srcTerritoryPtr, targetTerritoryPtr, this, deck));
             }
             break;
         case 6:
@@ -237,7 +237,7 @@ void Player::issueOrder() {
                     cout << "Invalid input. You only have " << this->getReinforcement() << " armies to deploy. Please enter a valid number." << endl;
                     cin >> armiesToDeploy;
                 }
-                this->setReinforcement(*this->getReinforcement() - armiesToDeploy);
+                this->setReinforcement(this->getReinforcement() - armiesToDeploy);
                 this->listOfOrders->addOrder(new Deploy(&armiesToDeploy, *it, this));
             }
             break;
@@ -265,7 +265,7 @@ void Player::setTerritoriesToAttack(){
     cout << "The following territories are neighbours to the territories you own: \n";
     vector<Territory*> neighbours;
     for(Territory* t : *tCollection) {
-        for(Territory* adjacentTerritory : *(t->adjacentTerritoriy)) {
+        for(Territory* adjacentTerritory : *(t->adjacentTerritory)) {
             if(adjacentTerritory->getOwner() != this){
                 neighbours.push_back(adjacentTerritory);
             }
