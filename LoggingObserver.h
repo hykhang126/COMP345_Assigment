@@ -1,5 +1,6 @@
 #ifndef COMP345_ASSIGMENT1_LOGGINGOBSERVER_H
 #define COMP345_ASSIGMENT1_LOGGINGOBSERVER_H
+#pragma once
 #include <list>
 #include <vector>
 // Abstract class to be inherited and ask for definition of stringToLog to classes that inherit it

@@ -12,6 +12,7 @@
 
 using namespace std;
 
+class Deck;
 class Territory;
 class Hand;
 class OrdersList;

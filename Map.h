@@ -1,6 +1,7 @@
 
 #ifndef MYHEADER_H
 #define MYHEADER_H
+#pragma once
 #include <map>
 #include <list>
 #include <iostream>

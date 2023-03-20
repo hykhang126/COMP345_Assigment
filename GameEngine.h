@@ -139,14 +139,11 @@ class GameEngine
         Map *getMap();
         void setMap(Map *map);
 
-        GameEngine();
         GameEngine(CommandProcessor *commandProcessor, Deck *deck,  Map *map);
         ~GameEngine();
 
         bool isCommandValid(string *command);
         void distributeTerritory(Player* player);
-
-        string stringToLog();
 
         void startupPhase();
 };

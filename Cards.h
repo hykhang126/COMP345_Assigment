@@ -1,5 +1,6 @@
 #ifndef CARDS_H
 #define CARDS_H
+#pragma once
 #include <string>
 #include <vector>
 using namespace std;

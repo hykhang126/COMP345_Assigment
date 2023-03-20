@@ -60,10 +60,12 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
     this->setTerritoriesToAttack();
     this->setTerritoriesToDefend();
 
+    vector<Territory*>* defendList = this->toDefend();
+
     do {
         cout << "Please enter a number between 1 to 7 to select your desired order: \n 1. Negotiate \n 2. Airlift \n 3. Blockade \n 4. Bomb"
         "\n 5. Advance \n 6. Deploy \n 7. Finish" << endl;
-
+        
         cin>>orderOption;
 
         switch (orderOption)
@@ -185,7 +187,7 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
                 break;
             } else {
                 cout << "The following territories are your list of territories to be defended along with how many armies they currently have: " << endl;
-                vector<Territory*>* defendList = this->toDefend();
+                //vector<Territory*>* defendList = this->toDefend();
                 for(auto it = defendList->begin(); it != defendList->end(); ++it){
                     cout << (*it)->getName() << ", Armies: " << (*it)->getArmies() << endl;
                 }
@@ -238,7 +240,7 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
             break;
         case 6:
             cout << "The following territories are your list of territories to be defended along with how many armies they currently have: " << endl;
-            vector<Territory*>* defendList = this->toDefend();
+            //vector<Territory*>* defendList = this->toDefend();
             for(auto it = defendList->begin(); it != defendList->end(); ++it){
                 cout << (*it)->getName() << ", Armies: " << (*it)->getArmies() << endl;
             }
@@ -298,7 +300,14 @@ void Player::setTerritoriesToAttack(){
     //Add territories to territories to attack
     territoriesToAttack->clear();
     for(Territory* t: neighbours) {
-        if(find(priorityTerritories.begin(), priorityTerritories.end(), t->getName()) != priorityTerritories.end()){
+        bool isPriority = false;
+        for(string& pt : priorityTerritories) {
+            if(*t->getName() == pt){
+                isPriority = true;
+                break;
+            }
+        }
+        if(isPriority) {
             territoriesToAttack->push_back(new Territory(*t));
         }
     }
@@ -319,9 +328,16 @@ void Player::setTerritoriesToDefend(){
     //Add territories to territories to defend
     territoriesToDefend->clear();
     for(Territory* t: *tCollection) {
-        if(find(priorityTerritories.begin(), priorityTerritories.end(), t->getName()) != priorityTerritories.end()) {
-            territoriesToDefend->push_back(t);
-        } 
+        bool isPriority = false;
+        for(string& pt: priorityTerritories) {
+            if(*t->getName() == pt) {
+                isPriority = true;
+                break;
+            }
+        }
+        if(isPriority) {
+            territoriesToDefend->push_back(new Territory(*t));
+        }
     }
 }
 
