@@ -32,13 +32,20 @@ int main() {
     //for advance: target belongs to enemy
     Player* player2 = new Player();
     Territory* terr3 = new Territory();
-    terr3->setArmies(new int(2));
+    Territory* terr6 = new Territory();
+    terr3->setArmies(new int(1));
     terr3->setName(new string("Mexico"));
     terr3->setOwner(player2);
     player2->setName("Danny");
+    terr6->setArmies(new int(1));
+    terr6->setName(new string("Antartica"));
+    terr6->setOwner(player2);
     terr1->adjacentTerritory->push_back(terr3);
     terr3->adjacentTerritory->push_back(terr1);
+    terr2->adjacentTerritory->push_back(terr6);
+    terr6->adjacentTerritory->push_back(terr2);
     Order* order3 = new Advance(numAdvance, terr1, terr3, player, deck);
+    Order* order9 = new Advance(numAdvance, terr2, terr6, player, deck);
 
     //for airlift
     Territory* terr4 = new Territory();
@@ -72,8 +79,11 @@ int main() {
     //--------------------------ADVANCE----------------------------------
     cout << "\nTesting out Advance Order moving to owned target....................." << endl;
     order2->execute();
-    cout << "\nTesting out Advance Order attacking enemy target....................." << endl;
+    cout << "\nTesting out Advance Order attacking enemy target and winning............." << endl;
     order3->execute();
+    cout << "\nTesting out Advance Order attacking enemy target and winning again............" << endl;
+    order9->execute();
+
     //--------------------------AIRLIFT----------------------------------
     cout << "\nTesting out Airlift Order...................." << endl;
     order4->execute();
