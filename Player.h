@@ -23,6 +23,7 @@ class Player{
         OrdersList* listOfOrders;
         int* reinforcement;
         vector<Player*>* negotiating;
+        bool* hasConquered;
 
     public :
         //Basic constructor
@@ -50,9 +51,11 @@ class Player{
         vector<Territory*>* getTerritoryCollection();
         int* getReinforcement();
         vector<Player*>* getNegotiating();
+        bool* getHasConquered();
         //setters
         void setTerritoryCollection(vector <Territory*>*);
         void setReinforcement(int* number);
         void setName(string name);
         void setNegotiating(vector<Player*>* list);
+        void setHasConquered(bool* check);
 };

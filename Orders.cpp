@@ -186,7 +186,7 @@ void Deploy::execute() {
         int* newArmies = new int(*(target->getArmies()) + *numReinforcements);
         int* newPool = new int(*(player->getReinforcement()) - *numReinforcements);
         target->setArmies(newArmies);
-        player->setReinforcement(*newPool);
+        player->setReinforcement(newPool);
         cout << "Deploy order executed! New number of armies: " << *(target->getArmies()) 
             << "\nOn territory: " << *(target->getName()) 
             << "\nNew reinforcement pool: " << *(player->getReinforcement()) << endl;
@@ -229,6 +229,7 @@ Advance::Advance() {
     source = new Territory();
     target = new Territory();
     player = new Player();
+    deck = new Deck(0);
 }
 /**
  * Destructor for Advance Class
@@ -238,6 +239,7 @@ Advance::~Advance() {
     delete target;
     delete player;
     delete numUnits;
+    delete deck;
 }
 /**
  * Full constructor for the Advance order
@@ -246,13 +248,14 @@ Advance::~Advance() {
  * @param targetTerr: the target adjacent territory
  * @param player: the player making the order
 */
-Advance::Advance(int* number, Territory* sourceTerr, Territory* targetTerr, Player* player) {
+Advance::Advance(int* number, Territory* sourceTerr, Territory* targetTerr, Player* player, Deck* deck) {
     setDescription("advance armies from one of the player's territories to an adjacent territory");
     setEffect("Player armies have moved to an adjacent territory.");
     numUnits = number;
     source = sourceTerr;
     target = targetTerr;
     this->player = player;
+    this->deck = deck;
 }
 /**
  * Copy Constructor for Advance Class
@@ -262,6 +265,7 @@ Advance::Advance(const Advance& other) {
     this->target = new Territory(*(other.target));
     this->player = new Player(*(other.player));
     this->numUnits = new int(*(other.numUnits));
+    this->deck = new Deck(*(other.deck));
 }
 /**
  * Assignment Operator for Advance Class
@@ -374,6 +378,11 @@ void Advance::execute() {
                 cout << "Moving " << *attackUnits << " to " << *(target->getName()) << endl;
                 cout << "New army for " << *(source->getName()) << ": " << *(source->getArmies()) << endl;
                 cout << "New army for " << *(target->getName()) << ": " << *(target->getArmies()) << endl;
+                if(*(player->getHasConquered()) == false) {
+                    deck->draw(player->getHand());
+                    cout << "Player has drawn a card" << endl;
+                    player->setHasConquered(new bool(true));
+                }
             }
             else {
                 cout << "Advance order executed!" << endl;
@@ -541,6 +550,7 @@ Blockade::Blockade() {
     setEffect("Number of armies on the player's territory has been tripled. The territory is now neutral.");
     target = new Territory();
     player = new Player();
+    listPlayers = new vector<Player*>();
 }
 /**
  * Destructor for Blockade Class
@@ -548,6 +558,7 @@ Blockade::Blockade() {
 Blockade::~Blockade() {
     delete target;
     delete player;
+    delete listPlayers;
 }
 /**
  * Copy Constructor for Blockade Class
@@ -555,13 +566,15 @@ Blockade::~Blockade() {
 Blockade::Blockade(const Blockade& other) {
     this->target = new Territory(*(other.target));
     this->player = new Player(*(other.player));
+    this->listPlayers = new vector<Player*>(*(other.listPlayers));
 }
 /**
  * Defined constructor
 */
-Blockade::Blockade(Territory* targetTerr, Player* player) {
+Blockade::Blockade(Territory* targetTerr, Player* player, vector<Player*>* list) {
     target = targetTerr;
     this->player = player;
+    this->listPlayers = list;
 }
 /**
  * Assignment Operator for Blockade Class
@@ -590,6 +603,17 @@ void Blockade::validate() {
     }
 }
 /**
+ * Check if neutral player exists
+*/
+bool Blockade::hasNeutral() {
+    for(int i = 0; i < listPlayers->size(); i++) {
+        if(*(listPlayers->at(i)->getName()) == "Neutral") {
+            return true;
+        }
+    }
+    return false;
+}
+/**
  * Execute method for Blockade order:
  * -First, validates the order
  * -Then, execute the order is it is valid
@@ -602,6 +626,21 @@ void Blockade::execute() {
         target->setArmies(newTargetArmies);
         cout << "Blockade order executed!" << endl;
         cout << "New army in " << *(target->getName()) << ": " << *(target->getArmies()) << endl;
+        if(!hasNeutral()) {
+            Player* neutral = new Player();
+            neutral->setName("Neutral");
+            target->setOwner(neutral);
+            listPlayers->push_back(neutral);
+            cout << "Neutral player created. Owner of " << *(target->getName()) << ": " << *(target->getOwner()->getName()) << endl;
+        }
+        else {
+            for(int i = 0; i < listPlayers->size(); i++) {
+                if(*(listPlayers->at(i)->getName()) == "Neutral") {
+                    target->setOwner(listPlayers->at(i));
+                }
+            }
+            cout << "Owner of " << *(target->getName()) << ": " << *(target->getOwner()->getName()) << endl;
+        }
         notify(this);
     }
     else {

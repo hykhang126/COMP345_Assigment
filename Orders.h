@@ -7,12 +7,14 @@
 #include "LoggingObserver.h"
 #include "Player.h"
 #include "Map.h"
+#include "Cards.h"
 
 //A2
 using namespace std;
 
 class Player;
 class Territory;
+class Deck;
 
 /**
  * Order: User-defined abstract class
@@ -114,13 +116,14 @@ private:
     Territory* target;
     Player* player;
     int* numUnits;
+    Deck* deck;
 public:
     //default constructor
     Advance();
     //destructor
     ~Advance();
     //defined constructor
-    Advance(int* number, Territory* sourceTerr, Territory* targetTerr, Player* player);
+    Advance(int* number, Territory* sourceTerr, Territory* targetTerr, Player* player, Deck* deck);
 
     //copy constructor
     Advance(const Advance& other);
@@ -205,13 +208,14 @@ private:
     /* data */
     Territory* target;
     Player* player;
+    vector<Player*>* listPlayers;
 public:
     //default constructor
     Blockade();
     //destructor
     ~Blockade();
     //defined constructor
-    Blockade(Territory* targetTerr, Player* player);
+    Blockade(Territory* targetTerr, Player* player, vector<Player*>* list);
 
     //copy constructor
     Blockade(const Blockade& other);
@@ -220,6 +224,8 @@ public:
     //stream operator
     friend ostream& operator << (ostream& out, const Blockade& blockade);
 
+    //check if neutral player exists
+    bool hasNeutral();
     //validate method to make the order valid
     void validate();
     //execute method to execute an order

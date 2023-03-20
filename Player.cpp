@@ -8,6 +8,7 @@ Player::Player() {
     this->listOfOrders = new OrdersList();
     this->reinforcement = new int(0);
     this->negotiating = new vector<Player*> {};
+    this->hasConquered = new bool(false);
 }
 
 Player::Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersList* listOfOrders) {
@@ -19,6 +20,7 @@ Player::Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersL
     }
     this->listOfOrders = new OrdersList(*listOfOrders);
     this->negotiating = new vector<Player*> {};
+    this->hasConquered = new bool(false);
 }
 
 Player::Player(const Player& p) {
@@ -31,6 +33,7 @@ Player::Player(const Player& p) {
     }
     this->listOfOrders = new OrdersList(*p.listOfOrders);
     this->negotiating = new vector<Player*>(*(p.negotiating));
+    this->hasConquered = new bool(*(p.hasConquered));
 }
 
 Player::~Player() {
@@ -158,4 +161,11 @@ void Player::setName(string name) {
 }
 void Player::setNegotiating(vector<Player*>* list) {
     this->negotiating = list;
+}
+
+bool* Player::getHasConquered() {
+    return hasConquered;
+}
+void Player::setHasConquered(bool* check) {
+    hasConquered = check;
 }

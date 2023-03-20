@@ -7,13 +7,14 @@ int main() {
     //--------------------------INITIALIZATION-------------------------------
     cout << "Initializing.................................." << endl;
     //for Deploy
+    Deck* deck = new Deck(20);
     Player* player = new Player();
     Territory* terr1 = new Territory();
     vector<Territory*>* collection = new vector<Territory*>();
     terr1->setOwner(player);
     terr1->setName(new string("USA"));
     collection->push_back(terr1);
-    player->setReinforcement(50);
+    player->setReinforcement(new int(50));
     player->setName("Steve");
     int* numReinforcement = new int(20);
     Order* order1 = new Deploy(numReinforcement, terr1, player);
@@ -26,7 +27,7 @@ int main() {
     collection->push_back(terr2);
     terr1->adjacentTerritory->push_back(terr2);
     terr2->adjacentTerritory->push_back(terr1);
-    Order* order2 = new Advance(numAdvance, terr1, terr2, player);
+    Order* order2 = new Advance(numAdvance, terr1, terr2, player, deck);
 
     //for advance: target belongs to enemy
     Player* player2 = new Player();
@@ -37,7 +38,7 @@ int main() {
     player2->setName("Danny");
     terr1->adjacentTerritory->push_back(terr3);
     terr3->adjacentTerritory->push_back(terr1);
-    Order* order3 = new Advance(numAdvance, terr1, terr3, player);
+    Order* order3 = new Advance(numAdvance, terr1, terr3, player, deck);
 
     //for airlift
     Territory* terr4 = new Territory();
@@ -55,14 +56,16 @@ int main() {
     terr4->adjacentTerritory->push_back(terr5);
     terr5->adjacentTerritory->push_back(terr4);
     Order* order5 = new Bomb(terr5, player);
-    player->setTerritoryCollection(*collection);
+    player->setTerritoryCollection(collection);
 
     //for blockade
-    Order* order6 = new Blockade(terr1, player);
-
+    vector<Player*>* listPlayers = new vector<Player*>();
+    listPlayers->push_back(player);
+    listPlayers->push_back(player2);
+    Order* order6 = new Blockade(terr1, player, listPlayers);
     //for negotiate
     Order* order7 = new Negotiate(player, player2);
-    Order* order8 = new Advance(new int(10), terr5, terr4, player2);
+    Order* order8 = new Advance(new int(10), terr5, terr4, player2, deck);
     //-------------------------DEPLOY------------------------------------
     cout << "\nTesting out Deploy Order...................." << endl;
     order1->execute();
