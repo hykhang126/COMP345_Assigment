@@ -59,12 +59,12 @@ class CommandProcessor
 //Class FileLineReader declarations
 class FileLineReader{
     private:
-    string *file;
+    string file;
     public:
-    FileLineReader(string*);
+    FileLineReader(string);
 
     FileLineReader();
-    void setFile(string*);
+    void setFile(string);
     ~FileLineReader();
     FileLineReader(const FileLineReader&);
     friend ostream& operator << (ostream&, FileLineReader&);
@@ -79,6 +79,6 @@ class FileCommandProcessorAdapter : public CommandProcessor{
     vector<Command*> * ReadCommand();
     public:
     virtual void GetCommand(string * curState);
-    FileCommandProcessorAdapter(string *f);
+    FileCommandProcessorAdapter(string f);
 };
 #endif

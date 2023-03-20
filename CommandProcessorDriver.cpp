@@ -32,11 +32,11 @@ int main()
     else{
         if(mode == "-file")
         {
-            string *fileName;
-            string temp ;
+            string fileName;
+         
             cout << "Please enter file name: " ;
-            cin >> temp; 
-            fileName = new string(temp);
+            cin >> fileName; 
+           
             try{
                 string * cur = new string("start");
                 CommandProcessor * cmdp = new FileCommandProcessorAdapter(fileName);

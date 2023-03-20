@@ -56,7 +56,7 @@ vector<string*>* FileLineReader::ReadLineFromfile()
     vector<string*> *vec = new vector<string*>();
     string line;
     ifstream reader;
-    reader.open(*file);
+    reader.open(file);
     if(reader.is_open())
     {
         while(getline(reader,line)){
@@ -66,23 +66,23 @@ vector<string*>* FileLineReader::ReadLineFromfile()
     cout << "++++++++++++Load file successfully" << endl;
     return vec;
 }
-FileLineReader::FileLineReader(string* f)
+FileLineReader::FileLineReader(string f)
 {
     file = f;
 }
 
 FileLineReader::FileLineReader()
 {
-    file = new string("");
+    file ="";
 }
 
-void FileLineReader::setFile(string * fileName){
+void FileLineReader::setFile(string  fileName){
     file = fileName;
 }
 
 FileLineReader::~FileLineReader()
 {
-    delete file;
+    //delete some allocated memory
 }
 
 FileLineReader::FileLineReader(const FileLineReader& fileLine){
@@ -109,7 +109,7 @@ vector<Command*>* FileCommandProcessorAdapter::ReadCommand()
     }
     return commands;
 }
-FileCommandProcessorAdapter::FileCommandProcessorAdapter(string* f)
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(string f)
 {
     flr = new FileLineReader(f);
 }
