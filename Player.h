@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <iterator>
+#include <algorithm>
 
 #include "Map.h"
 #include "Orders.h"
@@ -20,6 +22,9 @@ class Player{
         Hand* hand;
         vector<Territory*>* tCollection;
         OrdersList* listOfOrders;
+        vector<Territory*>* territoriesToAttack;
+        vector<Territory*>* territoriesToDefend;
+        int* reinforcement;
 
     public :
         //Basic constructor
@@ -47,4 +52,9 @@ class Player{
         vector<Territory*>* getTerritoryCollection();
         //setters
         void setTerritoryCollection(vector <Territory*>);
+        void setTerritoriesToAttack();
+        void setTerritoriesToDefend();
+        int* getReinforcement();
+        void setReinforcement(int number);
+        bool hasCardInHand(string cardName);
 };

@@ -1,6 +1,7 @@
 #include <list>
 #include <string>
 #include <vector>
+#include "Player.h"
 #include "LoggingObserver.h"
 
 using namespace std;
@@ -84,11 +85,18 @@ class GameEngine: public Subject, public ILoggable
         Transition *winTran_1;
         Transition *winTran_2;
 
+        //List of players in the game
+        vector<Player*>* gamePlayers;
+
+        //Map state
+        Map* currentMapState;
+
         void initialization();
 
     public :
         State *getCurrentState();
         void setCurrentState(State *currentState);
+        vector<Player*>& getPlayers();
 
         vector<State*> getStateList();
         void addStateToList(State* state);
@@ -96,8 +104,13 @@ class GameEngine: public Subject, public ILoggable
         GameEngine();
 
         bool isCommandValid(string *command);
+        bool playerOwnsContinent(Player * player, Continent* continent, Map* map);
 
         string stringToLog();
+        void reinforcementPhase();
+        void issueOrdersPhase();
+        void executeOrdersPhase();
+        Player mainGameLoop();
     
 };
 

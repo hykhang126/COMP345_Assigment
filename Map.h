@@ -67,6 +67,7 @@ class Territory{
         Coordinate* coordinate;
 
     public:
+        vector<Territory*>* adjacentTerritoriy = new vector<Territory*>();
         Coordinate* getCoordinate();
         Continent* getContinent();
         string* getName();
