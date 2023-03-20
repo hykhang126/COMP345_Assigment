@@ -42,7 +42,11 @@ string* Command::getCommandName()
 string Command::getEffect() {
     return *effect;
 }
-
+ostream& operator << (ostream& outPuting, Command& command)
+{
+    outPuting << command.toString();
+    return outPuting;
+}
 
 
 
@@ -52,7 +56,7 @@ vector<string*>* FileLineReader::ReadLineFromfile()
     vector<string*> *vec = new vector<string*>();
     string line;
     ifstream reader;
-    reader.open(file);
+    reader.open(*file);
     if(reader.is_open())
     {
         while(getline(reader,line)){
@@ -62,11 +66,34 @@ vector<string*>* FileLineReader::ReadLineFromfile()
     cout << "++++++++++++Load file successfully" << endl;
     return vec;
 }
-FileLineReader::FileLineReader(string f)
+FileLineReader::FileLineReader(string* f)
 {
     file = f;
 }
 
+FileLineReader::FileLineReader()
+{
+    file = new string("");
+}
+
+void FileLineReader::setFile(string * fileName){
+    file = fileName;
+}
+
+FileLineReader::~FileLineReader()
+{
+    delete file;
+}
+
+FileLineReader::FileLineReader(const FileLineReader& fileLine){
+    file = fileLine.file;
+}
+
+ostream& operator << (ostream& out, FileLineReader& file)
+{
+    out << file.file;
+    return out;
+}
 
 
 
@@ -82,7 +109,7 @@ vector<Command*>* FileCommandProcessorAdapter::ReadCommand()
     }
     return commands;
 }
-FileCommandProcessorAdapter::FileCommandProcessorAdapter(string f)
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(string* f)
 {
     flr = new FileLineReader(f);
 }
@@ -107,6 +134,15 @@ CommandProcessor::~CommandProcessor()
     commandList->clear();
     delete commandList;
     cout << "Deleting command list pointer." <<endl;
+}
+
+ostream& operator << (ostream& outPuting, CommandProcessor& cp)
+{
+    for(vector<Command *>::iterator it = cp.commandList->begin(); it != cp.commandList->end(); ++it)
+    {
+        outPuting << *it;
+    }
+    return outPuting;
 }
 
 void CommandProcessor::Validate(string *currentState, Command * com)

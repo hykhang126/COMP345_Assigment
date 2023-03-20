@@ -26,6 +26,7 @@ class Command{
     ~Command();
     //Copy constructor
     Command& operator= (const Command&);
+    friend ostream& operator << (ostream& outing, Command& command);
     void SaveEffect(string *effect);
     string* toString();
     string* getCommandName();
@@ -50,16 +51,23 @@ class CommandProcessor
     void SaveCommand(Command * commandName);
     virtual void GetCommand(string * curState);
     void ShowCommandList();
-    
+    friend ostream& operator << (ostream& outPuting, CommandProcessor&);
 };
 
 
 //Class FileLineReader declarations
 class FileLineReader{
     private:
-    string file;
+    string *file;
     public:
-    FileLineReader(string);
+    FileLineReader(string*);
+
+    FileLineReader();
+    void setFile(string*);
+    ~FileLineReader();
+    FileLineReader(const FileLineReader&);
+    friend ostream& operator << (ostream&, FileLineReader&);
+
     vector<string*>* ReadLineFromfile();
 };
 
@@ -70,6 +78,6 @@ class FileCommandProcessorAdapter : public CommandProcessor{
     vector<Command*> * ReadCommand();
     public:
     virtual void GetCommand(string * curState);
-    FileCommandProcessorAdapter(string f);
+    FileCommandProcessorAdapter(string *f);
 };
 #endif
