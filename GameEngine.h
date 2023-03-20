@@ -1,13 +1,19 @@
+#pragma once
 #include <list>
 #include <string>
 #include <vector>
-#include "Player.h"
 #include "LoggingObserver.h"
+#include "Map.h"
+#include "Player.h"
+#include "Cards.h"
+#include "CommandProcessing.h"
+
 
 using namespace std;
 
 class State;
 
+// Transition class
 class Transition
 {
     private :
@@ -23,11 +29,13 @@ class Transition
 
         Transition();
         Transition(string *name, State *destination);
+        ~Transition();
 
 };
 
 
 
+// State class
 class State
 {
     private :
@@ -46,15 +54,15 @@ class State
 
         State();
         State(string *name);
+        ~State();
 };
 
 
 
-class GameEngine: public Subject, public ILoggable
+// GameEngine class
+class GameEngine
 {
     private :
-        // // Command string
-        // string *command;
         // currentState to store current state of the game
         State* currentState;
         // All 8 States
@@ -85,11 +93,19 @@ class GameEngine: public Subject, public ILoggable
         Transition *winTran_1;
         Transition *winTran_2;
 
-        //List of players in the game
+
+        // Player list
         vector<Player*>* gamePlayers;
 
-        //Map state
-        Map* currentMapState;
+        // CommandProcessor reference, where all commands are handled
+        CommandProcessor *commandProcessor;
+
+        // Deck reference, where all cards and deck are stored
+        Deck *deck;
+
+        // Map reference, where the map is stored
+        Map *map;
+
 
         void initialization();
 
@@ -101,9 +117,9 @@ class GameEngine: public Subject, public ILoggable
         vector<State*> getStateList();
         void addStateToList(State* state);
 
+
         GameEngine();
 
-        bool isCommandValid(string *command);
         bool playerOwnsContinent(Player * player, Continent* continent, Map* map);
 
         string stringToLog();
@@ -112,10 +128,25 @@ class GameEngine: public Subject, public ILoggable
         void executeOrdersPhase();
         Player mainGameLoop();
     
+
+        vector<Player*>* getGamePlayers();
+        void addPlayerToList(Player* player);
+
+
+        Deck *getDeck();
+        void setDeck(Deck *deck);
+
+        Map *getMap();
+        void setMap(Map *map);
+
+        GameEngine();
+        GameEngine(CommandProcessor *commandProcessor, Deck *deck,  Map *map);
+        ~GameEngine();
+
+        bool isCommandValid(string *command);
+        void distributeTerritory(Player* player);
+
+        string stringToLog();
+
+        void startupPhase();
 };
-
-
-
-
-
-

@@ -13,7 +13,8 @@
 using namespace std;
 
 class Territory;
-
+class Hand;
+class OrdersList;
 class Player;
 
 class Player{
@@ -22,9 +23,13 @@ class Player{
         Hand* hand;
         vector<Territory*>* tCollection;
         OrdersList* listOfOrders;
+
         vector<Territory*>* territoriesToAttack;
         vector<Territory*>* territoriesToDefend;
         int* reinforcement;
+        vector<Player*>* negotiating;
+        bool* hasConquered;
+
 
     public :
         //Basic constructor
@@ -50,11 +55,19 @@ class Player{
         Hand* getHand();
         OrdersList* getOrdersList();
         vector<Territory*>* getTerritoryCollection();
+        int* getReinforcement();
+        vector<Player*>* getNegotiating();
+        bool* getHasConquered();
         //setters
-        void setTerritoryCollection(vector <Territory*>);
         void setTerritoriesToAttack();
         void setTerritoriesToDefend();
-        int* getReinforcement();
-        void setReinforcement(int number);
+  
         bool hasCardInHand(string cardName);
+
+        void setTerritoryCollection(vector <Territory*>*);
+        void setReinforcement(int* number);
+        void setName(string name);
+        void setNegotiating(vector<Player*>* list);
+        void setHasConquered(bool* check);
+
 };

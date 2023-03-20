@@ -1,5 +1,4 @@
 
-#pragma once
 #ifndef MYHEADER_H
 #define MYHEADER_H
 #include <map>
@@ -65,9 +64,10 @@ class Territory{
         string* name;
         Continent* continent;
         Coordinate* coordinate;
+       
 
     public:
-        vector<Territory*>* adjacentTerritoriy = new vector<Territory*>();
+        vector<Territory*>* adjacentTerritory = new vector<Territory*>();
         Coordinate* getCoordinate();
         Continent* getContinent();
         string* getName();
@@ -75,6 +75,7 @@ class Territory{
         int* getArmies();
         void setOwner( Player *player);
         void setArmies( int *armies);
+        void setName(string *name);
         Territory(Player *player, int *armies, int* pos, string* nm, Continent* cont, Coordinate* cor);
         ~Territory();
         string toString();
@@ -108,11 +109,13 @@ class Map{
         void showAllCoutry();
         void showAllBorder();
         void showAllContinent();
+        list<Territory*> * getAdjacentTerritory(Territory * source);
 };
 
 //Declaration of MapLoader class
 class MapLoader{
     private:
+   
         vector<string> split(const string &str, char delimiter);
     public:
         Map* loadMapFromFile(string fileName);

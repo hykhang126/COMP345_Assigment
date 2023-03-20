@@ -6,6 +6,9 @@ Player::Player() {
     this->hand = new Hand();
     this->tCollection = new vector<Territory*> {};
     this->listOfOrders = new OrdersList();
+    this->reinforcement = new int(0);
+    this->negotiating = new vector<Player*> {};
+    this->hasConquered = new bool(false);
 }
 
 Player::Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersList* listOfOrders) {
@@ -16,6 +19,8 @@ Player::Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersL
         this->tCollection->push_back(territory);
     }
     this->listOfOrders = new OrdersList(*listOfOrders);
+    this->negotiating = new vector<Player*> {};
+    this->hasConquered = new bool(false);
 }
 
 Player::Player(const Player& p) {
@@ -27,6 +32,8 @@ Player::Player(const Player& p) {
         this->tCollection->push_back(territoryCopy);
     }
     this->listOfOrders = new OrdersList(*p.listOfOrders);
+    this->negotiating = new vector<Player*>(*(p.negotiating));
+    this->hasConquered = new bool(*(p.hasConquered));
 }
 
 Player::~Player() {
@@ -36,6 +43,7 @@ Player::~Player() {
         delete(territory);
     }
     delete(listOfOrders);
+    delete(negotiating);
 }
 
 vector<Territory*>* Player::toDefend() {
@@ -341,6 +349,29 @@ vector<Territory*>* Player::getTerritoryCollection() {
     return this->tCollection;
 }
 
-void Player::setTerritoryCollection(vector <Territory*> collection) {
-    *tCollection = collection;
+vector<Player*>* Player::getNegotiating() {
+    return this->negotiating;
+}
+
+void Player::setTerritoryCollection(vector <Territory*>* collection) {
+    tCollection = collection;
+}
+int* Player::getReinforcement() {
+    return this->reinforcement;
+}
+void Player::setReinforcement(int* number) {
+    reinforcement = number;
+}
+void Player::setName(string name) {
+    *(this->name) = name;
+}
+void Player::setNegotiating(vector<Player*>* list) {
+    this->negotiating = list;
+}
+
+bool* Player::getHasConquered() {
+    return hasConquered;
+}
+void Player::setHasConquered(bool* check) {
+    hasConquered = check;
 }
