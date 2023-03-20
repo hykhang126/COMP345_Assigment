@@ -75,6 +75,7 @@ class Territory{
         int* getArmies();
         void setOwner( Player *player);
         void setArmies( int *armies);
+        void setName(string *name);
         Territory(Player *player, int *armies, int* pos, string* nm, Continent* cont, Coordinate* cor);
         ~Territory();
         string toString();
