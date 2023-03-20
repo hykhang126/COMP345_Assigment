@@ -307,17 +307,17 @@ void GameEngine::reinforcementPhase() {
         int reinforcementValue = player->getTerritoryCollection()->size() / 3;
 
         if(reinforcementValue < 3) { //minimum of 3 army points per round
-            player->setReinforcement(*player->getReinforcement() + 3);
+            player->setReinforcement(player->getReinforcement() + 3);
         } else { //if territories/3 is greater than 3, add that number to the reinforcement armies
-            player->setReinforcement(*player->getReinforcement() + reinforcementValue);
+            player->setReinforcement(player->getReinforcement() + reinforcementValue);
         }
     }
 
     //Bonus Army
     for(Player* player: this->getPlayers()) {
-        for(Continent* c : *currentMapState->getContinentList()) {
-            if(this->playerOwnsContinent(player, c, currentMapState)){
-                player->setReinforcement(*player->getReinforcement() + *c->getPoint());
+        for(Continent* c : *map->getContinentList()) {
+            if(this->playerOwnsContinent(player, c, map)){
+                player->setReinforcement(player->getReinforcement() + *c->getPoint());
             }
         }
     }
@@ -367,7 +367,7 @@ Player GameEngine::mainGameLoop() {
 
         //Declare winner if a player owns all territories
         for(Player* player : *gamePlayers){
-            if(currentMapState->countTerritory() == player->getTerritoryCollection()->size()){
+            if(map->countTerritory() == player->getTerritoryCollection()->size()){
                 cout << "Player " << *(player->getName()) << " owns all territories on the map. They win the game!\n";
                 winner = player;
             }
