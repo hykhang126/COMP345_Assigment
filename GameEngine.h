@@ -2,11 +2,12 @@
 #include <list>
 #include <string>
 #include <vector>
-
+#include "LoggingObserver.h"
 #include "Map.h"
 #include "Player.h"
 #include "Cards.h"
 #include "CommandProcessing.h"
+
 
 using namespace std;
 
@@ -92,6 +93,7 @@ class GameEngine
         Transition *winTran_1;
         Transition *winTran_2;
 
+
         // Player list
         vector<Player*>* gamePlayers;
 
@@ -104,17 +106,32 @@ class GameEngine
         // Map reference, where the map is stored
         Map *map;
 
+
         void initialization();
 
     public :
         State *getCurrentState();
         void setCurrentState(State *currentState);
+        vector<Player*>& getPlayers();
 
         vector<State*> getStateList();
         void addStateToList(State* state);
 
+
+        GameEngine();
+
+        bool playerOwnsContinent(Player * player, Continent* continent, Map* map);
+
+        string stringToLog();
+        void reinforcementPhase();
+        void issueOrdersPhase();
+        void executeOrdersPhase();
+        Player mainGameLoop();
+    
+
         vector<Player*>* getGamePlayers();
         void addPlayerToList(Player* player);
+
 
         Deck *getDeck();
         void setDeck(Deck *deck);

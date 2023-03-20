@@ -279,6 +279,105 @@ string GameEngine::stringToLog()
     return "LOG: Game engine transitioning to state " + *currentState->getName();
 }
 
+
+vector<Player*>& GameEngine::getPlayers(){
+    return *gamePlayers;
+}
+
+bool GameEngine::playerOwnsContinent(Player* player, Continent* continent, Map* map) {
+    vector<Territory*> territoriesInContinent;
+    for(int i = 0; i<map->countTerritory(); i++) {
+        Territory* territory = map->getTerritoryByIndex(i);
+        if (territory->getContinent() == continent){
+            territoriesInContinent.push_back(territory);
+        }
+    }
+
+    for(auto territory : territoriesInContinent) {
+        if(territory->getOwner() != player){
+            return false;
+        }
+    }
+    return true;
+}
+
+void GameEngine::reinforcementPhase() {
+    // # of territories / 3 to added to the army pool
+    for(Player* player: this->getPlayers()){
+        int reinforcementValue = player->getTerritoryCollection()->size() / 3;
+
+        if(reinforcementValue < 3) { //minimum of 3 army points per round
+            player->setReinforcement(player->getReinforcement() + 3);
+        } else { //if territories/3 is greater than 3, add that number to the reinforcement armies
+            player->setReinforcement(player->getReinforcement() + reinforcementValue);
+        }
+    }
+
+    //Bonus Army
+    for(Player* player: this->getPlayers()) {
+        for(Continent* c : *map->getContinentList()) {
+            if(this->playerOwnsContinent(player, c, map)){
+                player->setReinforcement(player->getReinforcement() + *c->getPoint());
+            }
+        }
+    }
+}
+
+void GameEngine::issueOrdersPhase() {
+    for(Player* player: this->getPlayers()){
+        player->issueOrder();
+    }
+}
+
+void GameEngine::executeOrdersPhase() {
+    for(Player* player: this->getPlayers()){
+        OrdersList* orderList = player->getOrdersList();
+        while(!orderList->getList().empty()) {
+            //get first order of list
+            Order* order = orderList->getList().front();
+            //exectue order
+            order->execute();
+            //remove order
+            orderList->remove(order);
+        }
+    }
+}
+
+Player GameEngine::mainGameLoop() {
+    Player* winner = nullptr;
+    do{
+        cout << "Starting reinforcement phase" << endl;
+        this->reinforcementPhase();
+        cout << "Starting issue orders phase" << endl;
+        this->issueOrdersPhase();
+        cout << "Starting execute orders phase" << endl;
+        this->executeOrdersPhase();
+
+        //Remove players who do not own any territories
+        vector<Player*>::iterator it = gamePlayers->begin();
+        while(it != gamePlayers->end()) {
+            if ((*it)->getTerritoryCollection()->empty()){
+                cout << "Player " << *((*it)->getName()) << " has been eliminated from the game.\n";
+                delete *it;
+                it = gamePlayers->erase(it);
+            } else {
+                ++it;
+            }
+        }
+
+        //Declare winner if a player owns all territories
+        for(Player* player : *gamePlayers){
+            if(map->countTerritory() == player->getTerritoryCollection()->size()){
+                cout << "Player " << *(player->getName()) << " owns all territories on the map. They win the game!\n";
+                winner = player;
+            }
+        }
+
+    } while(winner == nullptr);
+   
+   return *winner;
+}
+
 void GameEngine::distributeTerritory(Player* player)
 {
     int maxNumTerritories = map->countTerritory();
@@ -298,6 +397,7 @@ void GameEngine::distributeTerritory(Player* player)
             cout << " Territory* is null" << endl;
             break;
         }
+
 
         if (territory->getOwner() == nullptr)
         {
