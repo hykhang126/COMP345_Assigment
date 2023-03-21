@@ -141,6 +141,8 @@ Deploy::Deploy(const Deploy& other) {
  * @param player: player issuing the order
 */
 Deploy::Deploy(int* number, Territory* targetTerr, Player* player) {
+    setDescription("deploy some armies on one of the player's territories");
+    setEffect("Player armies have been placed on the player's territories");
     numReinforcements = number;
     target = targetTerr;
     this->player = player;
@@ -163,7 +165,7 @@ ostream& operator << (ostream& out, const Deploy& deploy) {
 */
 void Deploy::validate() {
     //A2: if player doesn't own the territory, invalid order
-    if(target->getOwner() != player || *(player->getReinforcement()) < *numReinforcements) {
+    if(target->getOwner() != player) {
         setValidStatus(false);
         cout << "Deploy order is invalid..." << endl;
     }
@@ -184,12 +186,9 @@ void Deploy::execute() {
         setExecStatus(true);
         //A2: if valid, add the number of armies to the target territory
         int* newArmies = new int(*(target->getArmies()) + *numReinforcements);
-        int* newPool = new int(*(player->getReinforcement()) - *numReinforcements);
         target->setArmies(newArmies);
-        player->setReinforcement(newPool);
         cout << "Deploy order executed! New number of armies: " << *(target->getArmies()) 
-            << "\nOn territory: " << *(target->getName()) 
-            << "\nNew reinforcement pool: " << *(player->getReinforcement()) << endl;
+            << "\nOn territory: " << *(target->getName()) << endl;
         notify(this);
     }
     else {
@@ -261,6 +260,8 @@ Advance::Advance(int* number, Territory* sourceTerr, Territory* targetTerr, Play
  * Copy Constructor for Advance Class
 */
 Advance::Advance(const Advance& other) {
+    setDescription("advance armies from one of the player's territories to an adjacent territory");
+    setEffect("Player armies have moved to an adjacent territory.");
     this->source = new Territory(*(other.source));
     this->target = new Territory(*(other.target));
     this->player = new Player(*(other.player));
@@ -463,6 +464,8 @@ Bomb::Bomb(Territory* targetTerr, Player* player) {
  * Copy Constructor for Bomb Class
 */
 Bomb::Bomb(const Bomb& other) {
+    setDescription("bomb half of the armies on the opponent's territory that is adjacent to the player's");
+    setEffect("Half of the armies on the opponent's territory has been destroyed.");
     this->target = new Territory(*(other.target));
     this->player = new Player(*(other.player));
 }
@@ -564,6 +567,8 @@ Blockade::~Blockade() {
  * Copy Constructor for Blockade Class
 */
 Blockade::Blockade(const Blockade& other) {
+    setDescription("blockade one of the player's territories");
+    setEffect("Number of armies on the player's territory has been tripled. The territory is now neutral.");
     this->target = new Territory(*(other.target));
     this->player = new Player(*(other.player));
     this->listPlayers = new vector<Player*>(*(other.listPlayers));
@@ -572,6 +577,8 @@ Blockade::Blockade(const Blockade& other) {
  * Defined constructor
 */
 Blockade::Blockade(Territory* targetTerr, Player* player, vector<Player*>* list) {
+    setDescription("blockade one of the player's territories");
+    setEffect("Number of armies on the player's territory has been tripled. The territory is now neutral.");
     target = targetTerr;
     this->player = player;
     this->listPlayers = list;
@@ -689,6 +696,8 @@ Airlift::~Airlift() {
  * Defined constructor
 */
 Airlift::Airlift(int* number, Territory* sourceTerr, Territory* targetTerr, Player* player) {
+    setDescription("airlift some armies from one of the player's territories to another territory");
+    setEffect("Player's armies has advanced to the target territory");
     numArmies = number;
     source = sourceTerr;
     target = targetTerr;
@@ -698,6 +707,8 @@ Airlift::Airlift(int* number, Territory* sourceTerr, Territory* targetTerr, Play
  * Copy Constructor for Airlift Class
 */
 Airlift::Airlift(const Airlift& other) {
+    setDescription("airlift some armies from one of the player's territories to another territory");
+    setEffect("Player's armies has advanced to the target territory");
     this->numArmies = new int(*(other.numArmies));
     this->source = new Territory(*(other.source));
     this->target = new Territory(*(other.target));
@@ -801,6 +812,8 @@ Negotiate::~Negotiate() {
  * Copy Constructor for Negotiate Class
 */
 Negotiate::Negotiate(const Negotiate& other) {
+    setDescription("negotiate between the current player and another player");
+    setEffect("No attacks allowed between the players in negotiation until the end of the turn");
     this->player = new Player(*(other.player));
     this->enemy = new Player(*(other.enemy));
 }
@@ -808,6 +821,8 @@ Negotiate::Negotiate(const Negotiate& other) {
  * Defined constructor
 */
 Negotiate::Negotiate(Player* player, Player* enemy) {
+    setDescription("negotiate between the current player and another player");
+    setEffect("No attacks allowed between the players in negotiation until the end of the turn");
     this->player = player;
     this->enemy = enemy;
 }
