@@ -248,16 +248,16 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
             }
             cout << "You currently have " << *this->getReinforcement() << " available armies to deploy." << endl;
             for(auto it = defendList->begin(); it != defendList->end(); ++it){
-                int armiesToDeploy;
+                int *armiesToDeploy = new int(0);
                 cout << "How many armies would you like to deploy to " << *(*it)->getName() << " ?" <<endl;
-                cin >> armiesToDeploy;
-                while(armiesToDeploy > *this->getReinforcement()){
+                cin >> *armiesToDeploy;
+                while(*armiesToDeploy > *this->getReinforcement()){
                     cout << "Invalid input. You only have " << *this->getReinforcement() << " armies to deploy. Please enter a valid number." << endl;
-                    cin >> armiesToDeploy;
+                    cin >> *armiesToDeploy;
                 }
-                int* newReinforcement = new int(*this->getReinforcement() - armiesToDeploy); 
+                int* newReinforcement = new int(*this->getReinforcement() - *armiesToDeploy); 
                 this->setReinforcement(newReinforcement);
-                this->listOfOrders->addOrder(new Deploy(&armiesToDeploy, *it, this));
+                this->listOfOrders->addOrder(new Deploy(armiesToDeploy, *it, this));
             }
             break;
         case 7:
