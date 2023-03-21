@@ -358,8 +358,32 @@ void GameEngine::executeOrdersPhase() {
 }
 
 Player GameEngine::mainGameLoop() {
+    cout << "MAIN GAME LOOP" << endl;
     Player* winner = nullptr;
     do{
+        //Remove players who do not own any territories
+        for (int i = 0; i < gamePlayers->size(); i++) {
+            if ((*gamePlayers)[i]->getTerritoryCollection()->empty()) {
+                cout << "Player " << *((*gamePlayers)[i]->getName()) << " has been eliminated from the game as he does not own any territories.\n";
+                delete (*gamePlayers)[i];
+                gamePlayers->erase(gamePlayers->begin() + i);
+                i--;
+            }
+        }       
+
+        //Declare winner if a player owns all territories
+        for(Player* player : *gamePlayers){
+            if(map->countTerritory() == player->getTerritoryCollection()->size()){
+                cout << "Player " << *(player->getName()) << " owns all territories on the map. They win the game!\n";
+                winner = player;
+                break;
+            }
+        }
+
+        if(winner != nullptr) {
+            break;
+        }
+
         cout << "Starting reinforcement phase" << endl;
         this->reinforcementPhase();
         cout << "Starting issue orders phase" << endl;
@@ -367,27 +391,7 @@ Player GameEngine::mainGameLoop() {
         cout << "Starting execute orders phase" << endl;
         this->executeOrdersPhase();
 
-        //Remove players who do not own any territories
-        vector<Player*>::iterator it = gamePlayers->begin();
-        while(it != gamePlayers->end()) {
-            if ((*it)->getTerritoryCollection()->empty()){
-                cout << "Player " << *((*it)->getName()) << " has been eliminated from the game.\n";
-                delete *it;
-                it = gamePlayers->erase(it);
-            } else {
-                ++it;
-            }
-        }
-
-        //Declare winner if a player owns all territories
-        for(Player* player : *gamePlayers){
-            if(map->countTerritory() == player->getTerritoryCollection()->size()){
-                cout << "Player " << *(player->getName()) << " owns all territories on the map. They win the game!\n";
-                winner = player;
-            }
-        }
-
-    } while(winner == nullptr);
+    } while(true);
    
    return *winner;
 }

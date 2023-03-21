@@ -80,13 +80,33 @@ int main(int argc, char const *argv[])
     test->addPlayerToList(player2);
     test->addPlayerToList(player3);
 
+    //SHOWING REINFORCEMENT PHASE
     test->reinforcementPhase();
 
+    //SHOWING ISSUE ORDER PHASE
     test->issueOrdersPhase();
+    
+    //SHOWING THAT MAIN GAME LOOP REMOVES PLAYERS WITH NO TERRITORIES AND HAS A PLAYER WIN IF OWN ALL TERRITORIES
+    GameEngine *testWinner = new GameEngine(commandProcessor, deck, map);
 
-    //test->executeOrdersPhase();
+    territory1->setOwner(player3);
+    territory2->setOwner(player3);
+    territory3->setOwner(player3);
 
+    tCollection1 = {};
+    tCollection2 = {};
+    tCollection3 = {territory1, territory2, territory3};
+
+
+    player1 = new Player(name1, tCollection1, p1_hand, listOfOrders1);
+    player2 = new Player(name2, tCollection2, p2_hand, listOfOrders2);
+    player3 = new Player(name3, tCollection3, p3_hand, listOfOrders3);
+    testWinner->addPlayerToList(player1);
+    testWinner->addPlayerToList(player2);
+    testWinner->addPlayerToList(player3);
+    testWinner->mainGameLoop();
 
     delete test;
+    delete testWinner;
     return 0;
 }

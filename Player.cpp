@@ -243,7 +243,6 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
             break;
         case 6:
             cout << "The following territories are your list of territories to be defended along with how many armies they currently have: " << endl;
-            //vector<Territory*>* defendList = this->toDefend();
             for(auto it = defendList->begin(); it != defendList->end(); ++it){
                 cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
             }
@@ -298,6 +297,7 @@ void Player::setTerritoriesToAttack(){
     //Prompt player for priority territories
     cout << "\nPlease enter the names of the territories to be attacked in priority (separated by spaces): \n";
     string ters;
+    cin.ignore();
     getline(cin, ters);
     istringstream iss(ters);
     vector<string> priorityTerritories{istream_iterator<string>{iss}, istream_iterator<string>{}};
