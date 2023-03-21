@@ -2,8 +2,11 @@
 #include <list>
 #include <string>
 #include <vector>
+#include <iostream>
+#include <algorithm>
 #include "LoggingObserver.h"
 #include "Map.h"
+#include "Orders.h"
 #include "Player.h"
 #include "Cards.h"
 #include "CommandProcessing.h"

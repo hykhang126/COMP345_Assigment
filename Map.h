@@ -77,6 +77,7 @@ class Territory{
         void setOwner( Player *player);
         void setArmies( int *armies);
         void setName(string *name);
+        void setAdjacentTerritory(vector<Territory*>* adj);
         Territory(Player *player, int *armies, int* pos, string* nm, Continent* cont, Coordinate* cor);
         ~Territory();
         string toString();
@@ -103,6 +104,7 @@ class Map{
         ~Map();
         void validate();
         Map();
+        Map(map<Territory*, list<Territory*>*>* map, vector<Continent*>* continents);
         bool BFS();
         void setContinentList(vector<Continent*>*);
         vector<Continent*>* getContinentList();

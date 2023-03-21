@@ -308,6 +308,11 @@ void Territory::setName(string *name)
     this->name = name;
 }
 
+void Territory::setAdjacentTerritory(vector<Territory*>* adj)
+{
+    this->adjacentTerritory = adj;
+}
+
 int* Territory::getArmies()
 {
     return armies;

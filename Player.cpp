@@ -19,8 +19,11 @@ Player::Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersL
         this->tCollection->push_back(territory);
     }
     this->listOfOrders = new OrdersList(*listOfOrders);
+    this->reinforcement = new int(0);
     this->negotiating = new vector<Player*> {};
     this->hasConquered = new bool(false);
+    this->territoriesToAttack = new vector<Territory*>();
+    this->territoriesToDefend = new vector<Territory*>();
 }
 
 Player::Player(const Player& p) {
@@ -71,10 +74,10 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
         switch (orderOption)
         {
         case 1:
-            if(this->getReinforcement() != 0) {
+            if(*this->getReinforcement() != 0) {
                 cout << "You must deploy all your armies before any other order" << endl;;
                 break;
-            } else if (this->hasCardInHand("Negotiate")){
+            } else if (this->hasCardInHand("diplomacy")){
                 cout << "The following is a list of the players in the game: " << endl; 
                 vector<Player*>* players = gamePlayers;
                 for(auto it = players->begin(); it != players->end(); ++it){
@@ -99,14 +102,14 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
             } 
             break;
         case 2:
-            if(this->getReinforcement() != 0) {
+            if(*this->getReinforcement() != 0) {
                 cout << "You must deploy all your armies before any other order" << endl;
                 break;
-            } else if (this->hasCardInHand("Airlift")){
+            } else if (this->hasCardInHand("airlift")){
                 cout << "The following is a list of the territories you own: " << endl; 
                 vector<Territory*>* ownedTerritories = this->getTerritoryCollection();
                 for(auto it = ownedTerritories->begin(); it != ownedTerritories->end(); ++it){
-                    cout << (*it)->getName() << ", Armies: " << (*it)->getArmies() << endl;
+                    cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
                 }
 
                 string srcTerritory;
@@ -139,14 +142,14 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
             }
             break;
         case 3:
-            if(this->getReinforcement() != 0) {
+            if(*this->getReinforcement() != 0) {
                 cout << "You must deploy all your armies before any other order" << endl;
                 break;
-            } else if (this->hasCardInHand("Blockade")){
+            } else if (this->hasCardInHand("blockade")){
                 cout << "The following is a list of the territories you own: " << endl; 
                 vector<Territory*>* ownedTerritories = this->getTerritoryCollection();
                 for(auto it = ownedTerritories->begin(); it != ownedTerritories->end(); ++it){
-                    cout << (*it)->getName() << ", Armies: " << (*it)->getArmies() << endl;
+                    cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
                 }
 
                 string targetTerritory;
@@ -169,10 +172,10 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
             }
             break;
         case 4:
-            if(this->getReinforcement() != 0) {
+            if(*this->getReinforcement() != 0) {
                 cout << "You must deploy all your armies before any other order" << endl;
                 break;
-            } else if (this->hasCardInHand("Bomb")){
+            } else if (this->hasCardInHand("bomb")){
                 string targetTerritory;
                 cout << "Enter the target territory for the bomb: " << endl;
                 cin >> targetTerritory;
@@ -182,20 +185,20 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
             }
             break;
         case 5:
-            if(this->getReinforcement() != 0) {
+            if(*this->getReinforcement() != 0) {
                 cout << "You must deploy all your armies before any other order" << endl;
                 break;
             } else {
                 cout << "The following territories are your list of territories to be defended along with how many armies they currently have: " << endl;
                 //vector<Territory*>* defendList = this->toDefend();
                 for(auto it = defendList->begin(); it != defendList->end(); ++it){
-                    cout << (*it)->getName() << ", Armies: " << (*it)->getArmies() << endl;
+                    cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
                 }
 
                 cout << "\nThe following territories are your list of terrirotires to attack:" << endl;
                 vector<Territory*>* attackList = this->toAttack();
                 for(auto it = attackList->begin(); it != attackList->end(); ++it){
-                    cout << (*it)->getName() << endl;
+                    cout << *(*it)->getName() << endl;
                 }
 
                 string srcTerritory;
@@ -242,24 +245,25 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
             cout << "The following territories are your list of territories to be defended along with how many armies they currently have: " << endl;
             //vector<Territory*>* defendList = this->toDefend();
             for(auto it = defendList->begin(); it != defendList->end(); ++it){
-                cout << (*it)->getName() << ", Armies: " << (*it)->getArmies() << endl;
+                cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
             }
-            cout << "You currently have " << this->getReinforcement() << " available armies to deploy." << endl;
+            cout << "You currently have " << *this->getReinforcement() << " available armies to deploy." << endl;
             for(auto it = defendList->begin(); it != defendList->end(); ++it){
                 int armiesToDeploy;
-                cout << "How many armies would you like to deploy to " << (*it)->getName() << " ?" <<endl;
+                cout << "How many armies would you like to deploy to " << *(*it)->getName() << " ?" <<endl;
                 cin >> armiesToDeploy;
                 while(armiesToDeploy > *this->getReinforcement()){
-                    cout << "Invalid input. You only have " << this->getReinforcement() << " armies to deploy. Please enter a valid number." << endl;
+                    cout << "Invalid input. You only have " << *this->getReinforcement() << " armies to deploy. Please enter a valid number." << endl;
                     cin >> armiesToDeploy;
                 }
-                this->setReinforcement(this->getReinforcement() - armiesToDeploy);
+                int* newReinforcement = new int(*this->getReinforcement() - armiesToDeploy); 
+                this->setReinforcement(newReinforcement);
                 this->listOfOrders->addOrder(new Deploy(&armiesToDeploy, *it, this));
             }
             break;
         case 7:
-            if(this->getReinforcement() != 0) {
-                cout << "You must deploy all your armies before any other order";
+            if(*this->getReinforcement() != 0) {
+                cout << "You must deploy all your armies before any other order" << endl;
                 break;
             }
             break;       
@@ -289,14 +293,15 @@ void Player::setTerritoriesToAttack(){
     }
     //print out list of neighbouring territories 
     for(Territory* territory : neighbours) {
-        cout << territory->getName() << endl;
+        cout << *territory->getName() << endl;
     }
     //Prompt player for priority territories
-    cout << "Please enter the names of the territories to be attacked in priority (separated by spaces): \n";
+    cout << "\nPlease enter the names of the territories to be attacked in priority (separated by spaces): \n";
     string ters;
     getline(cin, ters);
     istringstream iss(ters);
     vector<string> priorityTerritories{istream_iterator<string>{iss}, istream_iterator<string>{}};
+   
     //Add territories to territories to attack
     territoriesToAttack->clear();
     for(Territory* t: neighbours) {
@@ -311,20 +316,25 @@ void Player::setTerritoriesToAttack(){
             territoriesToAttack->push_back(new Territory(*t));
         }
     }
+    cout<< "These are the territories you chose: " << endl;
+    for(Territory* t: *this->territoriesToAttack){
+        cout << *t->getName() << endl;
+    }
 }
 
 void Player::setTerritoriesToDefend(){
     //Show territories
     cout << "The following territories belong to you: \n";
     for(Territory* territory : *tCollection) {
-        cout << territory->getName() << endl;
+        cout << *territory->getName() << endl;
     }
     //Prompt player for priority territories
-    cout << "Please enter the names of the territories to be defended in priority (separated by spaces): \n";
+    cout << "\nPlease enter the names of the territories to be defended in priority (separated by spaces): \n";
     string ters;
     getline(cin, ters);
     istringstream iss(ters);
     vector<string> priorityTerritories{istream_iterator<string>{iss}, istream_iterator<string>{}};
+    
     //Add territories to territories to defend
     territoriesToDefend->clear();
     for(Territory* t: *tCollection) {
@@ -338,6 +348,10 @@ void Player::setTerritoriesToDefend(){
         if(isPriority) {
             territoriesToDefend->push_back(new Territory(*t));
         }
+    }
+    cout<< "These are the territories you chose: " << endl;
+    for(Territory* t: *this->territoriesToDefend){
+        cout << *t->getName() << endl;
     }
 }
 

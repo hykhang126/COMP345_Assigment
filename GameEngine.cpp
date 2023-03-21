@@ -303,33 +303,47 @@ bool GameEngine::playerOwnsContinent(Player* player, Continent* continent, Map* 
 
 void GameEngine::reinforcementPhase() {
     // # of territories / 3 to added to the army pool
+    cout << "BEGINNING OF REINFORCEMENT PHASE\n" << endl;
     for(Player* player: this->getPlayers()){
+        int* newReinforcementValue;
         int reinforcementValue = player->getTerritoryCollection()->size() / 3;
-
+        cout << "Based on the number of territories " << *player->getName() <<" owns, your calculated reinforcement value is " << reinforcementValue << endl;
         if(reinforcementValue < 3) { //minimum of 3 army points per round
-            player->setReinforcement(player->getReinforcement() + 3);
+            cout << "Since that value is less than 3, you will have 3 armies added to your reinforcements this round" << endl;
+            newReinforcementValue = new int(3 + *player->getReinforcement());
+            player->setReinforcement(newReinforcementValue);
         } else { //if territories/3 is greater than 3, add that number to the reinforcement armies
-            player->setReinforcement(player->getReinforcement() + reinforcementValue);
+            cout << *player->getName() <<" will have " << reinforcementValue << " armies added to they reinforcements" << endl;
+            newReinforcementValue = new int(reinforcementValue + *player->getReinforcement());
+            player->setReinforcement(newReinforcementValue);
         }
+        cout << *player->getName() <<" now has " << *player->getReinforcement() << " reinforcement armies\n" << endl;
     }
 
     //Bonus Army
     for(Player* player: this->getPlayers()) {
+        int* newReinforcementValue;
         for(Continent* c : *map->getContinentList()) {
             if(this->playerOwnsContinent(player, c, map)){
-                player->setReinforcement(player->getReinforcement() + *c->getPoint());
+                cout << *player->getName() <<" owns all the territories on " << *c->getName() << ", they will be given a bonus of " << *c->getPoint() << endl;
+                newReinforcementValue = new int(*c->getPoint() + *player->getReinforcement());
+                player->setReinforcement(newReinforcementValue);
+                cout << *player->getName() <<" now has " << *player->getReinforcement() << " reinforcement armies\n" << endl;
             }
         }
     }
 }
 
 void GameEngine::issueOrdersPhase() {
+    cout << "ISSUE ORDERS PHASE\n" << endl; 
     for(Player* player: this->getPlayers()){
+        cout << *player->getName() << " will now issue orders\n" << endl;
         player->issueOrder(gamePlayers, deck);
     }
 }
 
 void GameEngine::executeOrdersPhase() {
+    cout << "EXECUTE ORDERS PHASE\n" << endl;
     for(Player* player: this->getPlayers()){
         OrdersList* orderList = player->getOrdersList();
         while(!orderList->getList().empty()) {
