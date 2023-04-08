@@ -223,8 +223,8 @@ void GameEngine::initialization()
 
     this->setCurrentState(startState);
 
-    delete startTran, loadTran_1, loadTran_2, validMapTran, playersAddedTran_1, playersAddedTran_2, assignReinTran, issueOrderTran_1, 
-            issueOrderTran_2, executeOrderTran_1, executeOrderTran_2, executeOrderTran_3, winTran_1, winTran_2;
+//    delete startTran, loadTran_1, loadTran_2, validMapTran, playersAddedTran_1, playersAddedTran_2, assignReinTran, issueOrderTran_1,
+//            issueOrderTran_2, executeOrderTran_1, executeOrderTran_2, executeOrderTran_3, winTran_1, winTran_2;
 }
 
 GameEngine::GameEngine()
@@ -267,6 +267,7 @@ bool GameEngine::isCommandValid(string *command)
         {
             currentState = currTransitions[i]->getDestination();
             cout << "Command Valid. State changed\n" << endl;
+            notify(this);
             return true;
         }
     }
