@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "Orders.h"
 #include "Cards.h"
+#include "PlayerStrategies.h"
 
 using namespace std;
 
@@ -30,6 +31,7 @@ class Player{
         int* reinforcement;
         vector<Player*>* negotiating;
         bool* hasConquered;
+        PlayerStrategy *playerStrategy;
 
 
     public :
@@ -37,6 +39,8 @@ class Player{
         Player();
         //Contructor taking in all attributes as params
         Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersList* listOfOrders);
+        // Constructor that also takes in player strategy
+        Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersList* listOfOrders, PlayerStrategy* playerStrategy);
         //Copy constructor
         Player(const Player& p);
         //Destructor
@@ -70,5 +74,6 @@ class Player{
         void setName(string name);
         void setNegotiating(vector<Player*>* list);
         void setHasConquered(bool* check);
+        void setStrategy(PlayerStrategy*);
 
 };

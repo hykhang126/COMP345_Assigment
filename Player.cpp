@@ -24,6 +24,8 @@ Player::Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersL
     this->hasConquered = new bool(false);
     this->territoriesToAttack = new vector<Territory*>();
     this->territoriesToDefend = new vector<Territory*>();
+    // default constructor with no ps parameter uses human player
+    this->playerStrategy = new Human();
 }
 
 Player::Player(const Player& p) {
@@ -58,216 +60,229 @@ vector<Territory*>* Player::toAttack() {
 }
 
 void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
-    
-    int orderOption;
-    this->setTerritoriesToAttack();
-    this->setTerritoriesToDefend();
 
-    vector<Territory*>* defendList = this->toDefend();
+    if (this->playerStrategy == nullptr) {
+        int orderOption;
+        this->setTerritoriesToAttack();
+        this->setTerritoriesToDefend();
 
-    do {
-        cout << "Please enter a number between 1 to 7 to select your desired order: \n 1. Negotiate \n 2. Airlift \n 3. Blockade \n 4. Bomb"
-        "\n 5. Advance \n 6. Deploy \n 7. Finish" << endl;
-        
-        cin>>orderOption;
+        vector<Territory *> *defendList = this->toDefend();
 
-        switch (orderOption)
-        {
-        case 1:
-            if(*this->getReinforcement() != 0) {
-                cout << "You must deploy all your armies before any other order" << endl;;
-                break;
-            } else if (this->hasCardInHand("diplomacy")){
-                cout << "The following is a list of the players in the game: " << endl; 
-                vector<Player*>* players = gamePlayers;
-                for(auto it = players->begin(); it != players->end(); ++it){
-                    cout << (*it)->getName() << endl;
-                }
+        do {
+            cout
+                    << "Please enter a number between 1 to 7 to select your desired order: \n 1. Negotiate \n 2. Airlift \n 3. Blockade \n 4. Bomb"
+                       "\n 5. Advance \n 6. Deploy \n 7. Finish" << endl;
 
-                string playerToNegotiate;
-                cout << "Enter the name of the player you would like to negotiate with " << endl;
-                cin >> playerToNegotiate;
+            cin >> orderOption;
 
-                Player* enemy = nullptr;
-                for (auto& player : *gamePlayers) {
-                    if (*player->getName() == playerToNegotiate) {
-                        enemy = player;
-                    }
-                }
-
-                this->listOfOrders->addOrder(new Negotiate(this, enemy));
-                break;
-            } else {
-                cout << "You cannot add this order as you do not have the proper card in hand!" << endl;
-            } 
-            break;
-        case 2:
-            if(*this->getReinforcement() != 0) {
-                cout << "You must deploy all your armies before any other order" << endl;
-                break;
-            } else if (this->hasCardInHand("airlift")){
-                cout << "The following is a list of the territories you own: " << endl; 
-                vector<Territory*>* ownedTerritories = this->getTerritoryCollection();
-                for(auto it = ownedTerritories->begin(); it != ownedTerritories->end(); ++it){
-                    cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
-                }
-
-                string srcTerritory;
-                string targetTerritory;
-                int number;
-
-                cout << "\nEnter the source territory for the airlift: " << endl;
-                cin >> srcTerritory;
-                cout << "Enter the target territory for the airlift: " << endl;
-                cin >> targetTerritory;
-                cout << "Enter the number of armies for the airlift: " << endl;
-                cin >> number;
-
-                Territory* src = nullptr;
-                Territory* target = nullptr;
-                for (auto& terr : *ownedTerritories) {
-                    if (*terr->getName() == srcTerritory) {
-                        src = terr;
-                    } else if (*terr->getName() == targetTerritory) {
-                        target = terr;
-                    }
-                }
-                if (src == nullptr || target == nullptr) {
-                    cout << "One of the territories entered does not exist or does not belong to the player." << endl;
-                } else {
-                    this->listOfOrders->addOrder(new Airlift(&number, src, target, this));
-                }
-            } else {
-                cout << "You cannot add this order as you do not have the proper card in hand!" << endl;
-            }
-            break;
-        case 3:
-            if(*this->getReinforcement() != 0) {
-                cout << "You must deploy all your armies before any other order" << endl;
-                break;
-            } else if (this->hasCardInHand("blockade")){
-                cout << "The following is a list of the territories you own: " << endl; 
-                vector<Territory*>* ownedTerritories = this->getTerritoryCollection();
-                for(auto it = ownedTerritories->begin(); it != ownedTerritories->end(); ++it){
-                    cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
-                }
-
-                string targetTerritory;
-                cout << "Enter the target territory for the blockade: " << endl;
-                cin >> targetTerritory;
-
-                Territory* target = nullptr;
-                for (auto& terr : *ownedTerritories) {
-                    if (*terr->getName() == targetTerritory) {
-                        target = terr;
-                    }
-                }
-                if (target == nullptr) {
-                    cout << "One of the territories entered does not exist or does not belong to the player." << endl;
-                } else {
-                    this->listOfOrders->addOrder(new Blockade(target, this, gamePlayers));
-                }
-            } else {
-                cout << "You cannot add this order as you do not have the proper card in hand!" << endl;
-            }
-            break;
-        case 4:
-            if(*this->getReinforcement() != 0) {
-                cout << "You must deploy all your armies before any other order" << endl;
-                break;
-            } else if (this->hasCardInHand("bomb")){
-                string targetTerritory;
-                cout << "Enter the target territory for the bomb: " << endl;
-                cin >> targetTerritory;
-                this->listOfOrders->addOrder(new Bomb());
-            } else {
-                cout << "You cannot add this order as you do not have the proper card in hand!" << endl;
-            }
-            break;
-        case 5:
-            if(*this->getReinforcement() != 0) {
-                cout << "You must deploy all your armies before any other order" << endl;
-                break;
-            } else {
-                cout << "The following territories are your list of territories to be defended along with how many armies they currently have: " << endl;
-                //vector<Territory*>* defendList = this->toDefend();
-                for(auto it = defendList->begin(); it != defendList->end(); ++it){
-                    cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
-                }
-
-                cout << "\nThe following territories are your list of terrirotires to attack:" << endl;
-                vector<Territory*>* attackList = this->toAttack();
-                for(auto it = attackList->begin(); it != attackList->end(); ++it){
-                    cout << *(*it)->getName() << endl;
-                }
-
-                string srcTerritory;
-                string targetTerritory;
-                int number;
-
-                cout << "Enter the source territory for the advance: " << endl;
-                cin >> srcTerritory;
-                cout << "Enter the target territory for the advance: " << endl;
-                cin >> targetTerritory;
-                cout << "Enter the number of armies for the advance: " << endl;
-                cin >> number;
-
-                Territory* srcTerritoryPtr = nullptr;
-                Territory* targetTerritoryPtr = nullptr;
-                bool isDefend = false;
-                bool isAttack = false;
-
-                for (auto it = defendList->begin(); it != defendList->end(); ++it) {
-                    if (*(*it)->getName() == targetTerritory) {
-                        isDefend = true;
-                        targetTerritoryPtr = *it;
+            switch (orderOption) {
+                case 1:
+                    if (*this->getReinforcement() != 0) {
+                        cout << "You must deploy all your armies before any other order" << endl;;
                         break;
-                    }
-                }
-                for (auto it = attackList->begin(); it != attackList->end(); ++it) {
-                    if (*(*it)->getName() == targetTerritory) {
-                        isAttack = true;
-                        targetTerritoryPtr = *it;
-                        break;
-                    }
-                }
-
-                for (auto& terr : *tCollection) {
-                        if (*terr->getName() == srcTerritory) {
-                            srcTerritoryPtr = terr;
+                    } else if (this->hasCardInHand("diplomacy")) {
+                        cout << "The following is a list of the players in the game: " << endl;
+                        vector<Player *> *players = gamePlayers;
+                        for (auto it = players->begin(); it != players->end(); ++it) {
+                            cout << (*it)->getName() << endl;
                         }
-                }
 
-                this->listOfOrders->addOrder(new Advance(&number, srcTerritoryPtr, targetTerritoryPtr, this, deck));
+                        string playerToNegotiate;
+                        cout << "Enter the name of the player you would like to negotiate with " << endl;
+                        cin >> playerToNegotiate;
+
+                        Player *enemy = nullptr;
+                        for (auto &player: *gamePlayers) {
+                            if (*player->getName() == playerToNegotiate) {
+                                enemy = player;
+                            }
+                        }
+
+                        this->listOfOrders->addOrder(new Negotiate(this, enemy));
+                        break;
+                    } else {
+                        cout << "You cannot add this order as you do not have the proper card in hand!" << endl;
+                    }
+                    break;
+                case 2:
+                    if (*this->getReinforcement() != 0) {
+                        cout << "You must deploy all your armies before any other order" << endl;
+                        break;
+                    } else if (this->hasCardInHand("airlift")) {
+                        cout << "The following is a list of the territories you own: " << endl;
+                        vector<Territory *> *ownedTerritories = this->getTerritoryCollection();
+                        for (auto it = ownedTerritories->begin(); it != ownedTerritories->end(); ++it) {
+                            cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
+                        }
+
+                        string srcTerritory;
+                        string targetTerritory;
+                        int number;
+
+                        cout << "\nEnter the source territory for the airlift: " << endl;
+                        cin >> srcTerritory;
+                        cout << "Enter the target territory for the airlift: " << endl;
+                        cin >> targetTerritory;
+                        cout << "Enter the number of armies for the airlift: " << endl;
+                        cin >> number;
+
+                        Territory *src = nullptr;
+                        Territory *target = nullptr;
+                        for (auto &terr: *ownedTerritories) {
+                            if (*terr->getName() == srcTerritory) {
+                                src = terr;
+                            } else if (*terr->getName() == targetTerritory) {
+                                target = terr;
+                            }
+                        }
+                        if (src == nullptr || target == nullptr) {
+                            cout << "One of the territories entered does not exist or does not belong to the player."
+                                 << endl;
+                        } else {
+                            this->listOfOrders->addOrder(new Airlift(&number, src, target, this));
+                        }
+                    } else {
+                        cout << "You cannot add this order as you do not have the proper card in hand!" << endl;
+                    }
+                    break;
+                case 3:
+                    if (*this->getReinforcement() != 0) {
+                        cout << "You must deploy all your armies before any other order" << endl;
+                        break;
+                    } else if (this->hasCardInHand("blockade")) {
+                        cout << "The following is a list of the territories you own: " << endl;
+                        vector<Territory *> *ownedTerritories = this->getTerritoryCollection();
+                        for (auto it = ownedTerritories->begin(); it != ownedTerritories->end(); ++it) {
+                            cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
+                        }
+
+                        string targetTerritory;
+                        cout << "Enter the target territory for the blockade: " << endl;
+                        cin >> targetTerritory;
+
+                        Territory *target = nullptr;
+                        for (auto &terr: *ownedTerritories) {
+                            if (*terr->getName() == targetTerritory) {
+                                target = terr;
+                            }
+                        }
+                        if (target == nullptr) {
+                            cout << "One of the territories entered does not exist or does not belong to the player."
+                                 << endl;
+                        } else {
+                            this->listOfOrders->addOrder(new Blockade(target, this, gamePlayers));
+                        }
+                    } else {
+                        cout << "You cannot add this order as you do not have the proper card in hand!" << endl;
+                    }
+                    break;
+                case 4:
+                    if (*this->getReinforcement() != 0) {
+                        cout << "You must deploy all your armies before any other order" << endl;
+                        break;
+                    } else if (this->hasCardInHand("bomb")) {
+                        string targetTerritory;
+                        cout << "Enter the target territory for the bomb: " << endl;
+                        cin >> targetTerritory;
+                        this->listOfOrders->addOrder(new Bomb());
+                    } else {
+                        cout << "You cannot add this order as you do not have the proper card in hand!" << endl;
+                    }
+                    break;
+                case 5:
+                    if (*this->getReinforcement() != 0) {
+                        cout << "You must deploy all your armies before any other order" << endl;
+                        break;
+                    } else {
+                        cout
+                                << "The following territories are your list of territories to be defended along with how many armies they currently have: "
+                                << endl;
+                        //vector<Territory*>* defendList = this->toDefend();
+                        for (auto it = defendList->begin(); it != defendList->end(); ++it) {
+                            cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
+                        }
+
+                        cout << "\nThe following territories are your list of terrirotires to attack:" << endl;
+                        vector<Territory *> *attackList = this->toAttack();
+                        for (auto it = attackList->begin(); it != attackList->end(); ++it) {
+                            cout << *(*it)->getName() << endl;
+                        }
+
+                        string srcTerritory;
+                        string targetTerritory;
+                        int number;
+
+                        cout << "Enter the source territory for the advance: " << endl;
+                        cin >> srcTerritory;
+                        cout << "Enter the target territory for the advance: " << endl;
+                        cin >> targetTerritory;
+                        cout << "Enter the number of armies for the advance: " << endl;
+                        cin >> number;
+
+                        Territory *srcTerritoryPtr = nullptr;
+                        Territory *targetTerritoryPtr = nullptr;
+                        bool isDefend = false;
+                        bool isAttack = false;
+
+                        for (auto it = defendList->begin(); it != defendList->end(); ++it) {
+                            if (*(*it)->getName() == targetTerritory) {
+                                isDefend = true;
+                                targetTerritoryPtr = *it;
+                                break;
+                            }
+                        }
+                        for (auto it = attackList->begin(); it != attackList->end(); ++it) {
+                            if (*(*it)->getName() == targetTerritory) {
+                                isAttack = true;
+                                targetTerritoryPtr = *it;
+                                break;
+                            }
+                        }
+
+                        for (auto &terr: *tCollection) {
+                            if (*terr->getName() == srcTerritory) {
+                                srcTerritoryPtr = terr;
+                            }
+                        }
+
+                        this->listOfOrders->addOrder(
+                                new Advance(&number, srcTerritoryPtr, targetTerritoryPtr, this, deck));
+                    }
+                    break;
+                case 6:
+                    cout
+                            << "The following territories are your list of territories to be defended along with how many armies they currently have: "
+                            << endl;
+                    for (auto it = defendList->begin(); it != defendList->end(); ++it) {
+                        cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
+                    }
+                    cout << "You currently have " << *this->getReinforcement() << " available armies to deploy."
+                         << endl;
+                    for (auto it = defendList->begin(); it != defendList->end(); ++it) {
+                        int *armiesToDeploy = new int(0);
+                        cout << "How many armies would you like to deploy to " << *(*it)->getName() << " ?" << endl;
+                        cin >> *armiesToDeploy;
+                        while (*armiesToDeploy > *this->getReinforcement()) {
+                            cout << "Invalid input. You only have " << *this->getReinforcement()
+                                 << " armies to deploy. Please enter a valid number." << endl;
+                            cin >> *armiesToDeploy;
+                        }
+                        int *newReinforcement = new int(*this->getReinforcement() - *armiesToDeploy);
+                        this->setReinforcement(newReinforcement);
+                        this->listOfOrders->addOrder(new Deploy(armiesToDeploy, *it, this));
+                    }
+                    break;
+                case 7:
+                    if (*this->getReinforcement() != 0) {
+                        cout << "You must deploy all your armies before any other order" << endl;
+                        break;
+                    }
+                    break;
             }
-            break;
-        case 6:
-            cout << "The following territories are your list of territories to be defended along with how many armies they currently have: " << endl;
-            for(auto it = defendList->begin(); it != defendList->end(); ++it){
-                cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
-            }
-            cout << "You currently have " << *this->getReinforcement() << " available armies to deploy." << endl;
-            for(auto it = defendList->begin(); it != defendList->end(); ++it){
-                int *armiesToDeploy = new int(0);
-                cout << "How many armies would you like to deploy to " << *(*it)->getName() << " ?" <<endl;
-                cin >> *armiesToDeploy;
-                while(*armiesToDeploy > *this->getReinforcement()){
-                    cout << "Invalid input. You only have " << *this->getReinforcement() << " armies to deploy. Please enter a valid number." << endl;
-                    cin >> *armiesToDeploy;
-                }
-                int* newReinforcement = new int(*this->getReinforcement() - *armiesToDeploy); 
-                this->setReinforcement(newReinforcement);
-                this->listOfOrders->addOrder(new Deploy(armiesToDeploy, *it, this));
-            }
-            break;
-        case 7:
-            if(*this->getReinforcement() != 0) {
-                cout << "You must deploy all your armies before any other order" << endl;
-                break;
-            }
-            break;       
-        }
-    } while (orderOption != 7 && this->getReinforcement() !=0);
+        } while (orderOption != 7 && this->getReinforcement() != 0);
+    } else {
+        this->playerStrategy->issueOrder();
+    }
 }
 
 bool Player::hasCardInHand(string cardName) {
@@ -419,3 +434,26 @@ bool* Player::getHasConquered() {
 void Player::setHasConquered(bool* check) {
     hasConquered = check;
 }
+
+Player::Player(string *name, vector<Territory *> tCollection, Hand *hand, OrdersList *listOfOrders,
+               PlayerStrategy *playerStrategy) {
+    this->name = new string(*name);
+    this->hand = new Hand(*hand);
+    this->tCollection = new vector<Territory*>;
+    for(auto territory : tCollection) {
+        this->tCollection->push_back(territory);
+    }
+    this->listOfOrders = new OrdersList(*listOfOrders);
+    this->reinforcement = new int(0);
+    this->negotiating = new vector<Player*> {};
+    this->hasConquered = new bool(false);
+    this->territoriesToAttack = new vector<Territory*>();
+    this->territoriesToDefend = new vector<Territory*>();
+    this->playerStrategy = playerStrategy;
+}
+
+void Player::setStrategy(PlayerStrategy *playerStrategy) {
+    this->playerStrategy = playerStrategy;
+}
+
+

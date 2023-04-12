@@ -1,5 +1,4 @@
 #include "CommandProcessing.h"
-
 //Command method implementations
 //Parameterized constructors
 Command::Command(string * commandName, string * effectName): command(commandName), effect(effectName){}
@@ -17,11 +16,13 @@ void Command::SaveEffect(string *effectName)
     effect = NULL;
     effect = effectName;
     cout << "Saving effect " << *effect << " in command " << *command << endl;
+    notify(this);
 }
 string* Command::toString()
 {
     return command;
 }
+
 //Copy constructor
 Command::Command(const Command& com)
 {
@@ -42,12 +43,14 @@ string* Command::getCommandName()
 string Command::getEffect() {
     return *effect;
 }
-ostream& operator << (ostream& outPuting, Command& command)
-{
-    outPuting << command.toString();
-    return outPuting;
+ostream &operator<<(ostream &out,  Command &command) {
+    out << "Command is " << *command.command << " with effect " << *command.effect;
+    return out;
 }
 
+string Command::stringToLog() {
+    return "LOG: Command saving effect: " + getEffect();
+}
 
 
 //FileLineReader method implementations
@@ -248,6 +251,7 @@ void CommandProcessor::SaveCommand(Command * com)
 {
     this->commandList->push_back(com);
     cout << "Command " << *(com->toString()) << " is saved." <<endl;
+    notify(this);
 }
 
 Command* CommandProcessor::ReadCommand(){
@@ -290,3 +294,15 @@ void CommandProcessor::ShowCommandList()
         cout << "Command: " << *(*commandList)[i]->toString() << endl;
     }
 }
+
+string CommandProcessor::stringToLog() {
+    std::stringstream buffer;
+    auto test = *commandList->back();
+
+    auto test2 = commandList->back();
+    buffer << *commandList->back();
+    string wow = buffer.str();
+    cout << test;
+    return "LOG: saving Command to command list. " + buffer.str();
+}
+

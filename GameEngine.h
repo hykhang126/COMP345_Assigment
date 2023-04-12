@@ -63,7 +63,7 @@ class State
 
 
 // GameEngine class
-class GameEngine
+class GameEngine: public Subject, public ILoggable
 {
     private :
         // currentState to store current state of the game
@@ -125,7 +125,7 @@ class GameEngine
 
         bool playerOwnsContinent(Player * player, Continent* continent, Map* map);
 
-        string stringToLog();
+        string stringToLog() override;
         void reinforcementPhase();
         void issueOrdersPhase();
         void executeOrdersPhase();
@@ -149,4 +149,5 @@ class GameEngine
         void distributeTerritory(Player* player);
 
         void startupPhase();
+
 };
