@@ -58,7 +58,7 @@ int main()
 
         }
     }
-
-    
+    int temp;
+    cin >> temp;
     return 1;
 }

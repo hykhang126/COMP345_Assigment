@@ -106,6 +106,7 @@ vector<Command*>* FileCommandProcessorAdapter::ReadCommand()
     {
         Command * cmd = new Command((*strings)[i]);
         commands->push_back(cmd);
+        cout << *(*strings)[i]<<endl;
     }
     return commands;
 }
@@ -147,20 +148,21 @@ ostream& operator << (ostream& outPuting, CommandProcessor& cp)
 
 void CommandProcessor::Validate(string *currentState, Command * com)
 {
-    cout << "-----------------------------"<< endl;
+    cout << "-----------------------------"<<*currentState <<  endl;
     cout << "Current State is: ";
     cout << *currentState << endl;
     string cmmnd = *(com->getCommandName());
     cout << "Your command is: " << cmmnd << endl;
 
-    if( cmmnd.compare("loadmap") == 0 )
+    if(cmmnd == "loadmap")
     {
-        if(*currentState == "Start" || *currentState == "maploaded")
+        if(*currentState == "start" || *currentState == "maploaded")
         {
             com->SaveEffect(new string("true"));
             SaveCommand(com);
-            delete currentState;
-            currentState = new string("maploaded");
+            //delete currentState;
+            *currentState = "maploaded";
+            //currentState = new string("maploaded");
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{
@@ -168,14 +170,15 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-    if(cmmnd.compare("validatemap") == 0)
+    if(cmmnd == "validatemap")
     {
-        if(*currentState == "MapLoaded")
+        if(*currentState == "maploaded")
         {
             com->SaveEffect(new string("true"));
             SaveCommand(com);
-            delete currentState;
-            currentState = new string("MapValidated");
+            //delete currentState;
+            *currentState = "mapvalidated";
+            //currentState = new string("mapvalidated");
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{
@@ -183,14 +186,15 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-    if(cmmnd.compare("addplayer") == 0)
+    if(cmmnd == "addplayer")
     {
-        if(*currentState == "MapValidated" || *currentState == "PlayersAdded")
+        if(*currentState == "mapvalidated" || *currentState == "playeradded")
         {
             com->SaveEffect(new string("true"));
             SaveCommand(com);
-            delete currentState;
-            currentState = new string("PlayersAdded");
+            //delete currentState;
+            *currentState = "playeradded";
+            //currentState = new string("playeradded");
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{
@@ -198,14 +202,15 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-    if(cmmnd.compare("gamestart") == 0)
+    if(cmmnd == "gamestart")
     {
-        if(*currentState == "PlayersAdded")
+        if(*currentState == "playeradded")
         {
             com->SaveEffect(new string("true"));
             SaveCommand(com);
-            delete currentState;
-            currentState = new string("assignreinforcement");
+            //delete currentState;
+            *currentState = "assignreinforcement";
+            //currentState = new string("assignreinforcement");
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{
@@ -213,14 +218,15 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-    if(cmmnd.compare("replay") == 0)
+    if(cmmnd == "replay")
     {
-        if(*currentState == "Win")
+        if(*currentState == "win")
         {
             com->SaveEffect(new string("true"));
             SaveCommand(com);
-            delete currentState;
-            currentState = new string("Start");
+            //delete currentState;
+            *currentState = "start";
+            //currentState = new string("start");
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{
@@ -228,14 +234,15 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-    if(cmmnd.compare("quit") == 0)
+    if(cmmnd == "quit")
     {
-        if(*currentState == "Win")
+        if(*currentState == "win")
         {
             com->SaveEffect(new string("true"));
             SaveCommand(com);
-            delete currentState;
-            currentState = new string("exit program");
+            //delete currentState;
+            *currentState = "exit program";
+            //currentState = new string("exit program");
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{

@@ -78,7 +78,7 @@ class FileCommandProcessorAdapter : public CommandProcessor{
     FileLineReader *flr;
     vector<Command*> * ReadCommand();
     public:
-    virtual void GetCommand(string * curState);
+    void GetCommand(string * curState);
     FileCommandProcessorAdapter(string f);
 };
 #endif
