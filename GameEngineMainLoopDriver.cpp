@@ -31,11 +31,11 @@ int main(int argc, char const *argv[])
     Territory* territory1 = new Territory(new Player(), new int(5), new int(0), new string("Territory1"), continent1, new Coordinate(new int(0), new int(0)));
     Territory* territory2 = new Territory(new Player(), new int(3), new int(1), new string("Territory2"), continent2, new Coordinate(new int(1), new int(0)));
     Territory* territory3 = new Territory(new Player(), new int(7), new int(2), new string("Territory3"), continent2, new Coordinate(new int(2), new int(0)));
-
+    Territory* territory4 = new Territory(new Player(), new int(4), new int(3), new string("Territory4"), continent2, new Coordinate(new int(3), new int(0)));
 
     vector<Territory*> tCollection1 = {territory1};
     vector<Territory*> tCollection2 = {territory2};
-    vector<Territory*> tCollection3 = {territory3, territory3, territory3, territory3, territory3, territory3, territory3, territory3, territory3, territory3, territory3, territory3,territory3};
+    vector<Territory*> tCollection3 = {territory3, territory4, territory4, territory4, territory4, territory4, territory4, territory4, territory4, territory4, territory4, territory4,territory4};
 
 
     Player* player1 = new Player(name1, tCollection1, p1_hand, listOfOrders1);
@@ -86,6 +86,8 @@ int main(int argc, char const *argv[])
     //SHOWING ISSUE ORDER PHASE
     test->issueOrdersPhase();
     
+    cout << "EXECUTION PHASE WOULD START HERE\n" << endl;
+
     //SHOWING THAT MAIN GAME LOOP REMOVES PLAYERS WITH NO TERRITORIES AND HAS A PLAYER WIN IF OWN ALL TERRITORIES
     GameEngine *testWinner = new GameEngine(commandProcessor, deck, map);
 

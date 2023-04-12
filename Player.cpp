@@ -70,7 +70,7 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
 
         do {
             cout
-                    << "Please enter a number between 1 to 7 to select your desired order: \n 1. Negotiate \n 2. Airlift \n 3. Blockade \n 4. Bomb"
+                    << "\nPlease enter a number between 1 to 7 to select your desired order: \n 1. Negotiate \n 2. Airlift \n 3. Blockade \n 4. Bomb"
                        "\n 5. Advance \n 6. Deploy \n 7. Finish" << endl;
 
             cin >> orderOption;
@@ -320,15 +320,12 @@ void Player::setTerritoriesToAttack(){
     //Add territories to territories to attack
     territoriesToAttack->clear();
     for(Territory* t: neighbours) {
-        bool isPriority = false;
-        for(string& pt : priorityTerritories) {
-            if(*t->getName() == pt){
-                isPriority = true;
+        for(string& pt : priorityTerritories) {        
+            string territoryName = t->getName()->substr(1);
+            if(*t->getName() == pt || territoryName == pt){
+                territoriesToAttack->push_back(new Territory(*t));
                 break;
             }
-        }
-        if(isPriority) {
-            territoriesToAttack->push_back(new Territory(*t));
         }
     }
     cout<< "These are the territories you chose: " << endl;
@@ -339,7 +336,7 @@ void Player::setTerritoriesToAttack(){
 
 void Player::setTerritoriesToDefend(){
     //Show territories
-    cout << "The following territories belong to you: \n";
+    cout << "\nThe following territories belong to you: \n";
     for(Territory* territory : *tCollection) {
         cout << *territory->getName() << endl;
     }
