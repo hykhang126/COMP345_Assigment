@@ -52,11 +52,13 @@ Player::~Player() {
 }
 
 vector<Territory*>* Player::toDefend() {
-    return this->territoriesToDefend;
+//    return this->territoriesToDefend;
+    return this->playerStrategy->toDefend();
 }
 
 vector<Territory*>* Player::toAttack() {
-    return this->territoriesToAttack;
+//    return this->territoriesToAttack;
+    return this->playerStrategy->toAttack();
 }
 
 void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
