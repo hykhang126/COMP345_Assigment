@@ -40,6 +40,7 @@ int Map::countTerritory(){
 }
 
 Map::~Map(){
+    delete name;
      for (auto const& pair : *maps) {
         delete pair.first;
         delete pair.second;
@@ -469,11 +470,20 @@ vector<string> MapLoader::split(const string &str, char delimiter)
     return tokens;
 }
 
+string* Map::getName()
+{
+    return name;
+}
 
+void Map::setName(string* fname)
+{
+    name = fname;
+}
 
 Map* MapLoader::loadMapFromFile(string fileName)
 { 
     try{
+    
     vector<Continent*> *listContinent = new vector<Continent*>();
     static int counter = 1;
     bool continentFlag = false;
@@ -481,6 +491,7 @@ Map* MapLoader::loadMapFromFile(string fileName)
     bool borderFlag = false;
     string line;
     Map* map = new Map();
+    map->setName(new string(fileName));
     ifstream reader;
     reader.open(fileName);
     if(reader.is_open())
