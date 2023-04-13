@@ -1,11 +1,13 @@
+#ifndef COMMANDS_H
+#define COMMANDS_H
+
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <sstream>
 #include "LoggingObserver.h"
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#include "GameEngine.h"
 using namespace std;
 
 //Class Command declarations

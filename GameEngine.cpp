@@ -225,12 +225,31 @@ void GameEngine::initialization()
 
     delete startTran, loadTran_1, loadTran_2, validMapTran, playersAddedTran_1, playersAddedTran_2, assignReinTran, issueOrderTran_1, 
             issueOrderTran_2, executeOrderTran_1, executeOrderTran_2, executeOrderTran_3, winTran_1, winTran_2;
+
+    MapLoader loader;
+    nameOfMapVector = new vector<string>();
+    nameOfMapVector->push_back("haiti.txt");
+    nameOfMapVector->push_back("brasil.txt");
+    nameOfMapVector->push_back("eire.txt");
+    nameOfMapVector->push_back("germany.txt");
+    nameOfMapVector->push_back("france.txt");
+
+}
+
+string* GameEngine::currentStateToString()
+{
+    State* st = this->getCurrentState();
+    return st->getName();
 }
 
 GameEngine::GameEngine()
 {
     this->initialization();
+    CommandProcessor *commandProcessor = new CommandProcessor();
+    commandProcessor->GetCommand(this->currentStateToString());
 }
+
+
 
 GameEngine::GameEngine(CommandProcessor *commandProcessor, Deck *deck, Map *map)
 {
@@ -240,6 +259,8 @@ GameEngine::GameEngine(CommandProcessor *commandProcessor, Deck *deck, Map *map)
     this->deck = deck;
     this->map = map;
 }
+
+
 
 GameEngine::~GameEngine()
 {

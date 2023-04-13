@@ -106,10 +106,18 @@ class GameEngine
         // Map reference, where the map is stored
         Map *map;
 
+        vector<Map*>* mapList;
 
         void initialization();
+        
 
     public :
+        static int M;
+        static int D;
+        static int G;
+        static int P;
+        vector<string>* nameOfMapVector;
+        string* currentStateToString();
         State *getCurrentState();
         void setCurrentState(State *currentState);
         vector<Player*>& getPlayers();
@@ -141,6 +149,7 @@ class GameEngine
 
         GameEngine();
         GameEngine(CommandProcessor *commandProcessor, Deck *deck,  Map *map);
+        GameEngine(CommandProcessor *commandProcessor);
         ~GameEngine();
 
         bool isCommandValid(string *command);
