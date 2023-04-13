@@ -1,10 +1,6 @@
-<<<<<<< Updated upstream
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
-=======
-#pragma once
->>>>>>> Stashed changes
 #include <string>
 #include <iostream>
 #include <fstream>

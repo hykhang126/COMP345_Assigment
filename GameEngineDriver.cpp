@@ -1,3 +1,4 @@
+#include "GameEngine.h"
 #include "GameEngine.cpp"
 
 using namespace std;
@@ -19,10 +20,11 @@ int main(int argc, char const *argv[])
         cout << "3. Show the current State\n";
         cout << "4. Input a command\n";
         cout << "5. startupPhase\n";
+        cout << "6. Tournament\n";
         cout << "99. End Demo\n";
         cout << "-----------------------------\n";
 
-        int choice = 5;
+        int choice = 6;
         string input;
         cout << "Please make your choice: " << endl;
         // cin >> choice;
@@ -60,6 +62,9 @@ int main(int argc, char const *argv[])
         case 5:
             test->startupPhase();
             break;
+        case 6:
+            test->Tournament();
+            
         case 99:
             cout << "-----Thank you and goodbye!----- \n";
             return 0;

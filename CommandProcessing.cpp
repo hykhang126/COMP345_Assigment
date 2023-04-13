@@ -1,9 +1,6 @@
 #include "CommandProcessing.h"
-<<<<<<< Updated upstream
 
 
-=======
->>>>>>> Stashed changes
 //Command method implementations
 //Parameterized constructors
 Command::Command(string * commandName, string * effectName): command(commandName), effect(effectName){}
@@ -161,7 +158,6 @@ void CommandProcessor::Validate(string *currentState, Command * com)
     string cmmnd = *(com->getCommandName());
     cout << "Your command is: " << cmmnd << endl;
 
-<<<<<<< Updated upstream
  
     //
     string s;
@@ -227,16 +223,6 @@ void CommandProcessor::Validate(string *currentState, Command * com)
             //delete currentState;
             *currentState = "MapLoaded";
             //currentState = new string("maploaded");
-=======
-    if( cmmnd.compare("loadmap") == 0 )
-    {
-        if(*currentState == "Start" || *currentState == "maploaded")
-        {
-            com->SaveEffect(new string("true"));
-            SaveCommand(com);
-            delete currentState;
-            currentState = new string("maploaded");
->>>>>>> Stashed changes
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{
@@ -244,24 +230,15 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-<<<<<<< Updated upstream
     if(cmmnd == "MapValidated")
-=======
-    if(cmmnd.compare("validatemap") == 0)
->>>>>>> Stashed changes
     {
         if(*currentState == "MapLoaded")
         {
             com->SaveEffect(new string("true"));
             SaveCommand(com);
-<<<<<<< Updated upstream
             //delete currentState;
             *currentState = "MapValidated";
             //currentState = new string("mapvalidated");
-=======
-            delete currentState;
-            currentState = new string("MapValidated");
->>>>>>> Stashed changes
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{
@@ -269,24 +246,15 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-<<<<<<< Updated upstream
     if(cmmnd == "PlayersAdded")
-=======
-    if(cmmnd.compare("addplayer") == 0)
->>>>>>> Stashed changes
     {
         if(*currentState == "MapValidated" || *currentState == "PlayersAdded")
         {
             com->SaveEffect(new string("true"));
             SaveCommand(com);
-<<<<<<< Updated upstream
             //delete currentState;
             *currentState = "PlayersAdded";
             //currentState = new string("playeradded");
-=======
-            delete currentState;
-            currentState = new string("PlayersAdded");
->>>>>>> Stashed changes
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{
@@ -294,25 +262,16 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-<<<<<<< Updated upstream
 
     if(cmmnd == "Start")
-=======
-    if(cmmnd.compare("gamestart") == 0)
->>>>>>> Stashed changes
     {
         if(*currentState == "PlayersAdded")
         {
             com->SaveEffect(new string("true"));
             SaveCommand(com);
-<<<<<<< Updated upstream
             //delete currentState;
             *currentState = "AssignReinforcement";
             //currentState = new string("assignreinforcement");
-=======
-            delete currentState;
-            currentState = new string("assignreinforcement");
->>>>>>> Stashed changes
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{
@@ -320,11 +279,7 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-<<<<<<< Updated upstream
     if(cmmnd == "Replay")
-=======
-    if(cmmnd.compare("replay") == 0)
->>>>>>> Stashed changes
     {
         if(*currentState == "Win")
         {
@@ -339,11 +294,7 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-<<<<<<< Updated upstream
     if(cmmnd == "Quit")
-=======
-    if(cmmnd.compare("quit") == 0)
->>>>>>> Stashed changes
     {
         if(*currentState == "Win")
         {
@@ -368,8 +319,9 @@ void CommandProcessor::SaveCommand(Command * com)
 
 Command* CommandProcessor::ReadCommand(){
     cout << "Please enter your command: " << endl;
-    string * cmmndString = new string("");
-    cin >> *cmmndString;
+    string * cmmndString = new string();
+    // cin >> *cmmndString;
+    getline(cin, *cmmndString);
     Command* cmmnd = new Command(cmmndString);
     return cmmnd;
 }

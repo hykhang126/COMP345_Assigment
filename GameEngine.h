@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <random>
+
 #include "LoggingObserver.h"
 #include "Map.h"
 #include "Orders.h"

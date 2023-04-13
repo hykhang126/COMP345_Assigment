@@ -113,6 +113,11 @@ void Transition::setDestination(State *destination)
 
 
 // GAME ENGINE CLASS
+int GameEngine::M;
+int GameEngine::P;
+int GameEngine::G;
+int GameEngine::D;
+
 vector<State*> GameEngine::getStateList()
 {
     return this->stateList;
@@ -219,7 +224,6 @@ void GameEngine::initialization()
     this->addStateToList(winState);
 
     this->setCurrentState(startState);
-<<<<<<< Updated upstream
 
     delete startTran, loadTran_1, loadTran_2, validMapTran, playersAddedTran_1, playersAddedTran_2, assignReinTran, issueOrderTran_1, 
             issueOrderTran_2, executeOrderTran_1, executeOrderTran_2, executeOrderTran_3, winTran_1, winTran_2;
@@ -232,14 +236,13 @@ void GameEngine::initialization()
     nameOfMapVector->push_back("germany.txt");
     nameOfMapVector->push_back("france.txt");
 
+    GameEngine::D = 0;
 }
 
 string* GameEngine::currentStateToString()
 {
     State* st = this->getCurrentState();
     return st->getName();
-=======
->>>>>>> Stashed changes
 }
 
 GameEngine::GameEngine()
@@ -259,8 +262,6 @@ GameEngine::GameEngine(CommandProcessor *commandProcessor, Deck *deck, Map *map)
     this->deck = deck;
     this->map = map;
 }
-
-
 
 GameEngine::~GameEngine()
 {
@@ -553,7 +554,10 @@ void GameEngine::startupPhase()
 
 Player* GameEngine::GameUpdate()
 {
-
+    startupPhase();
+    Player winner;
+    winner = mainGameLoop();
+    return nullptr;
 }
 
 void GameEngine::OutputResult(Player *winner, int i, int j)
@@ -561,19 +565,35 @@ void GameEngine::OutputResult(Player *winner, int i, int j)
     cout << *winner->getName() << endl;
     ofstream logFile;
     logFile.open (".\\gameResultLog.txt", ios::app);
-    logFile << "Map: " << i << ", Game: " << j << ", Winner: " << *winner->getName() << endl;
+    if (winner != nullptr)
+        logFile << "Map: " << i << ", Game: " << j << ", Winner: " << *winner->getName() << endl;
+    else
+        logFile << "Map: " << i << ", Game: " << j << ", Winner: DRAW!" << endl;
+    
     logFile.close();
 }
 
 void GameEngine::Tournament()
 {
+    commandProcessor->GetCommand(currentState->getName());
+
     ofstream logFile;
     logFile.open (".\\gameResultLog.txt", ios::app);
     logFile << "Tournament mode:" << endl << "M: ";
-    //outout list a map names
-    logFile << "P: " << endl;
-    logFile << "G: " << endl;
-    logFile << "D: " << endl;
+    //output list a map names
+    for (int i = 0; i < GameEngine::M; i++)
+    {
+        logFile << "Map " << i << ". ";
+    }
+    
+    // for (Map* map : *mapList)
+    // {
+    //     logFile << "A" << ", ";
+    // }
+    logFile << "\n";
+    logFile << "P: " << GameEngine::P << endl;
+    logFile << "G: " << GameEngine::G << endl;
+    logFile << "D: " << GameEngine::D << endl;
     logFile << "Results: " << endl;
     logFile.close();
 
@@ -581,7 +601,7 @@ void GameEngine::Tournament()
     {
         for (int j = 0; i < 2; j++)
         {
-            Player* winner = GameUpdate();
+            Player* winner = &GameUpdate();
             OutputResult(winner, i, j);
         }
         
