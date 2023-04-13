@@ -2,8 +2,11 @@
 #include <list>
 #include <string>
 #include <vector>
+#include <iostream>
+#include <algorithm>
 #include "LoggingObserver.h"
 #include "Map.h"
+#include "Orders.h"
 #include "Player.h"
 #include "Cards.h"
 #include "CommandProcessing.h"
@@ -60,7 +63,7 @@ class State
 
 
 // GameEngine class
-class GameEngine
+class GameEngine: public Subject, public ILoggable
 {
     private :
         // currentState to store current state of the game
@@ -125,17 +128,15 @@ class GameEngine
         vector<State*> getStateList();
         void addStateToList(State* state);
 
-
         GameEngine();
 
         bool playerOwnsContinent(Player * player, Continent* continent, Map* map);
 
-        string stringToLog();
+        string stringToLog() override;
         void reinforcementPhase();
         void issueOrdersPhase();
         void executeOrdersPhase();
         Player mainGameLoop();
-    
 
         vector<Player*>* getGamePlayers();
         void addPlayerToList(Player* player);
@@ -147,7 +148,6 @@ class GameEngine
         Map *getMap();
         void setMap(Map *map);
 
-        GameEngine();
         GameEngine(CommandProcessor *commandProcessor, Deck *deck,  Map *map);
         GameEngine(CommandProcessor *commandProcessor);
         ~GameEngine();
@@ -155,7 +155,9 @@ class GameEngine
         bool isCommandValid(string *command);
         void distributeTerritory(Player* player);
 
-        string stringToLog();
-
         void startupPhase();
+
+        Player* GameUpdate();
+        void OutputResult(Player *winner, int i, int j);
+        void Tournament();
 };

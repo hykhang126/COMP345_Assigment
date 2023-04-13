@@ -1,6 +1,10 @@
+<<<<<<< Updated upstream
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
+=======
+#pragma once
+>>>>>>> Stashed changes
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -11,12 +15,11 @@
 using namespace std;
 
 //Class Command declarations
-class Command{
+class Command: public Subject, public ILoggable{
     private:
-    string *command;
-    string *effect;
 
-    public:
+
+public:
     //Default constructor
     Command();
     //parameterized constructors
@@ -33,10 +36,13 @@ class Command{
     string* toString();
     string* getCommandName();
     string getEffect();
+    string stringToLog() override;
+    string *command;
+    string *effect;
 };
 
 //Class CommandProcessor
-class CommandProcessor
+class CommandProcessor: public Subject, public ILoggable
 {
     private:
     vector<Command*> * commandList;
@@ -55,6 +61,7 @@ class CommandProcessor
     vector<Command*> * ReturnCommandList();
     void ShowCommandList();
     friend ostream& operator << (ostream& outPuting, CommandProcessor&);
+    string stringToLog() override;
 };
 
 
@@ -80,7 +87,7 @@ class FileCommandProcessorAdapter : public CommandProcessor{
     FileLineReader *flr;
     vector<Command*> * ReadCommand();
     public:
-    void GetCommand(string * curState);
+    virtual void GetCommand(string * curState);
     FileCommandProcessorAdapter(string f);
 };
 #endif

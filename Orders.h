@@ -1,7 +1,7 @@
 
 #ifndef ORDERS_H
 #define ORDERS_H
-
+#pragma once
 #include <iostream>
 #include <vector>
 #include "LoggingObserver.h"

@@ -7,9 +7,6 @@
 #include "LoggingObserver.cpp"
 #include "Map.cpp"
 
-#include <iostream>
-#include <algorithm>
-
 
 
 // STATE CLASS
@@ -180,20 +177,20 @@ void GameEngine::initialization()
     winState = new State(new string("Win"));
 
     // Create all transitions;
-    Transition *startTran = new Transition(new string("loadMap"), loadState);
-    Transition *loadTran_1 = startTran;
-    Transition *loadTran_2 = new Transition(new string("validateMap"), validMapState);
-    Transition *validMapTran = new Transition(new string("addPlayer"), playersAddedState);
-    Transition *playersAddedTran_1 = validMapTran;
-    Transition *playersAddedTran_2 = new Transition(new string("assigncountries"), assignReinState);
-    Transition *assignReinTran = new Transition(new string("issueorder"), issueOrderState);
-    Transition *issueOrderTran_1 = assignReinTran;
-    Transition *issueOrderTran_2 = new Transition(new string("endissueorders"), executeOrderState);
-    Transition *executeOrderTran_1 = new Transition(new string("execorder"), executeOrderState);
-    Transition *executeOrderTran_2 = new Transition(new string("endexecorders"), assignReinState);
-    Transition *executeOrderTran_3 = new Transition(new string("win"), winState);
-    Transition *winTran_1 = new Transition(new string("play"), startState);
-    Transition *winTran_2 = new Transition(new string("end"), NULL);
+    startTran = new Transition(new string("loadMap"), loadState);
+    loadTran_1 = startTran;
+    loadTran_2 = new Transition(new string("validateMap"), validMapState);
+    validMapTran = new Transition(new string("addPlayer"), playersAddedState);
+    playersAddedTran_1 = validMapTran;
+    playersAddedTran_2 = new Transition(new string("assigncountries"), assignReinState);
+    assignReinTran = new Transition(new string("issueorder"), issueOrderState);
+    issueOrderTran_1 = assignReinTran;
+    issueOrderTran_2 = new Transition(new string("endissueorders"), executeOrderState);
+    executeOrderTran_1 = new Transition(new string("execorder"), executeOrderState);
+    executeOrderTran_2 = new Transition(new string("endexecorders"), assignReinState);
+    executeOrderTran_3 = new Transition(new string("win"), winState);
+    winTran_1 = new Transition(new string("play"), startState);
+    winTran_2 = new Transition(new string("end"), NULL);
 
     // Add all 14 transitions to 8 states;
     startState->addTransitionsToState(startTran);
@@ -222,6 +219,7 @@ void GameEngine::initialization()
     this->addStateToList(winState);
 
     this->setCurrentState(startState);
+<<<<<<< Updated upstream
 
     delete startTran, loadTran_1, loadTran_2, validMapTran, playersAddedTran_1, playersAddedTran_2, assignReinTran, issueOrderTran_1, 
             issueOrderTran_2, executeOrderTran_1, executeOrderTran_2, executeOrderTran_3, winTran_1, winTran_2;
@@ -240,6 +238,8 @@ string* GameEngine::currentStateToString()
 {
     State* st = this->getCurrentState();
     return st->getName();
+=======
+>>>>>>> Stashed changes
 }
 
 GameEngine::GameEngine()
@@ -271,6 +271,8 @@ GameEngine::~GameEngine()
     }
     
     delete gamePlayers;
+    delete startTran, loadTran_1, loadTran_2, validMapTran, playersAddedTran_1, playersAddedTran_2, assignReinTran, issueOrderTran_1,
+        issueOrderTran_2, executeOrderTran_1, executeOrderTran_2, executeOrderTran_3, winTran_1, winTran_2;
 }
 
 bool GameEngine::isCommandValid(string *command)
@@ -288,6 +290,7 @@ bool GameEngine::isCommandValid(string *command)
         {
             currentState = currTransitions[i]->getDestination();
             cout << "Command Valid. State changed\n" << endl;
+            notify(this);
             return true;
         }
     }
@@ -324,33 +327,47 @@ bool GameEngine::playerOwnsContinent(Player* player, Continent* continent, Map* 
 
 void GameEngine::reinforcementPhase() {
     // # of territories / 3 to added to the army pool
+    cout << "BEGINNING OF REINFORCEMENT PHASE\n" << endl;
     for(Player* player: this->getPlayers()){
+        int* newReinforcementValue;
         int reinforcementValue = player->getTerritoryCollection()->size() / 3;
-
+        cout << "Based on the number of territories " << *player->getName() <<" owns, your calculated reinforcement value is " << reinforcementValue << endl;
         if(reinforcementValue < 3) { //minimum of 3 army points per round
-            player->setReinforcement(player->getReinforcement() + 3);
+            cout << "Since that value is less than 3, you will have 3 armies added to your reinforcements this round" << endl;
+            newReinforcementValue = new int(3 + *player->getReinforcement());
+            player->setReinforcement(newReinforcementValue);
         } else { //if territories/3 is greater than 3, add that number to the reinforcement armies
-            player->setReinforcement(player->getReinforcement() + reinforcementValue);
+            cout << *player->getName() <<" will have " << reinforcementValue << " armies added to they reinforcements" << endl;
+            newReinforcementValue = new int(reinforcementValue + *player->getReinforcement());
+            player->setReinforcement(newReinforcementValue);
         }
+        cout << *player->getName() <<" now has " << *player->getReinforcement() << " reinforcement armies\n" << endl;
     }
 
     //Bonus Army
     for(Player* player: this->getPlayers()) {
+        int* newReinforcementValue;
         for(Continent* c : *map->getContinentList()) {
             if(this->playerOwnsContinent(player, c, map)){
-                player->setReinforcement(player->getReinforcement() + *c->getPoint());
+                cout << *player->getName() <<" owns all the territories on " << *c->getName() << ", they will be given a bonus of " << *c->getPoint() << endl;
+                newReinforcementValue = new int(*c->getPoint() + *player->getReinforcement());
+                player->setReinforcement(newReinforcementValue);
+                cout << *player->getName() <<" now has " << *player->getReinforcement() << " reinforcement armies\n" << endl;
             }
         }
     }
 }
 
 void GameEngine::issueOrdersPhase() {
+    cout << "ISSUE ORDERS PHASE\n" << endl; 
     for(Player* player: this->getPlayers()){
+        cout << *player->getName() << " will now issue orders\n" << endl;
         player->issueOrder(gamePlayers, deck);
     }
 }
 
 void GameEngine::executeOrdersPhase() {
+    cout << "EXECUTE ORDERS PHASE\n" << endl;
     for(Player* player: this->getPlayers()){
         OrdersList* orderList = player->getOrdersList();
         while(!orderList->getList().empty()) {
@@ -365,8 +382,32 @@ void GameEngine::executeOrdersPhase() {
 }
 
 Player GameEngine::mainGameLoop() {
+    cout << "MAIN GAME LOOP" << endl;
     Player* winner = nullptr;
     do{
+        //Remove players who do not own any territories
+        for (int i = 0; i < gamePlayers->size(); i++) {
+            if ((*gamePlayers)[i]->getTerritoryCollection()->empty()) {
+                cout << "Player " << *((*gamePlayers)[i]->getName()) << " has been eliminated from the game as he does not own any territories.\n";
+                delete (*gamePlayers)[i];
+                gamePlayers->erase(gamePlayers->begin() + i);
+                i--;
+            }
+        }       
+
+        //Declare winner if a player owns all territories
+        for(Player* player : *gamePlayers){
+            if(map->countTerritory() == player->getTerritoryCollection()->size()){
+                cout << "Player " << *(player->getName()) << " owns all territories on the map. They win the game!\n";
+                winner = player;
+                break;
+            }
+        }
+
+        if(winner != nullptr) {
+            break;
+        }
+
         cout << "Starting reinforcement phase" << endl;
         this->reinforcementPhase();
         cout << "Starting issue orders phase" << endl;
@@ -374,27 +415,7 @@ Player GameEngine::mainGameLoop() {
         cout << "Starting execute orders phase" << endl;
         this->executeOrdersPhase();
 
-        //Remove players who do not own any territories
-        vector<Player*>::iterator it = gamePlayers->begin();
-        while(it != gamePlayers->end()) {
-            if ((*it)->getTerritoryCollection()->empty()){
-                cout << "Player " << *((*it)->getName()) << " has been eliminated from the game.\n";
-                delete *it;
-                it = gamePlayers->erase(it);
-            } else {
-                ++it;
-            }
-        }
-
-        //Declare winner if a player owns all territories
-        for(Player* player : *gamePlayers){
-            if(map->countTerritory() == player->getTerritoryCollection()->size()){
-                cout << "Player " << *(player->getName()) << " owns all territories on the map. They win the game!\n";
-                winner = player;
-            }
-        }
-
-    } while(winner == nullptr);
+    } while(true);
    
    return *winner;
 }
@@ -501,7 +522,7 @@ void GameEngine::startupPhase()
             auto randomEngine = std::default_random_engine {randomDevice()};
             std::shuffle(gamePlayers->begin(), gamePlayers->end(), randomEngine);
 
-              for (const auto& player : *gamePlayers)
+            for (const auto& player : *gamePlayers)
             {
                 cout << endl << "---" << *player->getName() << "---" << endl;
 
@@ -526,5 +547,44 @@ void GameEngine::startupPhase()
         command->SaveEffect(new string("executed"));
         cout << "---------------------" << endl;
     }
+
+    
 }
 
+Player* GameEngine::GameUpdate()
+{
+
+}
+
+void GameEngine::OutputResult(Player *winner, int i, int j)
+{
+    cout << *winner->getName() << endl;
+    ofstream logFile;
+    logFile.open (".\\gameResultLog.txt", ios::app);
+    logFile << "Map: " << i << ", Game: " << j << ", Winner: " << *winner->getName() << endl;
+    logFile.close();
+}
+
+void GameEngine::Tournament()
+{
+    ofstream logFile;
+    logFile.open (".\\gameResultLog.txt", ios::app);
+    logFile << "Tournament mode:" << endl << "M: ";
+    //outout list a map names
+    logFile << "P: " << endl;
+    logFile << "G: " << endl;
+    logFile << "D: " << endl;
+    logFile << "Results: " << endl;
+    logFile.close();
+
+    for (int i = 0; i < 1; i++)
+    {
+        for (int j = 0; i < 2; j++)
+        {
+            Player* winner = GameUpdate();
+            OutputResult(winner, i, j);
+        }
+        
+    }
+    
+}
