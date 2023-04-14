@@ -467,8 +467,10 @@ void GameEngine::startupPhase()
     MapLoader mapLoader;
     int playerCount = gamePlayers->size();
 
-    cout << "\n  ***  Please input commands  ***  "<< endl;
-    commandProcessor->GetCommand(currentState->getName());
+    cout << "\n  ***  Reading input commands  ***  "<< endl;
+    string fileName = "CommandLines.txt";
+    CommandProcessor * cmdp = new FileCommandProcessorAdapter(fileName);
+    cmdp->GetCommand(currentState->getName());
     
     cout << "\n  ***  Executing commands  ***  "<< endl;
     vector<Command*> *commandList = commandProcessor->ReturnCommandList();
@@ -481,7 +483,7 @@ void GameEngine::startupPhase()
         // Check if this command is already executed. If yes then skip it
         if (effect.compare("true") != 0) continue;
 
-        if (choice.compare("loadmap") == 0)
+        if (choice.compare("MapLoaded") == 0)
         {
             string mapName = "france.txt";
             map = mapLoader.loadMapFromFile(mapName);
@@ -489,13 +491,13 @@ void GameEngine::startupPhase()
             // Update State
             currentState = loadState;
         }
-        else if (choice.compare("validatemap") == 0)
+        else if (choice.compare("MapValidated") == 0)
         {
             map->validate();
             // Update State
             currentState = validMapState;
         }
-        else if (choice.compare("addplayer") == 0)
+        else if (choice.compare("PlayersAdded") == 0)
         {
             playerCount++;
             string playerName = "Player";
@@ -516,7 +518,7 @@ void GameEngine::startupPhase()
             currentState = playersAddedState;
 
         }
-        else if (choice.compare("gamestart") == 0)
+        else if (choice.compare("Start") == 0)
         {
             // b) determine randomly the order of play of the players in the game
             std::random_device randomDevice;
@@ -557,7 +559,7 @@ Player* GameEngine::GameUpdate()
     startupPhase();
     Player winner;
     winner = mainGameLoop();
-    return nullptr;
+    return new Player(winner);
 }
 
 void GameEngine::OutputResult(Player *winner, int i, int j)
@@ -601,7 +603,7 @@ void GameEngine::Tournament()
     {
         for (int j = 0; i < 2; j++)
         {
-            Player* winner = &GameUpdate();
+            Player* winner = GameUpdate();
             OutputResult(winner, i, j);
         }
         
