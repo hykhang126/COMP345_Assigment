@@ -5,10 +5,10 @@ using namespace std;
 
 
 class PlayerStrategy{
-private :
+
+
+protected:
     Player * p;
-
-
 public :
     virtual void issueOrder() = 0;
     virtual vector<Territory*>* toAttack() = 0;
@@ -22,4 +22,11 @@ public :
 
 class Human : public PlayerStrategy {
 
+};
+
+
+class Aggressive: public PlayerStrategy {
+    void issueOrder() override;
+    vector<Territory *> * toAttack() override;
+    vector<Territory *> * toDefend() override;
 };

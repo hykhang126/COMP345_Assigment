@@ -9,8 +9,11 @@ Order::Order() {
     description = new string("Not Defined");
     isExecuted = new bool(false); //default execution status is false
     effect = new string("Not Defined");
-    isValid = new bool(false); //default validation status is false
+    isValid = new bool(false); //default validation status is
+    deck = new Deck(50);
 }
+
+
 /**
  * Destructor for Order Class
 */
@@ -104,6 +107,8 @@ string Order::stringToLog() {
     string test = getEffect();
     return "LOG: Order " +getDescription() + " executed.";
 }
+
+
 
 // ------------------- DEPLOY ORDER --------------------------
 /**
@@ -891,6 +896,11 @@ void Negotiate::setEnemy(Player* enemy) {
 */
 OrdersList::OrdersList() {
     ordersList = new vector<Order*> {};
+    this->deck = new Deck(50);
+}
+OrdersList::OrdersList(Deck* deck) {
+    ordersList = new vector<Order*> {};
+    this->deck = deck;
 }
 /**
  * Destructor for OrdersList Class

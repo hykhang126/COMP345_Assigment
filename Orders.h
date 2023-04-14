@@ -29,9 +29,11 @@ private:
     bool* isExecuted; //Status of Order execution (Executed: true. Not executed: false)
     string* effect; // Specifies the effect of the Order
     bool* isValid; //Status of Order Validation (Valid: true. Not Valid: false)
+    Deck* deck;
 public:
     //default constructor
     Order();
+
     //destructor
     ~Order();
 
@@ -330,6 +332,7 @@ private:
 public:
     //default constructor
     OrdersList();
+    OrdersList(Deck* deck);
     //destructor
     ~OrdersList();
 
@@ -353,6 +356,8 @@ public:
     void setList(vector<Order*> list);
 
     string stringToLog() override;
+
+    Deck* deck;
 };
 
 #endif //ORDERS_H
