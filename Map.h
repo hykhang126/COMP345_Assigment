@@ -73,7 +73,7 @@ class Territory{
         Continent* getContinent();
         string* getName();
         Player* getOwner();
-        int* getArmies();
+        int * getArmies();
         void setOwner( Player *player);
         void setArmies( int *armies);
         void setName(string *name);
@@ -86,6 +86,7 @@ class Territory{
         Territory& operator= (const Territory &ter);
         Territory(Territory const &ter);
         Territory();
+        bool operator < (const Territory& ter) const;
 };
 
 //Declaration of Map class

@@ -26,6 +26,25 @@ class Human : public PlayerStrategy {
 
 
 class Aggressive: public PlayerStrategy {
+    Aggressive();
+    Aggressive(Player*);
+    ~Aggressive();
+    friend std::ostream& operator<<(std::ostream &out, const Aggressive &Aggressive);
+    Aggressive(const Aggressive&);
+    Aggressive& operator =(const Aggressive&);
+    void issueOrder() override;
+    vector<Territory *> * toAttack() override;
+    vector<Territory *> * toDefend() override;
+};
+
+
+class Benevolent: public PlayerStrategy {
+    Benevolent();
+    Benevolent(Player*);
+    ~Benevolent();
+    friend std::ostream& operator<<(std::ostream &out, const Benevolent &Benevolent);
+    Benevolent(const Benevolent&);
+    Benevolent& operator =(const Benevolent&);
     void issueOrder() override;
     vector<Territory *> * toAttack() override;
     vector<Territory *> * toDefend() override;

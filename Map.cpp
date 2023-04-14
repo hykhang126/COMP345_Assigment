@@ -313,8 +313,7 @@ void Territory::setAdjacentTerritory(vector<Territory*>* adj)
     this->adjacentTerritory = adj;
 }
 
-int* Territory::getArmies()
-{
+int * Territory::getArmies() {
     return armies;
 }
 
@@ -401,6 +400,10 @@ Territory::Territory()
     name = new string("");
     continent = new Continent();
     coordinate = new Coordinate();
+}
+
+bool Territory::operator<(const Territory &ter) const {
+    return (armies < ter.armies);
 }
 
 //Definition of Coordinate class
