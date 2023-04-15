@@ -127,7 +127,7 @@ void Aggressive::issueOrder() {
          << " their total of " << *p->getReinforcement() << " reinforcements" << endl;
 
     p->getOrdersList()->addOrder(new Deploy(p->getReinforcement(), strongestTerritory, p));
-
+    int secondMaxArmies = 0;
     while (p->hasCardInHand("airlift")) {
         cout << "Starting airlift for aggressive player " << *p->getName() << endl;
         cout << "The following is a list of the territories aggressive " << *p->getName() << " owns: " << endl;
@@ -141,7 +141,7 @@ void Aggressive::issueOrder() {
 
 
         int iteratorIndex = 0;
-        int secondMaxArmies = 0;
+        secondMaxArmies = 0;
         int secondMaxArmiesIndex = 0;
         for (Territory *territory: *p->getTerritoryCollection()) {
             if (territory->getName() == strongestTerritory->getName()) {
@@ -181,9 +181,11 @@ void Aggressive::issueOrder() {
         cout << "couldn't find a suitable enemy to attack this turn for aggressive player " << *p->getName() <<endl;
     } else {
         cout << "adding order for aggressive player " << *p->getName() << " to attack " << *attackList->back()->getName()
-             << " with " << *strongestTerritory->getName() << endl;
+             << " holding " << *attackList->back()->getArmies() << " armies with " << *strongestTerritory->getName() << " that will hold " <<
+             (*strongestTerritory->getArmies()+*p->getReinforcement()+secondMaxArmies) << " armies after deploy and airlift order executed"
+             << " (currently only holding " << *strongestTerritory->getArmies() << ")" << endl;
         p->getOrdersList()->addOrder(
-                new Advance(new int(*strongestTerritory->getArmies()+*p->getReinforcement()), strongestTerritory, attackList->back(), p,
+                new Advance(new int(*strongestTerritory->getArmies()+*p->getReinforcement()+secondMaxArmies), strongestTerritory, attackList->back(), p,
                             this->p->getOrdersList()->deck));
     }
 }
@@ -322,7 +324,7 @@ NeutralPlayerStrategy::NeutralPlayerStrategy() {
 
 NeutralPlayerStrategy::~NeutralPlayerStrategy() {
     delete wasAttacked;
-    delete agStrat;
+//    delete agStrat;
     delete p;
 }
 
@@ -336,7 +338,7 @@ void NeutralPlayerStrategy::issueOrder() {
         if(agStrat->getPlayer() == nullptr) {
             agStrat->setPlayer(p);
         } else {
-            agStrat->issueOrder();
+//            agStrat->issueOrder();
         }
     }
 }
@@ -348,7 +350,7 @@ vector<Territory*>* NeutralPlayerStrategy::toAttack() {
     }
 
     if(*wasAttacked) {
-      return agStrat->toAttack();
+//      return agStrat->toAttack();
     } else {
         return new vector<Territory*>();
     }
@@ -361,7 +363,7 @@ vector<Territory*>* NeutralPlayerStrategy::toDefend() {
     }
 
     if(*wasAttacked) {
-      return agStrat->toDefend();
+//      return agStrat->toDefend();
     } else {
         return new vector<Territory*>();
     }
@@ -375,14 +377,14 @@ NeutralPlayerStrategy::NeutralPlayerStrategy(Player* p) {
 
 NeutralPlayerStrategy::NeutralPlayerStrategy(const NeutralPlayerStrategy& other) {
     this->wasAttacked = new bool(*other.wasAttacked);
-    this->agStrat = new Aggressive(*other.agStrat);
+//    this->agStrat = new Aggressive(*other.agStrat);
     setPlayer(other.getPlayer());
 }
 
 NeutralPlayerStrategy& NeutralPlayerStrategy::operator=(const NeutralPlayerStrategy& rhs) {
     setPlayer(rhs.getPlayer());
     this->wasAttacked = new bool(*rhs.wasAttacked);
-    this->agStrat = new Aggressive(*rhs.agStrat);
+//    this->agStrat = new Aggressive(*rhs.agStrat);
     return *this;
 }
 

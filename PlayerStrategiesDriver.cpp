@@ -99,6 +99,7 @@ int main() {
     player2->setReinforcement(new int(5));
     player2->issueOrder(players, deck);
    listOfOrders2->getList().front()->execute();
+   listOfOrders2->getList().at(1)->execute();
     listOfOrders2->getList().back()->execute();
     //SHOWING THAT MAIN GAME LOOP REMOVES PLAYERS WITH NO TERRITORIES AND HAS A PLAYER WIN IF OWN ALL TERRITORIES
 //    GameEngine *testWinner = new GameEngine(commandProcessor, deck, map);
