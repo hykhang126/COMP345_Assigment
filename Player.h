@@ -25,6 +25,7 @@ class Player{
         Hand* hand;
         vector<Territory*>* tCollection;
         OrdersList* listOfOrders;
+        bool* wasAttacked = new bool(false);
 
         vector<Territory*>* territoriesToAttack;
         vector<Territory*>* territoriesToDefend;
@@ -63,6 +64,7 @@ class Player{
         int* getReinforcement();
         vector<Player*>* getNegotiating();
         bool* getHasConquered();
+        bool* getWasAttacked();
         //setters
         void setTerritoriesToAttack();
         void setTerritoriesToDefend();
@@ -75,5 +77,6 @@ class Player{
         void setNegotiating(vector<Player*>* list);
         void setHasConquered(bool* check);
         void setStrategy(PlayerStrategy*);
+        void setWasAttacked();
 
 };

@@ -1,8 +1,16 @@
 #pragma once
 #include "Map.h"
+#include "Player.h"
+#include <list>
+#include <vector>
+#include <string>
+#include <iostream>
+#include <iterator>
+#include <algorithm>
 
 using namespace std;
 
+class Aggressive;
 
 class PlayerStrategy{
 
@@ -18,6 +26,8 @@ public :
     friend std::ostream& operator<<(std::ostream &out, const PlayerStrategy &PlayerStrategy);
     PlayerStrategy(const PlayerStrategy&);
     PlayerStrategy& operator =(const PlayerStrategy&);
+    Player* getPlayer() const;
+    void setPlayer(Player* newPlayer);
 };
 
 class Human : public PlayerStrategy {
@@ -48,4 +58,35 @@ class Benevolent: public PlayerStrategy {
     void issueOrder() override;
     vector<Territory *> * toAttack() override;
     vector<Territory *> * toDefend() override;
+};
+
+
+class NeutralPlayerStrategy : public PlayerStrategy {
+    public:
+        void issueOrder() override;
+        vector<Territory*>* toAttack() override;
+        vector<Territory*>* toDefend() override;
+        NeutralPlayerStrategy();
+        NeutralPlayerStrategy(Player* p);
+        ~NeutralPlayerStrategy();
+        friend std::ostream& operator<<(std::ostream &out, const NeutralPlayerStrategy &neutral);
+        NeutralPlayerStrategy(const NeutralPlayerStrategy&);
+        NeutralPlayerStrategy& operator =(const NeutralPlayerStrategy&);
+    
+    private:
+        bool* wasAttacked;
+        Aggressive* agStrat;
+};
+
+class CheaterPlayerStrategy : public PlayerStrategy {
+    public:
+        void issueOrder() override;
+        vector<Territory*>* toAttack() override;
+        vector<Territory*>* toDefend() override;
+        CheaterPlayerStrategy();
+        CheaterPlayerStrategy(Player* p);
+        ~CheaterPlayerStrategy();
+        friend std::ostream& operator<<(std::ostream &out, const CheaterPlayerStrategy &Cheater);
+        CheaterPlayerStrategy(const CheaterPlayerStrategy&);
+        CheaterPlayerStrategy& operator =(const CheaterPlayerStrategy&);
 };
