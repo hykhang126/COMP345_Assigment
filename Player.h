@@ -18,6 +18,7 @@ class Territory;
 class Hand;
 class OrdersList;
 class Player;
+class PlayerStrategy;
 
 class Player{
     private :
@@ -38,7 +39,7 @@ class Player{
         //Basic constructor
         Player();
         //Contructor taking in all attributes as params
-        Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersList* listOfOrders);
+        Player(string* name, vector<Territory*> *tCollection, Hand* hand, OrdersList* listOfOrders);
         // Constructor that also takes in player strategy
         Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersList* listOfOrders, PlayerStrategy* playerStrategy);
         //Copy constructor
@@ -74,6 +75,6 @@ class Player{
         void setName(string name);
         void setNegotiating(vector<Player*>* list);
         void setHasConquered(bool* check);
-        void setStrategy(PlayerStrategy*);
+        void setStrategy(PlayerStrategy* ps);
 
 };

@@ -26,8 +26,6 @@ class Human : public PlayerStrategy {
 
 
 class Aggressive: public PlayerStrategy {
-    Aggressive();
-    Aggressive(Player*);
     ~Aggressive();
     friend std::ostream& operator<<(std::ostream &out, const Aggressive &Aggressive);
     Aggressive(const Aggressive&);
@@ -35,6 +33,11 @@ class Aggressive: public PlayerStrategy {
     void issueOrder() override;
     vector<Territory *> * toAttack() override;
     vector<Territory *> * toDefend() override;
+
+public:
+    Aggressive();
+
+    Aggressive(Player*);
 };
 
 

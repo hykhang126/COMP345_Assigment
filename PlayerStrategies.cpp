@@ -87,6 +87,18 @@ vector<Territory *> *Aggressive::toDefend() {
         }
         iteratorIndex++;
     }
+    if (territoriesToDefend->size() == 0){
+         maxArmies = 0;
+         territoryMaxArmiesIndex = 0;
+         iteratorIndex = 0;
+        for (Territory *territory: *defendList) {
+            if (*territory->getArmies() >= maxArmies) {
+                maxArmies = *territory->getArmies();
+                territoriesToDefend->push_back(territory);
+            }
+            iteratorIndex++;
+        }
+    }
     return territoriesToDefend;
 }
 
@@ -103,8 +115,8 @@ void Aggressive::issueOrder() {
     cout << "Aggressive " << *p->getName() << " currently has " << *p->getReinforcement()
          << " available armies to deploy."
          << endl;
-    cout << "Aggressive " << *p->getName() << " deploying to " << strongestTerritory
-         << " their total of " << *p->getReinforcement() << " reinforcements";
+    cout << "Aggressive " << *p->getName() << " deploying to " << *strongestTerritory->getName()
+         << " their total of " << *p->getReinforcement() << " reinforcements" << endl;
 
     p->getOrdersList()->addOrder(new Deploy(p->getReinforcement(), strongestTerritory, p));
 
@@ -158,12 +170,12 @@ void Aggressive::issueOrder() {
     vector<Territory *> *attackList = this->toAttack();
     if (attackList->size() == 0) {
 
-        cout << "couldn't find a suitable enemy to attack this turn for aggressive player " << *p->getName();
+        cout << "couldn't find a suitable enemy to attack this turn for aggressive player " << *p->getName() <<endl;
     } else {
-        cout << "adding order for aggressive player " << *p->getName() << " to attack " << attackList->back()->getName()
-             << " with " << strongestTerritory->getName();
+        cout << "adding order for aggressive player " << *p->getName() << " to attack " << *attackList->back()->getName()
+             << " with " << *strongestTerritory->getName() << endl;
         p->getOrdersList()->addOrder(
-                new Advance(strongestTerritory->getArmies(), strongestTerritory, attackList->back(), p,
+                new Advance(new int(*strongestTerritory->getArmies()+*p->getReinforcement()), strongestTerritory, attackList->back(), p,
                             this->p->getOrdersList()->deck));
     }
 }

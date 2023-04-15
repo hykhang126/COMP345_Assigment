@@ -11,21 +11,18 @@ Player::Player() {
     this->hasConquered = new bool(false);
 }
 
-Player::Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersList* listOfOrders) {
-    this->name = new string(*name);
-    this->hand = new Hand(*hand);
-    this->tCollection = new vector<Territory*>;
-    for(auto territory : tCollection) {
-        this->tCollection->push_back(territory);
-    }
-    this->listOfOrders = new OrdersList(*listOfOrders);
+Player::Player(string* name, vector<Territory*> *tCollection, Hand* hand, OrdersList* listOfOrders) {
+    this->name = name;
+    this->hand = hand;
+    this->tCollection = tCollection;
+    this->listOfOrders = listOfOrders;
     this->reinforcement = new int(0);
     this->negotiating = new vector<Player*> {};
     this->hasConquered = new bool(false);
     this->territoriesToAttack = new vector<Territory*>();
     this->territoriesToDefend = new vector<Territory*>();
     // default constructor with no ps parameter uses human player
-    this->playerStrategy = new Human();
+//    this->playerStrategy = new Human();
 }
 
 Player::Player(const Player& p) {
