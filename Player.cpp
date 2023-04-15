@@ -431,6 +431,14 @@ void Player::setHasConquered(bool* check) {
     hasConquered = check;
 }
 
+bool* Player::getWasAttacked() {
+    return this->wasAttacked;
+}
+
+void Player::setWasAttacked() {
+    *this->wasAttacked = true;
+}
+
 Player::Player(string *name, vector<Territory *> tCollection, Hand *hand, OrdersList *listOfOrders,
                PlayerStrategy *playerStrategy) {
     this->name = new string(*name);

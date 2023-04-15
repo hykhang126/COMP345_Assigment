@@ -38,6 +38,14 @@ PlayerStrategy &PlayerStrategy::operator=(const PlayerStrategy &) {
     return *this;
 }
 
+Player* PlayerStrategy::getPlayer() const{
+    return p;
+}
+
+void PlayerStrategy::setPlayer(Player* newPlayer) {
+    this->p = newPlayer;
+}
+
 vector<Territory *> *Aggressive::toAttack() {
 
     vector<Territory *> *defendList = p->getTerritoryCollection();
@@ -293,4 +301,126 @@ void Benevolent::issueOrder() {
             }
         }
     }
+}
+
+std::ostream& operator<<(ostream &out, const NeutralPlayerStrategy &neutral) {
+    if(*neutral.wasAttacked) {
+        out << *neutral.agStrat;
+    } else {
+        out << "Neutral strategy: Computer player that never issues any order. If a Neutral player is attacked, it becomes an Aggressive player." << endl;
+        out << "Player info: " << endl;
+        out << *neutral.getPlayer();
+    }
+    return out;
+}
+
+NeutralPlayerStrategy::NeutralPlayerStrategy() {
+    p = new Player();
+    wasAttacked = new bool(false);
+    agStrat = new Aggressive();
+}
+
+NeutralPlayerStrategy::~NeutralPlayerStrategy() {
+    delete wasAttacked;
+    delete agStrat;
+    delete p;
+}
+
+void NeutralPlayerStrategy::issueOrder() {
+    if(*p->getWasAttacked() && *wasAttacked == false) {
+        *wasAttacked = true;
+        cout << "   Neutral player " << *p->getName() << " was attacked! This player will now become aggressive!" << endl;
+    }
+
+    if(*wasAttacked) {
+        if(agStrat->getPlayer() == nullptr) {
+            agStrat->setPlayer(p);
+        } else {
+            agStrat->issueOrder();
+        }
+    }
+}
+
+vector<Territory*>* NeutralPlayerStrategy::toAttack() {
+    if(*p->getWasAttacked() && *wasAttacked == false) {
+        *wasAttacked = true;
+        cout << "   Neutral player " << *p->getName() << " was attacked! This player will now become aggressive!" << endl;
+    }
+
+    if(*wasAttacked) {
+      return agStrat->toAttack();
+    } else {
+        return new vector<Territory*>();
+    }
+}
+
+vector<Territory*>* NeutralPlayerStrategy::toDefend() {
+    if(*p->getWasAttacked() && *wasAttacked == false) {
+        *wasAttacked = true;
+        cout << "   Neutral player " << *p->getName() << " was attacked! This player will now become aggressive!" << endl;
+    }
+
+    if(*wasAttacked) {
+      return agStrat->toDefend();
+    } else {
+        return new vector<Territory*>();
+    }
+}
+
+NeutralPlayerStrategy::NeutralPlayerStrategy(Player* p) {
+    setPlayer(p);
+    this->wasAttacked = new bool(false);
+    this->agStrat = new Aggressive(p);
+}
+
+NeutralPlayerStrategy::NeutralPlayerStrategy(const NeutralPlayerStrategy& other) {
+    this->wasAttacked = new bool(*other.wasAttacked);
+    this->agStrat = new Aggressive(*other.agStrat);
+    setPlayer(other.getPlayer());
+}
+
+NeutralPlayerStrategy& NeutralPlayerStrategy::operator=(const NeutralPlayerStrategy& rhs) {
+    setPlayer(rhs.getPlayer());
+    this->wasAttacked = new bool(*rhs.wasAttacked);
+    this->agStrat = new Aggressive(*rhs.agStrat);
+    return *this;
+}
+
+std::ostream& operator<<(ostream& out, const CheaterPlayerStrategy& cheater) {
+    out << "Cheater player: compputer player that automatically conqers all territories that are adjacent to its own territories(only once per turn)" << endl;
+    out << "Player info:" << endl;
+    out << *cheater.getPlayer();
+    return out;
+}
+
+CheaterPlayerStrategy::CheaterPlayerStrategy() : PlayerStrategy() {}
+
+CheaterPlayerStrategy::~CheaterPlayerStrategy() {}
+
+void CheaterPlayerStrategy::issueOrder() {
+    //TO DO
+}
+
+vector<Territory*>* CheaterPlayerStrategy::toAttack() {
+    vector<Territory*>* neighbours = new vector<Territory*>();
+    for(Territory* t : *p->getTerritoryCollection()) {
+        for(Territory* adjacentTerritory : *(t->adjacentTerritory)) {
+            if(adjacentTerritory->getOwner() != p){
+                neighbours->push_back(adjacentTerritory);
+            }
+        }    
+    }
+    
+    return neighbours;
+}
+
+vector<Territory*>* CheaterPlayerStrategy::toDefend() {
+    return p->getTerritoryCollection();
+}
+
+CheaterPlayerStrategy::CheaterPlayerStrategy(const CheaterPlayerStrategy& other) : PlayerStrategy(other) {}
+
+CheaterPlayerStrategy& CheaterPlayerStrategy::operator=(const CheaterPlayerStrategy& rhs) {
+    setPlayer(rhs.getPlayer());
+    return *this;
 }
