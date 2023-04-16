@@ -196,3 +196,9 @@ P: 2
 G: 3
 D: 10
 Results: 
+Tournament mode:
+M: Map 0. 
+P: 2
+G: 3
+D: 10
+Results: 

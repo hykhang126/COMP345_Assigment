@@ -364,7 +364,7 @@ void GameEngine::issueOrdersPhase() {
     for(Player* player: *gamePlayers)
     {
         cout << *player->getName() << " will now issue orders\n" << endl;
-        player->issueOrder(gamePlayers, deck);
+        player->issueOrder();
     }
 }
 
