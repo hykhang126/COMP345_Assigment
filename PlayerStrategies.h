@@ -61,7 +61,7 @@ public:
 
 class Benevolent: public PlayerStrategy {
     Benevolent();
-    Benevolent(Player*);
+
     ~Benevolent();
     friend std::ostream& operator<<(std::ostream &out, const Benevolent &Benevolent);
     Benevolent(const Benevolent&);
@@ -69,6 +69,9 @@ class Benevolent: public PlayerStrategy {
     void issueOrder() override;
     vector<Territory *> * toAttack() override;
     vector<Territory *> * toDefend() override;
+
+public:
+    Benevolent(Player*);
 };
 
 

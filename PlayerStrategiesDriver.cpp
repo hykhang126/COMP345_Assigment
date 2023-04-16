@@ -7,9 +7,86 @@
 //
 int main() {
 
+
+    // ***********************
+    // BENEVOLENT PLAYER
+    // ***********************
+    cout << "*****************\nBENEVOLENT STARTING HERE\n\"*****************\n";
+    OrdersList* listOfOrders1 = new OrdersList();
+    //creating players
+    string* name1 = new string("Player1");
+
+    // Create two continents
+    Continent* continent1 = new Continent(new int(2), new string("Continent 1"), new int(10), new string("green"));
+
+    // Create three territories
+    Territory* territory1 = new Territory(new Player(), new int(3), new int(1), new string("Territory1"), continent1, new Coordinate(new int(1), new int(0)));
+    Territory* territory2 = new Territory(new Player(), new int(7), new int(2), new string("Territory2"), continent1, new Coordinate(new int(2), new int(0)));
+    Territory* territory3 = new Territory(new Player(), new int(4), new int(3), new string("Territory3"), continent1, new Coordinate(new int(3), new int(0)));
+    Territory* territory4 = new Territory(new Player(), new int(4), new int(3), new string("Territory4"), continent1, new Coordinate(new int(4), new int(0)));
+
+
+    Card* p1_card1 = new Card("bomb");
+    Card* p1_card2 = new Card("airlift");
+    //creating hands
+    vector<Card*> player1Cards = {p1_card1, p1_card2};
+    Hand* p1_hand = new Hand();
+    p1_hand->setCardsInHand(player1Cards);
+
+    vector<Territory*> tCollection1 = {territory1, territory2, territory3};
+
+    auto collecter1Pter = new vector<Territory*>;
+    collecter1Pter = &tCollection1;
+
+    Player* player1 = new Player(name1, collecter1Pter, p1_hand, listOfOrders1);
+
+    territory1->setOwner(player1);
+    territory2->setOwner(player1);
+    territory3->setOwner(player1);
+    player1->setTerritoryCollection(collecter1Pter);
+    vector<Territory*>* adjacent1 = new vector<Territory*>{territory1, territory2};
+    vector<Territory*>* adjacent2 = new vector<Territory*>{territory2, territory4};
+
+    territory1->setAdjacentTerritory(adjacent1);
+    territory2->setAdjacentTerritory(adjacent1);
+    territory4->setAdjacentTerritory(adjacent2);
+    territory2->setAdjacentTerritory(adjacent2);
+    // CREATING MAP
+    // Add territories to the map
+    Map* map1 = new Map();
+    map1->addTerritory(territory1);
+    map1->addTerritory(territory2);
+    map1->addTerritory(territory4);
+    // Add edges between territories
+    map1->addEdge(territory1, territory2);
+    map1->addEdge(territory2, territory1);
+    map1->addEdge(territory2, territory4);
+    map1->addEdge(territory4, territory2);
+    vector<Continent*>* continents1 = new vector<Continent*>();
+    continents1->push_back(continent1);
+    map1->setContinentList(continents1);
+
+
+    cout << "EXECUTION PHASE WOULD START HERE\n" << endl;
+
+    vector<Player*> *players1 = new vector<Player*>;
+
+    players1->push_back(player1);
+    Deck *deck1 = new Deck(50);
+
+    player1->setStrategy(new Benevolent(player1));
+
+    player1->setReinforcement(new int(5));
+    player1->issueOrder(players1, deck1);
+    for (int i = 0; i < listOfOrders1->getList().size(); i++){
+        listOfOrders1->getList().at(i)->execute();
+    }
+
+
     // ***********************
     // AGGRESSIVE PLAYER
     // ***********************
+    cout << "*****************\nAGGRESSIVE STARTING HERE\n\"*****************\n";
     OrdersList* listOfOrders2 = new OrdersList();
     //creating players
     string* name2 = new string("Player2");
