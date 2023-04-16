@@ -9,6 +9,11 @@ Player::Player() {
     this->reinforcement = new int(0);
     this->negotiating = new vector<Player*> {};
     this->hasConquered = new bool(false);
+    this->territoriesToAttack = new vector<Territory*>();
+    this->territoriesToDefend = new vector<Territory*>();
+
+    // PART 2 DEBUG
+    this->playerStrategy = nullptr;
 }
 
 Player::Player(string* name, vector<Territory*> tCollection, Hand* hand, OrdersList* listOfOrders) {

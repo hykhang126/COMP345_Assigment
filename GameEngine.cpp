@@ -311,7 +311,7 @@ vector<Player*>& GameEngine::getPlayers(){
 
 bool GameEngine::playerOwnsContinent(Player* player, Continent* continent, Map* map) {
     vector<Territory*> territoriesInContinent;
-    for(int i = 0; i<map->countTerritory(); i++) {
+    for(int i = 1; i<map->countTerritory(); i++) {
         Territory* territory = map->getTerritoryByIndex(i);
         if (territory->getContinent() == continent){
             territoriesInContinent.push_back(territory);
@@ -361,7 +361,8 @@ void GameEngine::reinforcementPhase() {
 
 void GameEngine::issueOrdersPhase() {
     cout << "ISSUE ORDERS PHASE\n" << endl; 
-    for(Player* player: this->getPlayers()){
+    for(Player* player: *gamePlayers)
+    {
         cout << *player->getName() << " will now issue orders\n" << endl;
         player->issueOrder(gamePlayers, deck);
     }
@@ -369,7 +370,7 @@ void GameEngine::issueOrdersPhase() {
 
 void GameEngine::executeOrdersPhase() {
     cout << "EXECUTE ORDERS PHASE\n" << endl;
-    for(Player* player: this->getPlayers()){
+    for(Player* player: *gamePlayers){
         OrdersList* orderList = player->getOrdersList();
         while(!orderList->getList().empty()) {
             //get first order of list
@@ -425,14 +426,13 @@ void GameEngine::distributeTerritory(Player* player)
 {
     int maxNumTerritories = map->countTerritory();
     int maxNumTerritoriesPerPlayer = 5;
-    vector<Territory*> tCollection = {};
+    vector<Territory*>* tCollection = new vector<Territory*>();
     Territory* territory;
     int countTerritories = 0;
 
     while (countTerritories < maxNumTerritoriesPerPlayer)
     {
         int randomIndex = rand() % (maxNumTerritories-1) + 1;
-        cout << randomIndex << endl;
         if (map != nullptr && map->getTerritoryByIndex(randomIndex) != nullptr) 
             territory = map->getTerritoryByIndex(randomIndex);
         else 
@@ -444,13 +444,13 @@ void GameEngine::distributeTerritory(Player* player)
 
         if (territory->getOwner() == nullptr)
         {
-            tCollection.push_back(territory);
+            tCollection->push_back(territory);
             territory->setOwner(player);
             countTerritories++;
         }
     }
     
-    player->setTerritoryCollection(&tCollection);
+    player->setTerritoryCollection(tCollection);
     for (Territory *ter : *player->getTerritoryCollection())
     {
         if (ter != nullptr) cout << ter->toString() << endl;
@@ -460,106 +460,75 @@ void GameEngine::distributeTerritory(Player* player)
 
 void GameEngine::startupPhase()
 {
-    // /* Test command */
-    // currentState = playersAddedState;
-
-    string choice = "NULL";
+    // ADD MAP
     MapLoader mapLoader;
-    int playerCount = gamePlayers->size();
+    string mapName = "france.txt";
+    map = mapLoader.loadMapFromFile(mapName);
+    map->toString();
+    // Update State
+    currentState = loadState;
 
-    cout << "\n  ***  Reading input commands  ***  "<< endl;
-    string fileName = "CommandLines.txt";
-    CommandProcessor * cmdp = new FileCommandProcessorAdapter(fileName);
-    cmdp->GetCommand(currentState->getName());
-    
-    cout << "\n  ***  Executing commands  ***  "<< endl;
-    vector<Command*> *commandList = commandProcessor->ReturnCommandList();
+    // VALIDATE MAP
+    map->validate();
+    // Update State
+    currentState = validMapState;
 
-    for (Command *command : *commandList)
+    // ADD PLAYER
+    for (int i = 0; i < GameEngine::P; i++)
     {
-        choice = *command->getCommandName();
-        string effect = command->getEffect();
+        string playerName = "Player";
+        playerName.append(std::to_string(i));
 
-        // Check if this command is already executed. If yes then skip it
-        if (effect.compare("true") != 0) continue;
+        Player* player = new Player();
+        player->setName(playerName);
 
-        if (choice.compare("MapLoaded") == 0)
-        {
-            string mapName = "france.txt";
-            map = mapLoader.loadMapFromFile(mapName);
-            map->toString();
-            // Update State
-            currentState = loadState;
-        }
-        else if (choice.compare("MapValidated") == 0)
-        {
-            map->validate();
-            // Update State
-            currentState = validMapState;
-        }
-        else if (choice.compare("PlayersAdded") == 0)
-        {
-            playerCount++;
-            string playerName = "Player";
-            playerName.append(std::to_string(playerCount));
-            vector<Territory*> tCollection = {};
-            Hand hand;
-            OrdersList listOfOrders;
+        // a) fairly distribute all the territories to the players  
+        distributeTerritory(player);
 
-            Player* player = new Player(&playerName, tCollection, &hand, &listOfOrders);
-
-            // a) fairly distribute all the territories to the players  
-            distributeTerritory(player);
-
-            addPlayerToList(player);
-            cout << *player->getName() << " added succesfully to player list" << endl;
-            cout << "---------------------" << endl;
-            // Update State
-            currentState = playersAddedState;
-
-        }
-        else if (choice.compare("Start") == 0)
-        {
-            // b) determine randomly the order of play of the players in the game
-            std::random_device randomDevice;
-            auto randomEngine = std::default_random_engine {randomDevice()};
-            std::shuffle(gamePlayers->begin(), gamePlayers->end(), randomEngine);
-
-            for (const auto& player : *gamePlayers)
-            {
-                cout << endl << "---" << *player->getName() << "---" << endl;
-
-                // c) give 50 initial armies to the players, which are placed in their respective reinforcement pool
-                player->setReinforcement(new int(50));
-                cout << "Number of initial armies: " << *player->getReinforcement() << endl;
-                cout << "---------------------" << endl;
-
-                // d) let each player draw 2 initial cards from the deck using the deck’s draw() method
-                    // 1st card
-                deck->draw(player->getHand());
-                    // 2nd card
-                deck->draw(player->getHand());
-                    // Find some way to show the 2 drawn cards
-                cout << "Number of cards on hand: " << player->getHand()->getCardsInHand().size() << endl;
-                cout << "---------------------" << endl;
-            }
-            // e) switch the game to the play phase
-            currentState = assignReinState;
-        }
-        // Update the command effect to be already executed
-        command->SaveEffect(new string("executed"));
+        addPlayerToList(player);
+        cout << *player->getName() << " added succesfully to player list" << endl;
         cout << "---------------------" << endl;
     }
+    // Update State
+    currentState = playersAddedState;
 
-    
+    // START GAME
+        // b) determine randomly the order of play of the players in the game
+    std::random_device randomDevice;
+    auto randomEngine = std::default_random_engine {randomDevice()};
+    std::shuffle(gamePlayers->begin(), gamePlayers->end(), randomEngine);
+
+    for (const auto& player : *gamePlayers)
+    {
+        cout << endl << "---" << *player->getName() << "---" << endl;
+
+        // c) give 50 initial armies to the players, which are placed in their respective reinforcement pool
+        player->setReinforcement(new int(50));
+        cout << "Number of initial armies: " << *player->getReinforcement() << endl;
+        cout << "---------------------" << endl;
+
+        // d) let each player draw 2 initial cards from the deck using the deck’s draw() method
+            // 1st card
+        deck->draw(player->getHand());
+            // 2nd card
+        deck->draw(player->getHand());
+            // Find some way to show the 2 drawn cards
+        cout << "Number of cards on hand: " << player->getHand()->getCardsInHand().size() << endl;
+        cout << "---------------------" << endl;
+    }
+    // e) switch the game to the play phase
+    currentState = assignReinState;
+
+
 }
 
 Player* GameEngine::GameUpdate()
 {
+    currentState = startState;
     startupPhase();
-    Player winner;
-    winner = mainGameLoop();
-    return new Player(winner);
+    Player* winner;
+    *winner = mainGameLoop();
+    return winner;
 }
 
 void GameEngine::OutputResult(Player *winner, int i, int j)

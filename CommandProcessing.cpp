@@ -201,8 +201,8 @@ void CommandProcessor::Validate(string *currentState, Command * com)
                         {
                             GameEngine::M = stoi(v[2]);
                             GameEngine::P = stoi(v[4]);
-                            GameEngine::G = stoi(v[4]);
-                            GameEngine::D = stoi(v[4]);
+                            GameEngine::G = stoi(v[6]);
+                            GameEngine::D = stoi(v[8]);
                             com->SaveEffect(new string("true"));
                             SaveCommand(com);
                             cout << "Command is valid and saved.";
