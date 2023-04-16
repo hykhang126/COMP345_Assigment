@@ -46,6 +46,35 @@ void PlayerStrategy::setPlayer(Player* newPlayer) {
     this->p = newPlayer;
 }
 
+Human::Human() {
+    p = new Player();
+}
+
+Human::Human(Player* player) {
+    this->p = player;
+}
+
+Human::~Human() {
+    delete p;
+    p = NULL;
+}
+
+// returning default output
+std::ostream &operator<<(ostream &out, const Human &human) {
+    out << "PlayerStrategy is Human with name " << *human.p->getName() << endl;
+    return out;
+}
+
+Human::Human(const Human& human) {
+    this->p = new Player(*human.p);
+}
+
+Human &Human::operator=(const Human &human) {
+    this->p = new Player(*human.p);
+    return *this;
+}
+
+
 vector<Territory *> *Aggressive::toAttack() {
 
     vector<Territory *> *defendList = p->getTerritoryCollection();
