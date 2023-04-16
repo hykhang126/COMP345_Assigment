@@ -152,13 +152,80 @@ int main() {
     player2->setStrategy(new Aggressive(player2));
     player2->setReinforcement(new int(5));
     player2->issueOrder(players2, deck2);
-   listOfOrders2->getList().front()->execute();
-   listOfOrders2->getList().at(1)->execute();
+    listOfOrders2->getList().front()->execute();
+    listOfOrders2->getList().at(1)->execute();
     listOfOrders2->getList().back()->execute();
     
     //**********************************
     //HUMAN METHODS
     //**********************************
-    player2->setStrategy(new Human(player2));
-    player2->issueOrder(players2, deck2);
+    cout << "*****************\nHUMAN STARTING HERE\n\"*****************\n";
+    OrdersList* listOfOrders3 = new OrdersList();
+    //creating players
+    string* name3 = new string("Player3");
+
+    // Create two continents
+    Continent* continent3 = new Continent(new int(2), new string("Continent 3"), new int(10), new string("blue"));
+
+    // Create three territories
+    Territory* territory9 = new Territory(new Player(), new int(3), new int(1), new string("Territory9"), continent3, new Coordinate(new int(1), new int(0)));
+    Territory* territory10 = new Territory(new Player(), new int(7), new int(2), new string("Territory10"), continent3, new Coordinate(new int(2), new int(0)));
+    Territory* territory11 = new Territory(new Player(), new int(4), new int(3), new string("Territory11"), continent3, new Coordinate(new int(3), new int(0)));
+    Territory* territory12 = new Territory(new Player(), new int(4), new int(3), new string("Territory12"), continent3, new Coordinate(new int(4), new int(0)));
+
+
+    Card* p3_card1 = new Card("bomb");
+    Card* p3_card2 = new Card("airlift");
+    //creating hands
+    vector<Card*> player3Cards = {p3_card1, p3_card2};
+    Hand* p3_hand = new Hand();
+    p3_hand->setCardsInHand(player3Cards);
+
+    vector<Territory*> tCollection3 = {territory9, territory10, territory11};
+
+    auto collecter3Pter = new vector<Territory*>;
+    collecter3Pter = &tCollection3;
+
+    Player* player3 = new Player(name3, collecter3Pter, p3_hand, listOfOrders3);
+
+    territory9->setOwner(player3);
+    territory10->setOwner(player3);
+    territory11->setOwner(player3);
+    player3->setTerritoryCollection(collecter3Pter);
+    vector<Territory*>* adjacent5 = new vector<Territory*>{territory9, territory10};
+    vector<Territory*>* adjacent6 = new vector<Territory*>{territory10, territory12};
+
+    territory5->setAdjacentTerritory(adjacent5);
+    territory6->setAdjacentTerritory(adjacent5);
+    territory8->setAdjacentTerritory(adjacent6);
+    territory6->setAdjacentTerritory(adjacent6);
+    // CREATING MAP
+    // Add territories to the map
+    Map* map3 = new Map();
+    map3->addTerritory(territory9);
+    map3->addTerritory(territory10);
+    map3->addTerritory(territory12);
+    // Add edges between territories
+    map3->addEdge(territory9, territory10);
+    map3->addEdge(territory10, territory9);
+    map3->addEdge(territory10, territory12);
+    map3->addEdge(territory12, territory10);
+    vector<Continent*>* continents3 = new vector<Continent*>();
+    continents3->push_back(continent3);
+    map3->setContinentList(continents3);
+
+
+    cout << "EXECUTION PHASE WOULD START HERE\n" << endl;
+
+    vector<Player*> *players3 = new vector<Player*>;
+
+    players3->push_back(player3);
+    Deck *deck3 = new Deck(50);
+
+    player3->setStrategy(new Human(player3));
+    player3->setReinforcement(new int(5));
+    player3->issueOrder(players3, deck3);
+    for(Order* order : player3->getOrdersList()->getList()){
+        order->execute();
+    }
 }

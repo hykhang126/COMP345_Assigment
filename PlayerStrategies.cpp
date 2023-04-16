@@ -294,7 +294,7 @@ void Human::issueOrder() {
                     for (auto it = defendList->begin(); it != defendList->end(); ++it) {
                         cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
                     }
-                    cout << "\nThe following territories are your list of terrirotires to attack:" << endl;
+                    cout << "\nThe following territories are your list of territories to attack:" << endl;
                     for (auto it = attackList->begin(); it != attackList->end(); ++it) {
                         cout << *(*it)->getName() << endl;
                     }
