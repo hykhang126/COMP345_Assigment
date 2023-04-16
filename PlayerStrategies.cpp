@@ -719,11 +719,10 @@ void Benevolent::issueOrder() {
     }
 }
 
+
 std::ostream& operator<<(ostream &out, const NeutralPlayerStrategy &neutral) {
     
     out << "Neutral strategy: Computer player that never issues any order. If a Neutral player is attacked, it becomes an Aggressive player." << endl;
-    out << "Player info: " << endl;
-    out << *neutral.getPlayer();
     
     return out;
 }
@@ -738,16 +737,16 @@ NeutralPlayerStrategy::~NeutralPlayerStrategy() {
     delete p;
 }
 
-void NeutralPlayerStrategy::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
+void NeutralPlayerStrategy::issueOrder() {
     if(*p->getWasAttacked() && *wasAttacked == false) {
         *wasAttacked = true;
-        cout << "   Neutral player " << *p->getName() << " was attacked! This player will now become aggressive!"
+        cout << "Neutral player " << *p->getName() << " was attacked! This player will now become aggressive!"
              << endl;
     }
 
     if(*wasAttacked) {
         p->setStrategy(new Aggressive(p));
-        p->issueOrder(gamePlayers, deck);
+        p->issueOrder();
     } else {
         cout << "This is a neutral player and it will not issue any orders" << endl;
     }
@@ -756,7 +755,7 @@ void NeutralPlayerStrategy::issueOrder(vector<Player*>* gamePlayers, Deck* deck)
 vector<Territory *> *NeutralPlayerStrategy::toAttack() {
     if (*p->getWasAttacked() && *wasAttacked == false) {
         *wasAttacked = true;
-        cout << "   Neutral player " << *p->getName() << " was attacked! This player will now become aggressive!"
+        cout << "Neutral player " << *p->getName() << " was attacked! This player will now become aggressive!"
              << endl;
     }
 
@@ -771,8 +770,7 @@ vector<Territory *> *NeutralPlayerStrategy::toAttack() {
 vector<Territory *> *NeutralPlayerStrategy::toDefend() {
     if (*p->getWasAttacked() && *wasAttacked == false) {
         *wasAttacked = true;
-        cout << "   Neutral player " << *p->getName() << " was attacked! This player will now become aggressive!"
-             << endl;
+        cout << "Neutral player " << *p->getName() << " was attacked! This player will now become aggressive!" << endl;
     }
 
     if(*wasAttacked) {
@@ -812,6 +810,10 @@ std::ostream &operator<<(ostream &out, const CheaterPlayerStrategy &cheater) {
 
 CheaterPlayerStrategy::CheaterPlayerStrategy() : PlayerStrategy() {}
 
+CheaterPlayerStrategy::CheaterPlayerStrategy(Player* player) {
+    this->p = player;
+}
+
 CheaterPlayerStrategy::~CheaterPlayerStrategy() {}
 
 
@@ -819,13 +821,18 @@ CheaterPlayerStrategy::~CheaterPlayerStrategy() {}
 void CheaterPlayerStrategy::issueOrder() {
     //All territories returned by to attack are enemy territories adjacent to this players owned territories
     vector<Territory*>* territoriesToClaim = toAttack();
+    cout << "\nThe following are the neighbouring territories that this player will conquer: " << endl;
+    for(auto territory : *territoriesToClaim) {
+        cout << *territory->getName() << endl;
+    }
     //Iterate through territories to attack
     for(Territory* t : *territoriesToClaim) {
         if(t->getOwner() != p){
             //remove territory from current owners list of territories
             Player* currentOwner = t->getOwner();
-            //currentOwner->removeTerritory(*t->getName());
+            currentOwner->removeTerritory(*t->getName());
             //set owner to this player and change the number of armies currently on the territory to 0
+            p->addTerritory(t);
             t->setOwner(p);
             t->setArmies(new int(0));
         }
