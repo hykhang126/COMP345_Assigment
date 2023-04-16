@@ -294,6 +294,19 @@ bool Player::hasCardInHand(string cardName) {
     return false;
 }
 
+void Player::removeTerritory(string territoryName) {
+    vector<Territory*>::iterator it = find_if(tCollection->begin(), tCollection->end(), [&territoryName](Territory* t) {
+        return *t->getName();
+    });
+
+    if(it != tCollection->end()) {
+        tCollection->erase(it);
+        cout << "Territory " << territoryName << " removed from player " << *this->getName() << "'s collection." << endl;
+    } else {
+        cout << "Territory " << territoryName << " not found in player " << *this->getName() << "'s collection." << endl;
+    }
+}
+
 void Player::setTerritoriesToAttack(){
     cout << "The following territories are neighbours to the territories you own: \n";
     vector<Territory*> neighbours;

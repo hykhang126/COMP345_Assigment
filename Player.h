@@ -53,6 +53,7 @@ class Player{
         vector<Territory*>* toAttack();
         //creates an order object and adds it to the list of orders
         void issueOrder(vector<Player*>* gamePlayers, Deck* deck);
+        void removeTerritory(string territoryName);
         //assignment operator
         Player& operator =(const Player& e);
         //stream insertion operator

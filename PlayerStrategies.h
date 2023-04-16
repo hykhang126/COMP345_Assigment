@@ -10,15 +10,13 @@
 
 using namespace std;
 
-class Aggressive;
-
 class PlayerStrategy{
 
 
 protected:
     Player * p;
 public :
-    virtual void issueOrder() = 0;
+    virtual void issueOrder() = 0; 
     virtual vector<Territory*>* toAttack() = 0;
     virtual vector<Territory*>* toDefend() = 0;
     PlayerStrategy();
@@ -79,7 +77,7 @@ public:
 
 class NeutralPlayerStrategy : public PlayerStrategy {
     public:
-        void issueOrder() override;
+        void issueOrder(vector<Player*>* gamePlayers, Deck* deck);
         vector<Territory*>* toAttack() override;
         vector<Territory*>* toDefend() override;
         NeutralPlayerStrategy();
@@ -91,7 +89,6 @@ class NeutralPlayerStrategy : public PlayerStrategy {
     
     private:
         bool* wasAttacked;
-        Aggressive* agStrat;
 };
 
 class CheaterPlayerStrategy : public PlayerStrategy {
