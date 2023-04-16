@@ -1,6 +1,7 @@
 #pragma once
 #include "Map.h"
 #include "Player.h"
+#include "Cards.h"
 #include <list>
 #include <vector>
 #include <string>
@@ -9,6 +10,8 @@
 #include <algorithm>
 
 using namespace std;
+
+class Deck;
 
 class PlayerStrategy{
 
@@ -29,17 +32,16 @@ public :
 };
 
 class Human : public PlayerStrategy {
-    ~Human();
-    friend std::ostream& operator<<(std::ostream &out, const Human &Human);
-    Human(const Human&);
-    Human& operator =(const Human&);
-    void issueOrder() override;
-    vector<Territory *> * toAttack() override;
-    vector<Territory *> * toDefend() override;
-
-public:
-    Human();
-    Human(Player*);
+    public:
+        Human();
+        Human(Player*);
+        ~Human();
+        friend std::ostream& operator<<(std::ostream &out, const Human &Human);
+        Human(const Human&);
+        Human& operator =(const Human&);
+        void issueOrder() override;
+        vector<Territory *> * toAttack() override;
+        vector<Territory *> * toDefend() override;
 };
 
 

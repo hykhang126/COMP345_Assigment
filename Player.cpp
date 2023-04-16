@@ -9,6 +9,7 @@ Player::Player() {
     this->reinforcement = new int(0);
     this->negotiating = new vector<Player*> {};
     this->hasConquered = new bool(false);
+    this->gamePlayers = new vector<Player*> {};
 }
 
 Player::Player(string* name, vector<Territory*> *tCollection, Hand* hand, OrdersList* listOfOrders) {
@@ -21,6 +22,7 @@ Player::Player(string* name, vector<Territory*> *tCollection, Hand* hand, Orders
     this->hasConquered = new bool(false);
     this->territoriesToAttack = new vector<Territory*>();
     this->territoriesToDefend = new vector<Territory*>();
+    this->gamePlayers = new vector<Player*> {};
     // default constructor with no ps parameter uses human player
 //    this->playerStrategy = new Human();
 }
@@ -36,6 +38,7 @@ Player::Player(const Player& p) {
     this->listOfOrders = new OrdersList(*p.listOfOrders);
     this->negotiating = new vector<Player*>(*(p.negotiating));
     this->hasConquered = new bool(*(p.hasConquered));
+    this->gamePlayers = new vector<Player*>(*(p.gamePlayers));
 }
 
 Player::~Player() {
@@ -46,6 +49,7 @@ Player::~Player() {
     }
     delete(listOfOrders);
     delete(negotiating);
+    delete(gamePlayers);
 }
 
 vector<Territory*>* Player::toDefend() {
@@ -294,18 +298,18 @@ bool Player::hasCardInHand(string cardName) {
     return false;
 }
 
-void Player::removeTerritory(string territoryName) {
-    vector<Territory*>::iterator it = find_if(tCollection->begin(), tCollection->end(), [&territoryName](Territory* t) {
-        return *t->getName();
-    });
+// void Player::removeTerritory(string territoryName) {
+//     vector<Territory*>::iterator it = find_if(tCollection->begin(), tCollection->end(), [&territoryName](Territory* t) {
+//         return *t->getName();
+//     });
 
-    if(it != tCollection->end()) {
-        tCollection->erase(it);
-        cout << "Territory " << territoryName << " removed from player " << *this->getName() << "'s collection." << endl;
-    } else {
-        cout << "Territory " << territoryName << " not found in player " << *this->getName() << "'s collection." << endl;
-    }
-}
+//     if(it != tCollection->end()) {
+//         tCollection->erase(it);
+//         cout << "Territory " << territoryName << " removed from player " << *this->getName() << "'s collection." << endl;
+//     } else {
+//         cout << "Territory " << territoryName << " not found in player " << *this->getName() << "'s collection." << endl;
+//     }
+// }
 
 void Player::setTerritoriesToAttack(){
     cout << "The following territories are neighbours to the territories you own: \n";
@@ -473,4 +477,10 @@ void Player::setStrategy(PlayerStrategy *playerStrategy) {
     this->playerStrategy = playerStrategy;
 }
 
+vector<Player*>* Player::getPlayers() {
+    return this->gamePlayers;
+}
 
+void Player::setPlayers(vector<Player*>* players) {
+    this->gamePlayers = players;
+}

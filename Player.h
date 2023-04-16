@@ -34,7 +34,7 @@ class Player{
         vector<Player*>* negotiating;
         bool* hasConquered;
         PlayerStrategy *playerStrategy;
-
+        vector<Player*>* gamePlayers;
 
     public :
         //Basic constructor
@@ -67,6 +67,7 @@ class Player{
         vector<Player*>* getNegotiating();
         bool* getHasConquered();
         bool* getWasAttacked();
+        vector<Player*>* getPlayers();
         //setters
         void setTerritoriesToAttack();
         void setTerritoriesToDefend();
@@ -80,5 +81,6 @@ class Player{
         void setHasConquered(bool* check);
         void setStrategy(PlayerStrategy*);
         void setWasAttacked();
+        void setPlayers(vector<Player*>* players);
 
 };
