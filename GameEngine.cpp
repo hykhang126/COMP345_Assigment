@@ -480,7 +480,7 @@ void GameEngine::startupPhase()
             Hand hand;
             OrdersList listOfOrders;
 
-            Player* player = new Player(&playerName, tCollection, &hand, &listOfOrders);
+            Player* player = new Player(&playerName, &tCollection, &hand, &listOfOrders);
 
             // a) fairly distribute all the territories to the players  
             distributeTerritory(player);

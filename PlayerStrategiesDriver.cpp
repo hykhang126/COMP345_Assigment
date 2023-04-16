@@ -156,8 +156,9 @@ int main() {
    listOfOrders2->getList().at(1)->execute();
     listOfOrders2->getList().back()->execute();
     
-    //Testing Human methods
-    // player2->setStrategy(new Human(player2));
-    // player2->toAttack();
-    // player2->toDefend();
+    //**********************************
+    //HUMAN METHODS
+    //**********************************
+    player2->setStrategy(new Human(player2));
+    player2->issueOrder(players2, deck2);
 }

@@ -107,7 +107,7 @@ vector<Territory*>* Human::toAttack() {
     vector<string> priorityTerritories{istream_iterator<string>{iss}, istream_iterator<string>{}};
    
     //Add territories to territories to attack
-    vector<Territory*>* territoriesToAttack;
+    vector<Territory*>* territoriesToAttack = new vector<Territory*>;
     territoriesToAttack->clear();
     for(Territory* t: neighbours) {
         for(string& pt : priorityTerritories) {        
@@ -139,7 +139,7 @@ vector<Territory*>* Human::toDefend() {
     vector<string> priorityTerritories{istream_iterator<string>{iss}, istream_iterator<string>{}};
     
     //Add territories to territories to defend
-    vector<Territory*>* territoriesToDefend;
+    vector<Territory*>* territoriesToDefend = new vector<Territory*>;
     territoriesToDefend->clear();
     for(Territory* t: *p->getTerritoryCollection()) {
         bool isPriority = false;
@@ -822,7 +822,7 @@ void CheaterPlayerStrategy::issueOrder() {
         if(t->getOwner() != p){
             //remove territory from current owners list of territories
             Player* currentOwner = t->getOwner();
-            currentOwner->removeTerritory(*t->getName());
+            //currentOwner->removeTerritory(*t->getName());
             //set owner to this player and change the number of armies currently on the territory to 0
             t->setOwner(p);
             t->setArmies(new int(0));
