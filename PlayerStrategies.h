@@ -31,8 +31,6 @@ public :
 };
 
 class Human : public PlayerStrategy {
-    Human();
-    Human(Player*);
     ~Human();
     friend std::ostream& operator<<(std::ostream &out, const Human &Human);
     Human(const Human&);
@@ -40,6 +38,10 @@ class Human : public PlayerStrategy {
     void issueOrder() override;
     vector<Territory *> * toAttack() override;
     vector<Territory *> * toDefend() override;
+
+public:
+    Human();
+    Human(Player*);
 };
 
 

@@ -73,11 +73,14 @@ int main() {
     Deck *deck2 = new Deck(50);
 
     player2->setStrategy(new Aggressive(player2));
-
     player2->setReinforcement(new int(5));
     player2->issueOrder(players2, deck2);
    listOfOrders2->getList().front()->execute();
    listOfOrders2->getList().at(1)->execute();
     listOfOrders2->getList().back()->execute();
-
+    
+    //Testing Human methods
+    // player2->setStrategy(new Human(player2));
+    // player2->toAttack();
+    // player2->toDefend();
 }

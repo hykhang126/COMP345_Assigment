@@ -46,25 +46,33 @@ void PlayerStrategy::setPlayer(Player* newPlayer) {
     this->p = newPlayer;
 }
 
+/**
+ * Default constructor for Human player strategy
+*/
 Human::Human() {
     p = new Player();
 }
-
+/**
+ * Param constructor for Human player strategy
+*/
 Human::Human(Player* player) {
     this->p = player;
 }
-
+/**
+ * Destructor for Human player strategy
+*/
 Human::~Human() {
     delete p;
     p = NULL;
 }
-
 // returning default output
 std::ostream &operator<<(ostream &out, const Human &human) {
     out << "PlayerStrategy is Human with name " << *human.p->getName() << endl;
     return out;
 }
-
+/**
+ * Copy constructor for Human player strategy
+*/
 Human::Human(const Human& human) {
     this->p = new Player(*human.p);
 }
@@ -73,7 +81,88 @@ Human &Human::operator=(const Human &human) {
     this->p = new Player(*human.p);
     return *this;
 }
+/**
+ * list of territories Human player can attack
+*/
+vector<Territory*>* Human::toAttack() {
+    cout << "The following territories are neighbours to the territories you own: \n";
+    vector<Territory*> neighbours;
+    for(Territory* t : *p->getTerritoryCollection()) {
+        for(Territory* adjacentTerritory : *(t->adjacentTerritory)) {
+            if(adjacentTerritory->getOwner() != p){
+                neighbours.push_back(adjacentTerritory);
+            }
+        }    
+    }
+    //print out list of neighbouring territories 
+    for(Territory* territory : neighbours) {
+        cout << *territory->getName() << endl;
+    }
+    //Prompt player for priority territories
+    cout << "\nPlease enter the names of the territories to be attacked in priority (separated by spaces): \n";
+    string ters;
+    cin.ignore();
+    getline(cin, ters);
+    istringstream iss(ters);
+    vector<string> priorityTerritories{istream_iterator<string>{iss}, istream_iterator<string>{}};
+   
+    //Add territories to territories to attack
+    vector<Territory*>* territoriesToAttack;
+    territoriesToAttack->clear();
+    for(Territory* t: neighbours) {
+        for(string& pt : priorityTerritories) {        
+            string territoryName = t->getName()->substr(1);
+            if(*t->getName() == pt || territoryName == pt){
+                territoriesToAttack->push_back(new Territory(*t));
+                break;
+            }
+        }
+    }
+    cout<< "These are the territories you chose: " << endl;
+    for(Territory* t: *territoriesToAttack){
+        cout << *t->getName() << endl;
+    }
+    return territoriesToAttack;
+}
 
+vector<Territory*>* Human::toDefend() {
+    //Show territories
+    cout << "\nThe following territories belong to you: \n";
+    for(Territory* territory : *p->getTerritoryCollection()) {
+        cout << *territory->getName() << endl;
+    }
+    //Prompt player for priority territories
+    cout << "\nPlease enter the names of the territories to be defended in priority (separated by spaces): \n";
+    string ters;
+    getline(cin, ters);
+    istringstream iss(ters);
+    vector<string> priorityTerritories{istream_iterator<string>{iss}, istream_iterator<string>{}};
+    
+    //Add territories to territories to defend
+    vector<Territory*>* territoriesToDefend;
+    territoriesToDefend->clear();
+    for(Territory* t: *p->getTerritoryCollection()) {
+        bool isPriority = false;
+        for(string& pt: priorityTerritories) {
+            if(*t->getName() == pt) {
+                isPriority = true;
+                break;
+            }
+        }
+        if(isPriority) {
+            territoriesToDefend->push_back(new Territory(*t));
+        }
+    }
+    cout<< "These are the territories you chose: " << endl;
+    for(Territory* t: *territoriesToDefend){
+        cout << *t->getName() << endl;
+    }
+    return territoriesToDefend;
+}
+
+void Human::issueOrder() {
+
+}
 
 vector<Territory *> *Aggressive::toAttack() {
 
