@@ -1,6 +1,6 @@
-loadmap
-validatemap
-addplayer
-gamestart
-replay
-quit
+MapLoaded
+MapValidated
+PlayersAdded
+Start
+Replay
+Quit

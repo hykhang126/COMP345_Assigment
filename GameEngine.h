@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <random>
+
 #include "LoggingObserver.h"
 #include "Map.h"
 #include "Orders.h"
@@ -109,17 +111,24 @@ class GameEngine: public Subject, public ILoggable
         // Map reference, where the map is stored
         Map *map;
 
+        vector<Map*>* mapList;
 
         void initialization();
+        
 
     public :
+        static int M;
+        static int D;
+        static int G;
+        static int P;
+        vector<string>* nameOfMapVector;
+        string* currentStateToString();
         State *getCurrentState();
         void setCurrentState(State *currentState);
         vector<Player*>& getPlayers();
 
         vector<State*> getStateList();
         void addStateToList(State* state);
-
 
         GameEngine();
 
@@ -130,7 +139,6 @@ class GameEngine: public Subject, public ILoggable
         void issueOrdersPhase();
         void executeOrdersPhase();
         Player mainGameLoop();
-    
 
         vector<Player*>* getGamePlayers();
         void addPlayerToList(Player* player);
@@ -143,6 +151,7 @@ class GameEngine: public Subject, public ILoggable
         void setMap(Map *map);
 
         GameEngine(CommandProcessor *commandProcessor, Deck *deck,  Map *map);
+        GameEngine(CommandProcessor *commandProcessor);
         ~GameEngine();
 
         bool isCommandValid(string *command);
@@ -150,4 +159,7 @@ class GameEngine: public Subject, public ILoggable
 
         void startupPhase();
 
+        Player* GameUpdate();
+        void OutputResult(Player *winner, int i, int j);
+        void Tournament();
 };

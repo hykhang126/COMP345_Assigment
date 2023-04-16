@@ -1,4 +1,6 @@
 #include "CommandProcessing.h"
+
+
 //Command method implementations
 //Parameterized constructors
 Command::Command(string * commandName, string * effectName): command(commandName), effect(effectName){}
@@ -156,14 +158,71 @@ void CommandProcessor::Validate(string *currentState, Command * com)
     string cmmnd = *(com->getCommandName());
     cout << "Your command is: " << cmmnd << endl;
 
-    if( cmmnd.compare("loadmap") == 0 )
+ 
+    //
+    string s;
+    stringstream ss(cmmnd);
+    vector<string> v;
+    while (getline(ss, s, ' ')) {
+        v.push_back(s);
+    }
+    for (int i = 0; i < v.size(); i++) {
+        cout << v[i] << endl;
+    }
+    //
+
+    if(v[0] == "tournament")
     {
-        if(*currentState == "Start" || *currentState == "maploaded")
+        if(v[1] != "-M" || v[3] != "-P" || v[5] != "-G" || v[7] != "-D")
+        {
+            cout << "Invalid command in current state."<<endl;
+        }
+        else{
+            if(stoi(v[2]) < 1 || stoi(v[2]) >5)
+            {
+                cout << "Map need to be between 1 to 5 maps." << endl;
+            }
+            else{
+                if(stoi(v[4]) < 2 || stoi(v[4]) > 4)
+                {
+                    cout << "Need minimum 2 or maximum of 4 players." << endl;
+                }
+                else{
+                    if(stoi(v[6]) < 1 || stoi(v[6]) > 5)
+                    {   
+                        cout << "Number of game need to be between 1 and 5." << endl;
+                    }
+                    else{
+                        if(stoi(v[8]) < 10 || stoi(v[8]) > 50)
+                        {
+                            cout << "Number of turns need to be between 10 and 50." <<endl;
+                        }
+                        else
+                        {
+                            GameEngine::M = stoi(v[2]);
+                            GameEngine::P = stoi(v[4]);
+                            GameEngine::G = stoi(v[6]);
+                            GameEngine::D = stoi(v[8]);
+                            com->SaveEffect(new string("true"));
+                            SaveCommand(com);
+                            cout << "Command is valid and saved.";
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    if(cmmnd == "MapLoaded")
+    {
+        if(*currentState == "Start" || *currentState == "MapLoaded")
         {
             com->SaveEffect(new string("true"));
             SaveCommand(com);
-            delete currentState;
-            currentState = new string("maploaded");
+            //delete currentState;
+            *currentState = "MapLoaded";
+            //currentState = new string("maploaded");
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{
@@ -171,14 +230,15 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-    if(cmmnd.compare("validatemap") == 0)
+    if(cmmnd == "MapValidated")
     {
         if(*currentState == "MapLoaded")
         {
             com->SaveEffect(new string("true"));
             SaveCommand(com);
-            delete currentState;
-            currentState = new string("MapValidated");
+            //delete currentState;
+            *currentState = "MapValidated";
+            //currentState = new string("mapvalidated");
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{
@@ -186,14 +246,15 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-    if(cmmnd.compare("addplayer") == 0)
+    if(cmmnd == "PlayersAdded")
     {
         if(*currentState == "MapValidated" || *currentState == "PlayersAdded")
         {
             com->SaveEffect(new string("true"));
             SaveCommand(com);
-            delete currentState;
-            currentState = new string("PlayersAdded");
+            //delete currentState;
+            *currentState = "PlayersAdded";
+            //currentState = new string("playeradded");
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{
@@ -201,14 +262,16 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-    if(cmmnd.compare("gamestart") == 0)
+
+    if(cmmnd == "Start")
     {
         if(*currentState == "PlayersAdded")
         {
             com->SaveEffect(new string("true"));
             SaveCommand(com);
-            delete currentState;
-            currentState = new string("assignreinforcement");
+            //delete currentState;
+            *currentState = "AssignReinforcement";
+            //currentState = new string("assignreinforcement");
             cout << "Valid command and transit to state: " << *currentState << endl;
         }
         else{
@@ -216,7 +279,7 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-    if(cmmnd.compare("replay") == 0)
+    if(cmmnd == "Replay")
     {
         if(*currentState == "Win")
         {
@@ -231,7 +294,7 @@ void CommandProcessor::Validate(string *currentState, Command * com)
         }
     }
 
-    if(cmmnd.compare("quit") == 0)
+    if(cmmnd == "Quit")
     {
         if(*currentState == "Win")
         {
@@ -256,8 +319,9 @@ void CommandProcessor::SaveCommand(Command * com)
 
 Command* CommandProcessor::ReadCommand(){
     cout << "Please enter your command: " << endl;
-    string * cmmndString = new string("");
-    cin >> *cmmndString;
+    string * cmmndString = new string();
+    // cin >> *cmmndString;
+    getline(cin, *cmmndString);
     Command* cmmnd = new Command(cmmndString);
     return cmmnd;
 }

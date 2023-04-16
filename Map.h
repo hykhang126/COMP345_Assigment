@@ -92,10 +92,13 @@ class Territory{
 //Declaration of Map class
 class Map{
     private :
+        string* name;
         map<Territory*, list<Territory*>*>* maps;
         vector<Continent*>* continentList;
 
     public :
+        string* getName();
+        void setName(string*);
         void addTerritory(Territory * ter);
         void addEdge(Territory *ter, Territory *edg);
         int countTerritory();
