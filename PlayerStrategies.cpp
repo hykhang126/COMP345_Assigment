@@ -203,12 +203,13 @@ void Aggressive::issueOrder() {
         cout << *(*it)->getName() << ", Armies: " << *(*it)->getArmies() << endl;
     }
 
-    cout << "\nThe following territories are aggressive " << *p->getName() << " list of terrirotires to attack:" << endl;
+    cout << "\nThe following territories are aggressive " << *p->getName() << " list of territories to attack:" << endl;
     vector<Territory *> *attackList = this->toAttack();
     if (attackList->size() == 0) {
 
         cout << "couldn't find a suitable enemy to attack this turn for aggressive player " << *p->getName() <<endl;
     } else {
+        cout<< *attackList->back()->getName() << " holding: " << *attackList->back()->getArmies() << " armies." << endl;
         cout << "adding order for aggressive player " << *p->getName() << " to attack " << *attackList->back()->getName()
              << " holding " << *attackList->back()->getArmies() << " armies with " << *strongestTerritory->getName() << " that will hold " <<
              (*strongestTerritory->getArmies()+*p->getReinforcement()+secondMaxArmies) << " armies after deploy and airlift order executed"
