@@ -63,6 +63,7 @@ vector<Territory*>* Player::toAttack() {
 }
 
 void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
+    //CheaterPlayerStrategy* isACheater = dynamic_cast<CheaterPlayerStrategy*>(playerStrategy);
 
     if (this->playerStrategy == nullptr) {
         int orderOption;
@@ -286,6 +287,10 @@ void Player::issueOrder(vector<Player*>* gamePlayers, Deck* deck) {
     } else {
         this->playerStrategy->issueOrder();
     }
+
+    // } else if(isACheater != nullptr) {
+    //     this->playerStrategy->issueOrder(gamePlayers, deck);
+    // } 
 }
 
 bool Player::hasCardInHand(string cardName) {
@@ -450,6 +455,10 @@ void Player::setHasConquered(bool* check) {
 
 bool* Player::getWasAttacked() {
     return this->wasAttacked;
+}
+
+PlayerStrategy* Player::getStrategy() {
+    return this->playerStrategy;
 }
 
 void Player::setWasAttacked() {

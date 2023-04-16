@@ -79,6 +79,7 @@ public:
 
 class NeutralPlayerStrategy : public PlayerStrategy {
     public:
+        void issueOrder() override;
         void issueOrder(vector<Player*>* gamePlayers, Deck* deck);
         vector<Territory*>* toAttack() override;
         vector<Territory*>* toDefend() override;

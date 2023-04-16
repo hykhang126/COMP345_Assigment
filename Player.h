@@ -63,6 +63,7 @@ class Player{
         Hand* getHand();
         OrdersList* getOrdersList();
         vector<Territory*>* getTerritoryCollection();
+        PlayerStrategy* getStrategy();
         int* getReinforcement();
         vector<Player*>* getNegotiating();
         bool* getHasConquered();

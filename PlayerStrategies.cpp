@@ -748,6 +748,8 @@ void NeutralPlayerStrategy::issueOrder(vector<Player*>* gamePlayers, Deck* deck)
     if(*wasAttacked) {
         p->setStrategy(new Aggressive(p));
         p->issueOrder(gamePlayers, deck);
+    } else {
+        cout << "This is a neutral player and it will not issue any orders" << endl;
     }
 }
 
