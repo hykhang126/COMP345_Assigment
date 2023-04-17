@@ -158,10 +158,10 @@ class GameEngine: public Subject, public ILoggable
         bool isCommandValid(string *command);
         void distributeTerritory(Player* player);
 
-        void startupPhase();
+        void startupPhase(int mapIndex);
 
-        Player* GameUpdate();
-        void OutputResult(Player *winner, int i, int j);
+        Player* GameUpdate(int mapIndex);
+        void OutputResult(Player *winner, int mapIndex, int gameTurn);
         void RestartGameUpdate();
         void Tournament();
 };

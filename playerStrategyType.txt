@@ -1,0 +1,4 @@
+agressive
+benevolent
+neutral
+cheater

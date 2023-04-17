@@ -406,3 +406,124 @@ Results:
 Map: 0, Game: 0, Winner: DRAW!
 Map: 0, Game: 1, Winner: DRAW!
 Map: 0, Game: 2, Winner: DRAW!
+
+--- Tournament mode: ---
+M: Map 0. 
+P: 2
+G: 3
+D: 10
+Results: 
+
+--- Tournament mode: ---
+M: Map 0. 
+P: 2
+G: 3
+D: 10
+Results: 
+Map: 0, Game: 0, Winner: DRAW!
+Map: 0, Game: 1, Winner: DRAW!
+Map: 0, Game: 2, Winner: DRAW!
+
+--- Tournament mode: ---
+M: Map 0. 
+P: 2
+G: 3
+D: 10
+Results: 
+Map: 0, Game: 0, Winner: DRAW!
+Map: 0, Game: 1, Winner: DRAW!
+Map: 0, Game: 2, Winner: DRAW!
+
+--- Tournament mode: ---
+M: Map 0. 
+P: 2
+G: 3
+D: 10
+Results: 
+Map: 0, Game: 0, Winner: DRAW!
+Map: 0, Game: 1, Winner: DRAW!
+Map: 0, Game: 2, Winner: DRAW!
+
+--- Tournament mode: ---
+M: Map 0. 
+P: 0x20562e16ca0. 0x20562e12140. 0x20562e1a950. 
+G: 3
+D: 10
+Results: 
+Map: 0, Game: 0, Winner: DRAW!
+Map: 0, Game: 1, Winner: DRAW!
+Map: 0, Game: 2, Winner: DRAW!
+
+--- Tournament mode: ---
+M: Map 0. 
+
+--- Tournament mode: ---
+M: Map 0. 
+P: Player1. Player0. 
+G: 3
+D: 10
+Results: 
+Map: 0, Game: 0, Winner: DRAW!
+Map: 0, Game: 1, Winner: DRAW!
+Map: 0, Game: 2, Winner: DRAW!
+
+--- Tournament mode: ---
+M: Map 0. Map 1. 
+P: Player1. Player0. 
+G: 3
+D: 10
+Results: 
+Map: 0, Game: 0, Winner: DRAW!
+Map: 0, Game: 1, Winner: DRAW!
+Map: 0, Game: 2, Winner: DRAW!
+Map: 1, Game: 0, Winner: DRAW!
+Map: 1, Game: 1, Winner: DRAW!
+
+--- Tournament mode: ---
+M: Map 0. Map 1. 
+P: Player1. Player0. 
+G: 3
+D: 10
+Results: 
+Map: 0, Game: 0, Winner: DRAW!
+Map: 0, Game: 1, Winner: DRAW!
+Map: 0, Game: 2, Winner: DRAW!
+Map: 1, Game: 0, Winner: DRAW!
+Map: 1, Game: 1, Winner: DRAW!
+
+--- Tournament mode: ---
+M: Map 0. Map 1. 
+P: Player0. Player1. 
+G: 3
+D: 10
+Results: 
+Map: 0, Game: 0, Winner: DRAW!
+Map: 0, Game: 1, Winner: DRAW!
+Map: 0, Game: 2, Winner: DRAW!
+Map: 1, Game: 0, Winner: DRAW!
+Map: 1, Game: 1, Winner: DRAW!
+
+--- Tournament mode: ---
+M: Map 0. Map 1. 
+P: Player1. Player0. 
+G: 3
+D: 10
+Results: 
+Map: 0, Game: 0, Winner: DRAW!
+Map: 0, Game: 1, Winner: DRAW!
+Map: 0, Game: 2, Winner: DRAW!
+Map: 1, Game: 0, Winner: DRAW!
+Map: 1, Game: 1, Winner: DRAW!
+
+--- Tournament mode: ---
+M: Map 0. Map 1. 
+P: Player Neutral. Player Benevolent. 
+G: 3
+D: 10
+Results: 
+Map: 0, Game: 0, Winner: DRAW!
+Map: 0, Game: 1, Winner: DRAW!
+Map: 0, Game: 2, Winner: DRAW!
+Map: 1, Game: 0, Winner: DRAW!
+Map: 1, Game: 1, Winner: DRAW!
+Map: 1, Game: 2, Winner: DRAW!

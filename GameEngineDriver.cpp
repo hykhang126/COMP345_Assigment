@@ -1,3 +1,7 @@
+/*BAD PRATICE*/
+/*Only do this for driver and debugging*/
+
+// LIST OF DEPENDENT FUNCTION
 #include "GameEngine.cpp"
 
 using namespace std;
@@ -25,7 +29,7 @@ int main(int argc, char const *argv[])
 
         int choice = 6;
         string input;
-        cout << "Please make your choice: " << endl;
+        // cout << "Please make your choice: " << endl;
         // cin >> choice;
 
         switch (choice)
@@ -59,7 +63,7 @@ int main(int argc, char const *argv[])
             test->isCommandValid(&input);
             break;
         case 5:
-            test->startupPhase();
+            test->startupPhase(0);
             break;
         case 6:
             test->Tournament();

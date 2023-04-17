@@ -1,5 +1,7 @@
 #include "GameEngine.h"
 
+/*BAD PRATICE*/
+/*Only do this for driver and debugging*/
 // LIST OF DEPENDENT FUNCTION
 #include "CommandProcessing.cpp"
 #include "Player.cpp"
@@ -8,8 +10,6 @@
 #include "LoggingObserver.cpp"
 #include "Map.cpp"
 #include "PlayerStrategies.cpp"
-
-
 
 // STATE CLASS
 State::State()
@@ -230,13 +230,12 @@ void GameEngine::initialization()
     delete startTran, loadTran_1, loadTran_2, validMapTran, playersAddedTran_1, playersAddedTran_2, assignReinTran, issueOrderTran_1, 
             issueOrderTran_2, executeOrderTran_1, executeOrderTran_2, executeOrderTran_3, winTran_1, winTran_2;
 
-    MapLoader loader;
     nameOfMapVector = new vector<string>();
-    nameOfMapVector->push_back("haiti.txt");
-    nameOfMapVector->push_back("brasil.txt");
-    nameOfMapVector->push_back("eire.txt");
-    nameOfMapVector->push_back("germany.txt");
     nameOfMapVector->push_back("france.txt");
+    nameOfMapVector->push_back("germany.txt");
+    nameOfMapVector->push_back("eire.txt");
+    nameOfMapVector->push_back("brasil.txt");
+    nameOfMapVector->push_back("haiti.txt");
 
     GameEngine::D = 0;
 }
@@ -273,7 +272,7 @@ GameEngine::~GameEngine()
         delete trans;
     }
     
-    delete gamePlayers;
+    delete gamePlayers, nameOfMapVector, commandProcessor, deck, map;
     delete startTran, loadTran_1, loadTran_2, validMapTran, playersAddedTran_1, playersAddedTran_2, assignReinTran, issueOrderTran_1,
         issueOrderTran_2, executeOrderTran_1, executeOrderTran_2, executeOrderTran_3, winTran_1, winTran_2;
 }
@@ -432,7 +431,7 @@ Player* GameEngine::mainGameLoop() {
 void GameEngine::distributeTerritory(Player* player)
 {
     int maxNumTerritories = map->countTerritory();
-    int maxNumTerritoriesPerPlayer = 20;
+    int maxNumTerritoriesPerPlayer = maxNumTerritories / GameEngine::P - 1;
     vector<Territory*>* tCollection = new vector<Territory*>();
     Territory* territory;
     int countTerritories = 0;
@@ -465,11 +464,11 @@ void GameEngine::distributeTerritory(Player* player)
     }
 }
 
-void GameEngine::startupPhase()
+void GameEngine::startupPhase(int mapIndex)
 {
     // ADD MAP
     MapLoader mapLoader;
-    string mapName = "france.txt";
+    string mapName = nameOfMapVector->at(mapIndex);
     map = mapLoader.loadMapFromFile(mapName);
     map->toString();
     // Update State
@@ -484,18 +483,41 @@ void GameEngine::startupPhase()
     int i = gamePlayers->size();
     while (i < GameEngine::P)
     {
-        string playerName = "Player";
-        playerName.append(std::to_string(i));
-
+        /* CREATE THE PLAYER*/
         Player* player = new Player();
-        player->setName(playerName);
 
-        // Set player's strategy
-        if (i == 1) player->setStrategy(new Benevolent(player));
-        else player->setStrategy(new Aggressive(player));
+        string playerName = "Player";
+        // Set player's strategy and name
+        if (i == 1) 
+        {
+            player->setStrategy(new Benevolent(player));
+            playerName.append(" Benevolent");
+        }
+        else if (i == 2)
+        {
+            player->setStrategy(new Aggressive(player));
+            playerName.append(" Agressive");
+        } 
+        else if (i == 3)
+        {
+            player->setStrategy(new CheaterPlayerStrategy(player));
+            playerName.append(" Cheater");
+        }
+        else
+        {
+            player->setStrategy(new NeutralPlayerStrategy(player));
+            playerName.append(" Neutral");
+        }
+        player->setName(playerName);
 
         // a) fairly distribute all the territories to the players  
         distributeTerritory(player);
+
+        // d) let each player draw 2 initial cards from the deck using the deck’s draw() method
+            // 1st card
+        deck->draw(player->getHand());
+            // 2nd card
+        deck->draw(player->getHand());
 
         addPlayerToList(player);
         i += 1;
@@ -520,12 +542,7 @@ void GameEngine::startupPhase()
         cout << "Number of initial armies: " << *player->getReinforcement() << endl;
         cout << "---------------------" << endl;
 
-        // d) let each player draw 2 initial cards from the deck using the deck’s draw() method
-            // 1st card
-        deck->draw(player->getHand());
-            // 2nd card
-        deck->draw(player->getHand());
-            // Find some way to show the 2 drawn cards
+        // Find some way to show the 2 drawn cards
         cout << "Number of cards on hand: " << player->getHand()->getCardsInHand().size() << endl;
         cout << "---------------------" << endl;
     }
@@ -535,21 +552,37 @@ void GameEngine::startupPhase()
 
 }
 
-Player* GameEngine::GameUpdate()
+Player* GameEngine::GameUpdate(int mapIndex)
 {
     currentState = startState;
-    startupPhase();
+    startupPhase(mapIndex);
     return mainGameLoop();
 }
 
-void GameEngine::OutputResult(Player *winner, int i, int j)
+void GameEngine::OutputResult(Player *winner, int mapIndex, int gameTurn)
 {
     ofstream logFile;
     logFile.open (".\\gameResultLog.txt", ios::app);
+
+    if (mapIndex == 0 && gameTurn == 0)
+    {
+        logFile << "P: ";
+        for (const auto& player : *gamePlayers)
+        {
+            logFile << *player->getName() << ". ";
+        }
+        logFile << "\n";
+        
+        logFile << "G: " << GameEngine::G << endl;
+        logFile << "D: " << GameEngine::D << endl;
+        logFile << "Results: " << endl;
+    }
+
+
     if (winner != nullptr)
-        logFile << "Map: " << i << ", Game: " << j << ", Winner: " << *winner->getName() << endl;
+        logFile << "Map: " << mapIndex << ", Game: " << gameTurn << ", Winner: " << *winner->getName() << endl;
     else
-        logFile << "Map: " << i << ", Game: " << j << ", Winner: DRAW!" << endl;
+        logFile << "Map: " << mapIndex << ", Game: " << gameTurn << ", Winner: DRAW!" << endl;
     
     logFile.close();
 }
@@ -574,25 +607,16 @@ void GameEngine::Tournament()
     {
         logFile << "Map " << i << ". ";
     }
-    
-    // for (Map* map : *mapList)
-    // {
-    //     logFile << "A" << ", ";
-    // }
     logFile << "\n";
-    logFile << "P: " << GameEngine::P << endl;
-    logFile << "G: " << GameEngine::G << endl;
-    logFile << "D: " << GameEngine::D << endl;
-    logFile << "Results: " << endl;
     logFile.close();
 
     for (int i = 0; i < GameEngine::M; i++)
     {
         for (int j = 0; j < GameEngine::G; j++)
         {
-            Player* winner = GameUpdate();
+            Player* winner = GameUpdate(i);
             OutputResult(winner, i, j);
-            RestartGameUpdate();
+            // RestartGameUpdate();
         }
         
     }
