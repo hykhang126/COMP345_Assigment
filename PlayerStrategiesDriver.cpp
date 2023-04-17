@@ -226,16 +226,17 @@ int main() {
     player3->setStrategy(new NeutralPlayerStrategy(player3));
     player3->setReinforcement(new int(5));
     player3->issueOrder();
-    cout << "Player 3's list of orders are the following: " << endl;
+    cout << "Player 3's list of orders after calling the issueOrder() method are the following: " << endl;
     cout << *listOfOrders3 << endl;
-    //listOfOrders3->getList().front()->execute();
-
-    cout << "\nPlayer 3 is a player of type: " << *player3->getStrategy() << endl;
+    
+    //cout << "\nPlayer 3 is a player of type: " << *player3->getStrategy() << endl;
+    cout << "\nPlayer 3 is a player of type: " << typeid(*player3->getStrategy()).name() << endl;
     player3->setWasAttacked();
     //when calling to attack on this player after setting his wasAttacked status to true, the player will become an aggressive player and call the to
     //attack method of the aggressive class
     player3->toAttack();
-    cout << "\nPlayer 3 is a player of type: " << *player3->getStrategy() << endl; 
+    //cout << "\nPlayer 3 is a player of type: " << *player3->getStrategy() << endl; 
+    cout << "\nPlayer 3 is a player of type: " << typeid(*player3->getStrategy()).name() << endl;
 
 
     // ***********************
@@ -311,15 +312,17 @@ int main() {
         cout << *ter->getName() << endl;
     }
 
+    cout << "\nThe current owner of territory 16 is: " << *territory16->getOwner()->getName() << endl;
+
     player4->issueOrder();
 
-    cout << "\nPlayer 4 now owns the following territories: " << endl;
+    cout << "\nPlayer 4 now owns the following territories after calling issueOrder(): " << endl;
     currentTers = player4->toDefend();
     for(auto ter : *currentTers) {
         cout << *ter->getName() << endl;
     }
 
-    //listOfOrders3->getList().front()->execute();
+    cout << "\nThe owner of territory 16 is: " << *territory16->getOwner()->getName() << endl;
 
 
 
