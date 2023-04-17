@@ -26,7 +26,7 @@ int main(int argc, char const *argv[])
         int choice = 6;
         string input;
         cout << "Please make your choice: " << endl;
-        // cin >> choice;
+        cin >> choice;
 
         switch (choice)
         {

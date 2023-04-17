@@ -326,7 +326,8 @@ bool GameEngine::playerOwnsContinent(Player* player, Continent* continent, Map* 
     return true;
 }
 
-void GameEngine::reinforcementPhase() {
+void GameEngine::
+reinforcementPhase() {
     // # of territories / 3 to added to the army pool
     cout << "BEGINNING OF REINFORCEMENT PHASE\n" << endl;
     for(Player* player: this->getPlayers()){
