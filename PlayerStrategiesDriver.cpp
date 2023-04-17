@@ -327,17 +327,12 @@ int main() {
     //HUMAN METHODS
     //**********************************
     cout << "*****************\nHUMAN STARTING HERE\n\"*****************\n";
-    //Testing Human methods
-    // player2->setStrategy(new Human(player2));
-    // player2->toAttack();
-    // player2->toDefend();
-
     OrdersList* listOfOrders5 = new OrdersList();
     //creating players
     string* name5 = new string("Player5");
 
     // Create two continents
-    Continent* continent5 = new Continent(new int(2), new string("Continent 5"), new int(10), new string("red"));
+    Continent* continent5 = new Continent(new int(2), new string("Continent 5"), new int(10), new string("black"));
 
     // Create three territories
     Territory* territory17 = new Territory(new Player(), new int(3), new int(1), new string("Territory17"), continent5, new Coordinate(new int(1), new int(0)));
@@ -357,7 +352,7 @@ int main() {
     auto collecter5Pter = new vector<Territory*>;
     collecter5Pter = &tCollection5;
 
-    Player* player5 = new Player(name5, collecter5Pter, p5_hand, listOfOrders4);
+    Player* player5 = new Player(name5, collecter5Pter, p5_hand, listOfOrders5);
 
     territory17->setOwner(player5);
     territory18->setOwner(player5);
@@ -375,7 +370,7 @@ int main() {
     Map* map5 = new Map();
     map5->addTerritory(territory17);
     map5->addTerritory(territory18);
-    map5->addTerritory(territory19);
+    map5->addTerritory(territory20);
     // Add edges between territories
     map5->addEdge(territory17, territory18);
     map5->addEdge(territory18, territory17);
@@ -396,9 +391,4 @@ int main() {
     player5->setStrategy(new Human(player5));
     player5->setReinforcement(new int(5));
     player5->issueOrder();
-    for(Order* order : player5->getOrdersList()->getList()){
-        order->execute();
-    }
-    
-    
 }
