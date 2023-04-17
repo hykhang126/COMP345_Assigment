@@ -363,6 +363,7 @@ int main() {
 
     territory17->setAdjacentTerritory(adjacent9);
     territory18->setAdjacentTerritory(adjacent9);
+    territory18->setAdjacentTerritory(adjacent10);
     territory20->setAdjacentTerritory(adjacent10);
     territory18->setAdjacentTerritory(adjacent10);
     // CREATING MAP

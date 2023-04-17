@@ -291,7 +291,7 @@ ostream& operator << (ostream& out, const Advance& advance) {
 */
 bool Advance::isAdjacent() {
     for(int i = 0; i < (source->adjacentTerritory)->size(); i++) {
-        if(source->adjacentTerritory->at(i)->getName() == target->getName()) {
+        if(*source->adjacentTerritory->at(i)->getName() == *target->getName()) {
             return true;
         }
     }
@@ -370,13 +370,16 @@ void Advance::execute() {
                     *attackUnits -= 1; //each defending unit has 70% of killing an attacking unit
                 }
             }
-            *newSourceArmies += *attackUnits;
-            source->setArmies(newSourceArmies);
+//            *newSourceArmies += *attackUnits;
+//            source->setArmies(newSourceArmies);
             target->setArmies(newTargetArmies);
             //if enemy is defeated, move survivors to target terr
             if(*(target->getArmies()) == 0) {
                 target->setOwner(player);
                 *newSourceArmies -= *attackUnits;
+                if (*newSourceArmies < 0){
+                    *newSourceArmies = 0;
+                }
                 *newTargetArmies += *attackUnits;
                 source->setArmies(newSourceArmies);
                 target->setArmies(newTargetArmies);

@@ -150,7 +150,7 @@ vector<Territory*>* Human::toDefend() {
             }
         }
         if(isPriority) {
-            territoriesToDefend->push_back(new Territory(*t));
+            territoriesToDefend->push_back((t));
         }
     }
     cout<< "These are the territories you chose: " << endl;
@@ -165,6 +165,7 @@ void Human::issueOrder() {
 
     vector<Territory *> *defendList = this->toDefend();
     vector<Territory *> *attackList = this->toAttack();
+    int *armiesToDeploy = new int(0);
     do {
         cout
                 << "\nPlease enter a number between 1 to 7 to select your desired order: \n 1. Negotiate \n 2. Airlift \n 3. Blockade \n 4. Bomb"
@@ -228,7 +229,7 @@ void Human::issueOrder() {
                         cout << "One of the territories entered does not exist or does not belong to the player."
                              << endl;
                     } else {
-                        p->getOrdersList()->addOrder(new Airlift(&number, src, target, p));
+                        p->getOrdersList()->addOrder(new Airlift(new int(number), src, target, p));
                     }
                 } else {
                     cout << "You cannot add this order as you do not have the proper card in hand!" << endl;
@@ -331,7 +332,7 @@ void Human::issueOrder() {
                         }
                     }
                     p->getOrdersList()->addOrder(
-                            new Advance(&number, srcTerritoryPtr, targetTerritoryPtr, p, this->p->getOrdersList()->deck));
+                            new Advance(new int(number), srcTerritoryPtr, targetTerritoryPtr, p, this->p->getOrdersList()->deck));
                 }
                 break;
             case 6:
@@ -344,7 +345,7 @@ void Human::issueOrder() {
                 cout << "You currently have " << *p->getReinforcement() << " available armies to deploy."
                      << endl;
                 for (auto it = defendList->begin(); it != defendList->end(); ++it) {
-                    int *armiesToDeploy = new int(0);
+
                     cout << "How many armies would you like to deploy to " << *(*it)->getName() << " ?" << endl;
                     cin >> *armiesToDeploy;
                     while (*armiesToDeploy > *p->getReinforcement()) {
