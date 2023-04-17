@@ -345,8 +345,9 @@ int main() {
 
     Card* p5_card1 = new Card("bomb");
     Card* p5_card2 = new Card("airlift");
+    Card* p5_card3 = new Card("blockade");
     //creating hands
-    vector<Card*> player5Cards = {p5_card1, p5_card2};
+    vector<Card*> player5Cards = {p5_card1, p5_card2, p5_card3};
     Hand* p5_hand = new Hand();
     p5_hand->setCardsInHand(player5Cards);
 

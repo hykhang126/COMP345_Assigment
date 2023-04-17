@@ -312,6 +312,10 @@ bool Advance::isNegotiate() {
  * Validate method for Advance order: sets the order's validation status to true
 */
 void Advance::validate() {
+    cout << "\n TESTING ORDER EXECUTE............................" << endl;
+    cout << "Player: " << player << " value: " << *player->getName() << endl;
+    cout << "Source: " << source << " Name: " << *source->getName() << endl;
+    cout << "Player: " << target << " Name: " << *target->getName() << endl;
     //A2: if player doesn't own source territory or target territory is not adjacent, invalid order
     if(source->getOwner() != player
         || !isAdjacent()
@@ -555,7 +559,7 @@ void Bomb::setPlayer(Player* player) {
 */
 Blockade::Blockade() {
     setDescription("blockade one of the player's territories");
-    setEffect("Number of armies on the player's territory has been tripled. The territory is now neutral.");
+    setEffect("Number of armies on the player's territory has been doubled. The territory is now neutral.");
     target = new Territory();
     player = new Player();
     listPlayers = new vector<Player*>();

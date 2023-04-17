@@ -208,13 +208,13 @@ void Human::issueOrder() {
                     }
                     string srcTerritory;
                     string targetTerritory;
-                    int number;
+                    int *number = new int(0);
                     cout << "\nEnter the source territory for the airlift: " << endl;
                     cin >> srcTerritory;
                     cout << "Enter the target territory for the airlift: " << endl;
                     cin >> targetTerritory;
                     cout << "Enter the number of armies for the airlift: " << endl;
-                    cin >> number;
+                    cin >> *number;
                     Territory *src = nullptr;
                     Territory *target = nullptr;
                     for (auto &terr: *ownedTerritories) {
@@ -228,7 +228,7 @@ void Human::issueOrder() {
                         cout << "One of the territories entered does not exist or does not belong to the player."
                              << endl;
                     } else {
-                        p->getOrdersList()->addOrder(new Airlift(&number, src, target, p));
+                        p->getOrdersList()->addOrder(new Airlift(number, src, target, p));
                     }
                 } else {
                     cout << "You cannot add this order as you do not have the proper card in hand!" << endl;
@@ -300,13 +300,13 @@ void Human::issueOrder() {
                     }
                     string srcTerritory;
                     string targetTerritory;
-                    int number;
+                    int *number = new int(0);
                     cout << "Enter the source territory for the advance: " << endl;
                     cin >> srcTerritory;
                     cout << "Enter the target territory for the advance: " << endl;
                     cin >> targetTerritory;
                     cout << "Enter the number of armies for the advance: " << endl;
-                    cin >> number;
+                    cin >> *number;
                     Territory *srcTerritoryPtr = nullptr;
                     Territory *targetTerritoryPtr = nullptr;
                     bool isDefend = false;
@@ -330,8 +330,13 @@ void Human::issueOrder() {
                             srcTerritoryPtr = terr;
                         }
                     }
+                    //TESTING
+                    cout << "\n TESTING ISSUE ORDER..........................." << endl;
+                    cout << "Player: " << p << " Name: " << *p->getName() << endl;
+                    cout << "Source: " << srcTerritoryPtr << " Name: " << *srcTerritoryPtr->getName() << endl;
+                    cout << "Player: " << targetTerritoryPtr << " Name: " << *targetTerritoryPtr->getName() << endl;
                     p->getOrdersList()->addOrder(
-                            new Advance(&number, srcTerritoryPtr, targetTerritoryPtr, p, this->p->getOrdersList()->deck));
+                            new Advance(number, srcTerritoryPtr, targetTerritoryPtr, p, this->p->getOrdersList()->deck));
                 }
                 break;
             case 6:
