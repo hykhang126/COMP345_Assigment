@@ -1,11 +1,13 @@
 #include "GameEngine.h"
 
+// LIST OF DEPENDENT FUNCTION
 #include "CommandProcessing.cpp"
 #include "Player.cpp"
 #include "Cards.cpp"
 #include "Orders.cpp"
 #include "LoggingObserver.cpp"
 #include "Map.cpp"
+#include "PlayerStrategies.cpp"
 
 
 
@@ -383,9 +385,11 @@ void GameEngine::executeOrdersPhase() {
     }
 }
 
-Player GameEngine::mainGameLoop() {
+Player* GameEngine::mainGameLoop() {
     cout << "MAIN GAME LOOP" << endl;
     Player* winner = nullptr;
+    int roundsCount = 0;
+
     do{
         //Remove players who do not own any territories
         for (int i = 0; i < gamePlayers->size(); i++) {
@@ -417,22 +421,25 @@ Player GameEngine::mainGameLoop() {
         cout << "Starting execute orders phase" << endl;
         this->executeOrdersPhase();
 
-    } while(true);
+        //Increase round counter
+        roundsCount += 1;
+
+    } while(roundsCount < GameEngine::D);
    
-   return *winner;
+   return winner;
 }
 
 void GameEngine::distributeTerritory(Player* player)
 {
     int maxNumTerritories = map->countTerritory();
-    int maxNumTerritoriesPerPlayer = 5;
+    int maxNumTerritoriesPerPlayer = 20;
     vector<Territory*>* tCollection = new vector<Territory*>();
     Territory* territory;
     int countTerritories = 0;
 
     while (countTerritories < maxNumTerritoriesPerPlayer)
     {
-        int randomIndex = rand() % (maxNumTerritories-1) + 1;
+        int randomIndex = rand() % (maxNumTerritories-1);
         if (map != nullptr && map->getTerritoryByIndex(randomIndex) != nullptr) 
             territory = map->getTerritoryByIndex(randomIndex);
         else 
@@ -474,7 +481,8 @@ void GameEngine::startupPhase()
     currentState = validMapState;
 
     // ADD PLAYER
-    for (int i = 0; i < GameEngine::P; i++)
+    int i = gamePlayers->size();
+    while (i < GameEngine::P)
     {
         string playerName = "Player";
         playerName.append(std::to_string(i));
@@ -482,10 +490,15 @@ void GameEngine::startupPhase()
         Player* player = new Player();
         player->setName(playerName);
 
+        // Set player's strategy
+        if (i == 1) player->setStrategy(new Benevolent(player));
+        else player->setStrategy(new Aggressive(player));
+
         // a) fairly distribute all the territories to the players  
         distributeTerritory(player);
 
         addPlayerToList(player);
+        i += 1;
         cout << *player->getName() << " added succesfully to player list" << endl;
         cout << "---------------------" << endl;
     }
@@ -526,14 +539,11 @@ Player* GameEngine::GameUpdate()
 {
     currentState = startState;
     startupPhase();
-    Player* winner;
-    *winner = mainGameLoop();
-    return winner;
+    return mainGameLoop();
 }
 
 void GameEngine::OutputResult(Player *winner, int i, int j)
 {
-    cout << *winner->getName() << endl;
     ofstream logFile;
     logFile.open (".\\gameResultLog.txt", ios::app);
     if (winner != nullptr)
@@ -544,13 +554,21 @@ void GameEngine::OutputResult(Player *winner, int i, int j)
     logFile.close();
 }
 
+void GameEngine::RestartGameUpdate()
+{
+    if (gamePlayers != nullptr)
+    {
+        gamePlayers->clear();
+    }    
+}
+
 void GameEngine::Tournament()
 {
     commandProcessor->GetCommand(currentState->getName());
 
     ofstream logFile;
     logFile.open (".\\gameResultLog.txt", ios::app);
-    logFile << "Tournament mode:" << endl << "M: ";
+    logFile << "\n--- Tournament mode: ---" << endl << "M: ";
     //output list a map names
     for (int i = 0; i < GameEngine::M; i++)
     {
@@ -568,12 +586,13 @@ void GameEngine::Tournament()
     logFile << "Results: " << endl;
     logFile.close();
 
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < GameEngine::M; i++)
     {
-        for (int j = 0; i < 2; j++)
+        for (int j = 0; j < GameEngine::G; j++)
         {
             Player* winner = GameUpdate();
             OutputResult(winner, i, j);
+            RestartGameUpdate();
         }
         
     }

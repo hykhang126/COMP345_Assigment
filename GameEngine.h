@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "Cards.h"
 #include "CommandProcessing.h"
+#include "PlayerStrategies.h"
 
 
 using namespace std;
@@ -138,7 +139,7 @@ class GameEngine: public Subject, public ILoggable
         void reinforcementPhase();
         void issueOrdersPhase();
         void executeOrdersPhase();
-        Player mainGameLoop();
+        Player* mainGameLoop();
 
         vector<Player*>* getGamePlayers();
         void addPlayerToList(Player* player);
@@ -161,5 +162,6 @@ class GameEngine: public Subject, public ILoggable
 
         Player* GameUpdate();
         void OutputResult(Player *winner, int i, int j);
+        void RestartGameUpdate();
         void Tournament();
 };

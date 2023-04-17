@@ -301,6 +301,8 @@ bool Advance::isAdjacent() {
  * Check if target is a negotiating party
 */
 bool Advance::isNegotiate() {
+    if (target->getOwner() == nullptr) return false;
+    
     for(int i = 0; i < (target->getOwner()->getNegotiating())->size(); i++) {
         if(target->getOwner()->getNegotiating()->at(i) == player) {
             return true;

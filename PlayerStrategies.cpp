@@ -678,7 +678,9 @@ void Benevolent::issueOrder() {
                     }
                 }
             }
+            return false;
         });
+
     }
 
     // Airlift simply adds 1 army from the strongest to the weakest territory
@@ -765,6 +767,8 @@ vector<Territory *> *NeutralPlayerStrategy::toAttack() {
     } else {
         return new vector<Territory *>();
     }
+
+    return nullptr;
 }
 
 vector<Territory *> *NeutralPlayerStrategy::toDefend() {
@@ -779,6 +783,8 @@ vector<Territory *> *NeutralPlayerStrategy::toDefend() {
     } else {
         return new vector<Territory *>();
     }
+
+    return nullptr;
 }
 
 NeutralPlayerStrategy::NeutralPlayerStrategy(Player *p) {
