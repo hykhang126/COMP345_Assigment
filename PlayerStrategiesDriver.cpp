@@ -155,7 +155,7 @@ int main() {
     listOfOrders2->getList().front()->execute();
     listOfOrders2->getList().at(1)->execute();
     listOfOrders2->getList().back()->execute();
-    
+
 
     // ***********************
     // NEUTRAL PLAYER
@@ -226,16 +226,17 @@ int main() {
     player3->setStrategy(new NeutralPlayerStrategy(player3));
     player3->setReinforcement(new int(5));
     player3->issueOrder();
-    cout << "Player 3's list of orders are the following: " << endl;
+    cout << "Player 3's list of orders after calling the issueOrder() method are the following: " << endl;
     cout << *listOfOrders3 << endl;
-    //listOfOrders3->getList().front()->execute();
 
-    cout << "\nPlayer 3 is a player of type: " << *player3->getStrategy() << endl;
+    //cout << "\nPlayer 3 is a player of type: " << *player3->getStrategy() << endl;
+    cout << "\nPlayer 3 is a player of type: " << typeid(*player3->getStrategy()).name() << endl;
     player3->setWasAttacked();
     //when calling to attack on this player after setting his wasAttacked status to true, the player will become an aggressive player and call the to
     //attack method of the aggressive class
     player3->toAttack();
-    cout << "\nPlayer 3 is a player of type: " << *player3->getStrategy() << endl; 
+    //cout << "\nPlayer 3 is a player of type: " << *player3->getStrategy() << endl;
+    cout << "\nPlayer 3 is a player of type: " << typeid(*player3->getStrategy()).name() << endl;
 
 
     // ***********************
@@ -263,10 +264,10 @@ int main() {
     p4_hand->setCardsInHand(player4Cards);
 
     vector<Territory*> tCollection4 = {territory13, territory14, territory15};
-    
+
     auto collecter4Pter = new vector<Territory*>;
     collecter4Pter = &tCollection4;
-    
+
     Player* player4 = new Player(name4, collecter4Pter, p4_hand, listOfOrders4);
 
     territory13->setOwner(player4);
@@ -311,15 +312,17 @@ int main() {
         cout << *ter->getName() << endl;
     }
 
+    cout << "\nThe current owner of territory 16 is: " << *territory16->getOwner()->getName() << endl;
+
     player4->issueOrder();
 
-    cout << "\nPlayer 4 now owns the following territories: " << endl;
+    cout << "\nPlayer 4 now owns the following territories after calling issueOrder(): " << endl;
     currentTers = player4->toDefend();
     for(auto ter : *currentTers) {
         cout << *ter->getName() << endl;
     }
 
-    //listOfOrders3->getList().front()->execute();
+    cout << "\nThe owner of territory 16 is: " << *territory16->getOwner()->getName() << endl;
 
 
 
@@ -342,8 +345,9 @@ int main() {
 
     Card* p5_card1 = new Card("bomb");
     Card* p5_card2 = new Card("airlift");
+    Card* p5_card3 = new Card("blockade");
     //creating hands
-    vector<Card*> player5Cards = {p5_card1, p5_card2};
+    vector<Card*> player5Cards = {p5_card1, p5_card2, p5_card3};
     Hand* p5_hand = new Hand();
     p5_hand->setCardsInHand(player5Cards);
 
@@ -363,9 +367,8 @@ int main() {
 
     territory17->setAdjacentTerritory(adjacent9);
     territory18->setAdjacentTerritory(adjacent9);
-    territory18->setAdjacentTerritory(adjacent10);
+    territory19->setAdjacentTerritory(adjacent10);
     territory20->setAdjacentTerritory(adjacent10);
-    territory18->setAdjacentTerritory(adjacent10);
     // CREATING MAP
     // Add territories to the map
     Map* map5 = new Map();
@@ -392,4 +395,8 @@ int main() {
     player5->setStrategy(new Human(player5));
     player5->setReinforcement(new int(5));
     player5->issueOrder();
+
+    for(Order* order : player5->getOrdersList()->getList()) {
+        order->execute();
+    }
 }
